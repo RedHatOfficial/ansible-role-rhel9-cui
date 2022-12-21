@@ -168,6 +168,7 @@
   - NIST-800-53-SC-12(2)
   - NIST-800-53-SC-12(3)
   - NIST-800-53-SC-13
+  - PCI-DSS-Req-2.2
   - configure_openssl_crypto_policy
   - low_complexity
   - medium_disruption
@@ -206,6 +207,7 @@
   - NIST-800-53-SC-12(2)
   - NIST-800-53-SC-12(3)
   - NIST-800-53-SC-13
+  - PCI-DSS-Req-2.2
   - configure_openssl_crypto_policy
   - low_complexity
   - medium_disruption
@@ -238,6 +240,7 @@
   - NIST-800-53-SC-12(2)
   - NIST-800-53-SC-12(3)
   - NIST-800-53-SC-13
+  - PCI-DSS-Req-2.2
   - configure_openssl_crypto_policy
   - low_complexity
   - medium_disruption
@@ -257,6 +260,7 @@
   - NIST-800-53-CM-6(a)
   - NIST-800-53-MA-4(6)
   - NIST-800-53-SC-13
+  - PCI-DSS-Req-2.2
   - configure_ssh_crypto_policy
   - disable_strategy
   - low_complexity
@@ -286,6 +290,7 @@
   tags:
   - CCE-83523-1
   - NIST-800-53-CM-6(a)
+  - PCI-DSS-Req-10.2.1.5
   - enable_strategy
   - low_complexity
   - low_disruption
@@ -634,8 +639,6 @@
 
 - name: Read signatures in GPG key
   command: gpg --show-keys --with-fingerprint --with-colons "/etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release"
-  args:
-    warn: false
   changed_when: false
   register: gpg_fingerprints
   check_mode: false
@@ -808,8 +811,6 @@
     cmd: rpm -qV pam
   register: result_altered_authselect
   ignore_errors: true
-  args:
-    warn: false
   when:
   - configure_strategy | bool
   - enable_authselect | bool
@@ -2977,8 +2978,6 @@
 
 - name: Unit Socket Exists - debug-shell.socket
   command: systemctl list-unit-files debug-shell.socket
-  args:
-    warn: false
   register: socket_file_exists
   changed_when: false
   ignore_errors: true
@@ -3304,6 +3303,7 @@
     replace: auth             required        pam_wheel.so use_uid
   tags:
   - CCE-90085-2
+  - PCI-DSS-Req-8.6.1
   - low_complexity
   - low_disruption
   - medium_severity
@@ -3339,6 +3339,7 @@
   - NIST-800-53-AU-7(1)
   - NIST-800-53-AU-7(2)
   - NIST-800-53-CM-6(a)
+  - PCI-DSS-Req-10.2.1
   - enable_strategy
   - low_complexity
   - low_disruption
@@ -3439,15 +3440,15 @@
   - PCI-DSS-Req-10.3
   - grub2_audit_argument
   - low_disruption
+  - low_severity
   - medium_complexity
-  - medium_severity
   - reboot_required
   - restrict_strategy
   when:
   - grub2_audit_argument | bool
   - low_disruption | bool
+  - low_severity | bool
   - medium_complexity | bool
-  - medium_severity | bool
   - reboot_required | bool
   - restrict_strategy | bool
 
@@ -3456,8 +3457,8 @@
   when:
   - grub2_audit_argument | bool
   - low_disruption | bool
+  - low_severity | bool
   - medium_complexity | bool
-  - medium_severity | bool
   - reboot_required | bool
   - restrict_strategy | bool
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
@@ -3474,8 +3475,8 @@
   - PCI-DSS-Req-10.3
   - grub2_audit_argument
   - low_disruption
+  - low_severity
   - medium_complexity
-  - medium_severity
   - reboot_required
   - restrict_strategy
 
@@ -3556,8 +3557,8 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - '"audit" in ansible_facts.packages'
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"audit" in ansible_facts.packages'
   tags:
   - CCE-83685-8
   - NIST-800-171-3.3.1
@@ -3622,8 +3623,8 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - '"audit" in ansible_facts.packages'
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"audit" in ansible_facts.packages'
   tags:
   - CCE-83704-7
   - NIST-800-53-CM-6
@@ -3644,14 +3645,14 @@
   - auditd_log_format
   - low_complexity
   - low_disruption
-  - medium_severity
+  - low_severity
   - no_reboot_needed
   - restrict_strategy
   when:
   - auditd_log_format | bool
   - low_complexity | bool
   - low_disruption | bool
-  - medium_severity | bool
+  - low_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
 
@@ -3684,11 +3685,11 @@
   - auditd_log_format | bool
   - low_complexity | bool
   - low_disruption | bool
-  - medium_severity | bool
+  - low_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - '"audit" in ansible_facts.packages'
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"audit" in ansible_facts.packages'
   tags:
   - CCE-83696-5
   - NIST-800-53-AU-3
@@ -3696,7 +3697,7 @@
   - auditd_log_format
   - low_complexity
   - low_disruption
-  - medium_severity
+  - low_severity
   - no_reboot_needed
   - restrict_strategy
 
@@ -3753,8 +3754,8 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - '"audit" in ansible_facts.packages'
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"audit" in ansible_facts.packages'
   tags:
   - CCE-83686-6
   - NIST-800-53-AU-3
@@ -5439,6 +5440,7 @@
       ## original copies may be found in /usr/share/audit/sample-rules/
 
 
+
       ## User add delete modify. This is covered by pam. However, someone could
 
       ## open a file and directly create or modify a user, so we''ll watch passwd and
@@ -5482,6 +5484,7 @@
       -a always,exit -F path=/etc/group -F perm=wa -F auid>=1000 -F auid!=unset -F key=group-modify
 
       -a always,exit -F path=/etc/gshadow -F perm=wa -F auid>=1000 -F auid!=unset -F key=group-modify
+
 
 
       ## Use of special rights for config changes. This would be use of setuid
@@ -5641,6 +5644,7 @@
       ## original copies may be found in /usr/share/audit/sample-rules/
 
 
+
       ## User add delete modify. This is covered by pam. However, someone could
 
       ## open a file and directly create or modify a user, so we''ll watch passwd and
@@ -5680,6 +5684,7 @@
       -a always,exit -F path=/etc/group -F perm=wa -F auid>=1000 -F auid!=unset -F key=group-modify
 
       -a always,exit -F path=/etc/gshadow -F perm=wa -F auid>=1000 -F auid!=unset -F key=group-modify
+
 
 
       ## Use of special rights for config changes. This would be use of setuid
@@ -5839,6 +5844,7 @@
       ## original copies may be found in /usr/share/audit/sample-rules/
 
 
+
       ## User add delete modify. This is covered by pam. However, someone could
 
       ## open a file and directly create or modify a user, so we''ll watch passwd and
@@ -5872,6 +5878,7 @@
       -a always,exit -F path=/etc/group -F perm=wa -F auid>=1000 -F auid!=unset -F key=group-modify
 
       -a always,exit -F path=/etc/gshadow -F perm=wa -F auid>=1000 -F auid!=unset -F key=group-modify
+
 
 
       ## Use of special rights for config changes. This would be use of setuid
@@ -7278,6 +7285,7 @@
   - NIST-800-53-CM-6(a)
   - NIST-800-53-CM-7(a)
   - NIST-800-53-CM-7(b)
+  - PCI-DSS-Req-1.4.2
   - disable_strategy
   - kernel_module_sctp_disabled
   - low_complexity
@@ -7306,6 +7314,7 @@
   - NIST-800-53-CM-6(a)
   - NIST-800-53-CM-7(a)
   - NIST-800-53-CM-7(b)
+  - PCI-DSS-Req-1.4.2
   - disable_strategy
   - kernel_module_sctp_disabled
   - low_complexity
@@ -7988,6 +7997,7 @@
     paths:
     - /etc/sysctl.d/
     - /run/sysctl.d/
+    - /usr/local/lib/sysctl.d/
     contains: ^[\s]*kernel.core_uses_pid.*$
     patterns: '*.conf'
     file_type: any
@@ -8009,7 +8019,7 @@
   - reboot_required
   - sysctl_kernel_core_uses_pid
 
-- name: Comment out any occurrences of kernel.core_uses_pid from /etc/sysctl.d/*.conf files
+- name: Comment out any occurrences of kernel.core_uses_pid from config files
   replace:
     path: '{{ item.path }}'
     regexp: ^[\s]*kernel.core_uses_pid
@@ -8060,6 +8070,7 @@
     paths:
     - /etc/sysctl.d/
     - /run/sysctl.d/
+    - /usr/local/lib/sysctl.d/
     contains: ^[\s]*kernel.dmesg_restrict.*$
     patterns: '*.conf'
     file_type: any
@@ -8084,7 +8095,7 @@
   - reboot_required
   - sysctl_kernel_dmesg_restrict
 
-- name: Comment out any occurrences of kernel.dmesg_restrict from /etc/sysctl.d/*.conf files
+- name: Comment out any occurrences of kernel.dmesg_restrict from config files
   replace:
     path: '{{ item.path }}'
     regexp: ^[\s]*kernel.dmesg_restrict
@@ -8141,6 +8152,7 @@
     paths:
     - /etc/sysctl.d/
     - /run/sysctl.d/
+    - /usr/local/lib/sysctl.d/
     contains: ^[\s]*kernel.kexec_load_disabled.*$
     patterns: '*.conf'
     file_type: any
@@ -8163,7 +8175,7 @@
   - reboot_required
   - sysctl_kernel_kexec_load_disabled
 
-- name: Comment out any occurrences of kernel.kexec_load_disabled from /etc/sysctl.d/*.conf files
+- name: Comment out any occurrences of kernel.kexec_load_disabled from config files
   replace:
     path: '{{ item.path }}'
     regexp: ^[\s]*kernel.kexec_load_disabled
@@ -8216,6 +8228,7 @@
     paths:
     - /etc/sysctl.d/
     - /run/sysctl.d/
+    - /usr/local/lib/sysctl.d/
     contains: ^[\s]*kernel.perf_event_paranoid.*$
     patterns: '*.conf'
     file_type: any
@@ -8238,7 +8251,7 @@
   - reboot_required
   - sysctl_kernel_perf_event_paranoid
 
-- name: Comment out any occurrences of kernel.perf_event_paranoid from /etc/sysctl.d/*.conf files
+- name: Comment out any occurrences of kernel.perf_event_paranoid from config files
   replace:
     path: '{{ item.path }}'
     regexp: ^[\s]*kernel.perf_event_paranoid
@@ -8291,6 +8304,7 @@
     paths:
     - /etc/sysctl.d/
     - /run/sysctl.d/
+    - /usr/local/lib/sysctl.d/
     contains: ^[\s]*kernel.unprivileged_bpf_disabled.*$
     patterns: '*.conf'
     file_type: any
@@ -8314,7 +8328,7 @@
   - reboot_required
   - sysctl_kernel_unprivileged_bpf_disabled_accept_default
 
-- name: Comment out any occurrences of kernel.unprivileged_bpf_disabled from /etc/sysctl.d/*.conf files
+- name: Comment out any occurrences of kernel.unprivileged_bpf_disabled from config files
   replace:
     path: '{{ item.path }}'
     regexp: ^[\s]*kernel.unprivileged_bpf_disabled
@@ -8369,6 +8383,7 @@
     paths:
     - /etc/sysctl.d/
     - /run/sysctl.d/
+    - /usr/local/lib/sysctl.d/
     contains: ^[\s]*kernel.yama.ptrace_scope.*$
     patterns: '*.conf'
     file_type: any
@@ -8391,7 +8406,7 @@
   - reboot_required
   - sysctl_kernel_yama_ptrace_scope
 
-- name: Comment out any occurrences of kernel.yama.ptrace_scope from /etc/sysctl.d/*.conf files
+- name: Comment out any occurrences of kernel.yama.ptrace_scope from config files
   replace:
     path: '{{ item.path }}'
     regexp: ^[\s]*kernel.yama.ptrace_scope
@@ -8444,6 +8459,7 @@
     paths:
     - /etc/sysctl.d/
     - /run/sysctl.d/
+    - /usr/local/lib/sysctl.d/
     contains: ^[\s]*user.max_user_namespaces.*$
     patterns: '*.conf'
     file_type: any
@@ -8467,7 +8483,7 @@
   - reboot_required
   - sysctl_user_max_user_namespaces
 
-- name: Comment out any occurrences of user.max_user_namespaces from /etc/sysctl.d/*.conf files
+- name: Comment out any occurrences of user.max_user_namespaces from config files
   replace:
     path: '{{ item.path }}'
     regexp: ^[\s]*user.max_user_namespaces
@@ -8546,8 +8562,6 @@
 
 - name: Unit Socket Exists - systemd-coredump.socket
   command: systemctl list-unit-files systemd-coredump.socket
-  args:
-    warn: false
   register: socket_file_exists
   changed_when: false
   ignore_errors: true
@@ -8600,6 +8614,7 @@
     paths:
     - /etc/sysctl.d/
     - /run/sysctl.d/
+    - /usr/local/lib/sysctl.d/
     contains: ^[\s]*kernel.kptr_restrict.*$
     patterns: '*.conf'
     file_type: any
@@ -8625,7 +8640,7 @@
   - reboot_required
   - sysctl_kernel_kptr_restrict
 
-- name: Comment out any occurrences of kernel.kptr_restrict from /etc/sysctl.d/*.conf files
+- name: Comment out any occurrences of kernel.kptr_restrict from config files
   replace:
     path: '{{ item.path }}'
     regexp: ^[\s]*kernel.kptr_restrict
@@ -8753,9 +8768,9 @@
       line: SELINUX={{ var_selinux_state }}
       state: present
   when:
+  - high_severity | bool
   - low_complexity | bool
   - low_disruption | bool
-  - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
   - selinux_state | bool
@@ -8768,9 +8783,9 @@
   - NIST-800-53-AC-3(3)(a)
   - NIST-800-53-AU-9
   - NIST-800-53-SC-7(21)
+  - high_severity
   - low_complexity
   - low_disruption
-  - medium_severity
   - no_reboot_needed
   - restrict_strategy
   - selinux_state
@@ -8806,8 +8821,6 @@
 
 - name: Unit Socket Exists - kdump.socket
   command: systemctl list-unit-files kdump.socket
-  args:
-    warn: false
   register: socket_file_exists
   changed_when: false
   ignore_errors: true
@@ -8928,6 +8941,7 @@
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
   tags:
   - CCE-84215-3
+  - PCI-DSS-Req-10.6.1
   - enable_strategy
   - low_complexity
   - low_disruption
@@ -9230,6 +9244,7 @@
   - NIST-800-53-CM-6(a)
   - NIST-800-53-CM-7(a)
   - NIST-800-53-CM-7(b)
+  - PCI-DSS-Req-2.2.6
   - high_severity
   - low_complexity
   - low_disruption
@@ -9412,6 +9427,7 @@
   - NIST-800-53-CM-7(b)
   - NIST-800-53-IA-2
   - NIST-800-53-IA-2(5)
+  - PCI-DSS-Req-2.2.6
   - low_complexity
   - low_disruption
   - medium_severity
@@ -9472,6 +9488,7 @@
   - NIST-800-53-AC-8(a)
   - NIST-800-53-AC-8(c)
   - NIST-800-53-CM-6(a)
+  - PCI-DSS-Req-2.2.6
   - low_complexity
   - low_disruption
   - medium_severity
