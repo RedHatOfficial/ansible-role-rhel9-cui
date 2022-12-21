@@ -1,7 +1,7 @@
-DRAFT Unclassified Information in Non-federal Information Systems and Organizations (NIST 800-171)
+[DRAFT] Unclassified Information in Non-federal Information Systems and Organizations (NIST 800-171)
 =========
 
-Ansible Role for DRAFT Unclassified Information in Non-federal Information Systems and Organizations (NIST 800-171)  
+Ansible Role for [DRAFT] Unclassified Information in Non-federal Information Systems and Organizations (NIST 800-171)  
   
 Profile Description:  
 From NIST 800-171, Section 2.2:  
