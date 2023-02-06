@@ -1119,11 +1119,11 @@
     - name: Lock Accounts After Failed Password Attempts - Define the PAM file to be edited as a local fact
       ansible.builtin.set_fact:
         pam_file_path: /etc/pam.d/system-auth
-    - name: Lock Accounts After Failed Password Attempts - Check if system relies on authselect
+    - name: Lock Accounts After Failed Password Attempts - Check if system relies on authselect tool
       ansible.builtin.stat:
         path: /usr/bin/authselect
       register: result_authselect_present
-    - name: Lock Accounts After Failed Password Attempts - Remediate using authselect
+    - name: Lock Accounts After Failed Password Attempts - Ensure authselect custom profile is used if authselect is present
       block:
       - name: Lock Accounts After Failed Password Attempts - Check integrity of authselect current profile
         ansible.builtin.command:
@@ -1251,11 +1251,11 @@
     - name: Lock Accounts After Failed Password Attempts - Define the PAM file to be edited as a local fact
       ansible.builtin.set_fact:
         pam_file_path: /etc/pam.d/password-auth
-    - name: Lock Accounts After Failed Password Attempts - Check if system relies on authselect
+    - name: Lock Accounts After Failed Password Attempts - Check if system relies on authselect tool
       ansible.builtin.stat:
         path: /usr/bin/authselect
       register: result_authselect_present
-    - name: Lock Accounts After Failed Password Attempts - Remediate using authselect
+    - name: Lock Accounts After Failed Password Attempts - Ensure authselect custom profile is used if authselect is present
       block:
       - name: Lock Accounts After Failed Password Attempts - Check integrity of authselect current profile
         ansible.builtin.command:
@@ -1713,11 +1713,12 @@
     - name: Set Interval For Counting Failed Password Attempts - Define the PAM file to be edited as a local fact
       ansible.builtin.set_fact:
         pam_file_path: /etc/pam.d/system-auth
-    - name: Set Interval For Counting Failed Password Attempts - Check if system relies on authselect
+    - name: Set Interval For Counting Failed Password Attempts - Check if system relies on authselect tool
       ansible.builtin.stat:
         path: /usr/bin/authselect
       register: result_authselect_present
-    - name: Set Interval For Counting Failed Password Attempts - Remediate using authselect
+    - name: Set Interval For Counting Failed Password Attempts - Ensure authselect custom profile is used if authselect is
+        present
       block:
       - name: Set Interval For Counting Failed Password Attempts - Check integrity of authselect current profile
         ansible.builtin.command:
@@ -1848,11 +1849,12 @@
     - name: Set Interval For Counting Failed Password Attempts - Define the PAM file to be edited as a local fact
       ansible.builtin.set_fact:
         pam_file_path: /etc/pam.d/password-auth
-    - name: Set Interval For Counting Failed Password Attempts - Check if system relies on authselect
+    - name: Set Interval For Counting Failed Password Attempts - Check if system relies on authselect tool
       ansible.builtin.stat:
         path: /usr/bin/authselect
       register: result_authselect_present
-    - name: Set Interval For Counting Failed Password Attempts - Remediate using authselect
+    - name: Set Interval For Counting Failed Password Attempts - Ensure authselect custom profile is used if authselect is
+        present
       block:
       - name: Set Interval For Counting Failed Password Attempts - Check integrity of authselect current profile
         ansible.builtin.command:
@@ -2322,11 +2324,11 @@
     - name: Set Lockout Time for Failed Password Attempts - Define the PAM file to be edited as a local fact
       ansible.builtin.set_fact:
         pam_file_path: /etc/pam.d/system-auth
-    - name: Set Lockout Time for Failed Password Attempts - Check if system relies on authselect
+    - name: Set Lockout Time for Failed Password Attempts - Check if system relies on authselect tool
       ansible.builtin.stat:
         path: /usr/bin/authselect
       register: result_authselect_present
-    - name: Set Lockout Time for Failed Password Attempts - Remediate using authselect
+    - name: Set Lockout Time for Failed Password Attempts - Ensure authselect custom profile is used if authselect is present
       block:
       - name: Set Lockout Time for Failed Password Attempts - Check integrity of authselect current profile
         ansible.builtin.command:
@@ -2455,11 +2457,11 @@
     - name: Set Lockout Time for Failed Password Attempts - Define the PAM file to be edited as a local fact
       ansible.builtin.set_fact:
         pam_file_path: /etc/pam.d/password-auth
-    - name: Set Lockout Time for Failed Password Attempts - Check if system relies on authselect
+    - name: Set Lockout Time for Failed Password Attempts - Check if system relies on authselect tool
       ansible.builtin.stat:
         path: /usr/bin/authselect
       register: result_authselect_present
-    - name: Set Lockout Time for Failed Password Attempts - Remediate using authselect
+    - name: Set Lockout Time for Failed Password Attempts - Ensure authselect custom profile is used if authselect is present
       block:
       - name: Set Lockout Time for Failed Password Attempts - Check integrity of authselect current profile
         ansible.builtin.command:
@@ -2712,8 +2714,8 @@
   - no_reboot_needed | bool
   - restrict_strategy | bool
 
-- name: Ensure PAM variable dcredit is set accordingly
-  lineinfile:
+- name: Ensure PAM Enforces Password Requirements - Minimum Digit Characters - Ensure PAM variable dcredit is set accordingly
+  ansible.builtin.lineinfile:
     create: true
     dest: /etc/security/pwquality.conf
     regexp: ^#?\s*dcredit
@@ -2764,8 +2766,8 @@
   - no_reboot_needed | bool
   - restrict_strategy | bool
 
-- name: Ensure PAM variable lcredit is set accordingly
-  lineinfile:
+- name: Ensure PAM Enforces Password Requirements - Minimum Lowercase Characters - Ensure PAM variable lcredit is set accordingly
+  ansible.builtin.lineinfile:
     create: true
     dest: /etc/security/pwquality.conf
     regexp: ^#?\s*lcredit
@@ -2817,8 +2819,8 @@
   - no_reboot_needed | bool
   - restrict_strategy | bool
 
-- name: Ensure PAM variable minlen is set accordingly
-  lineinfile:
+- name: Ensure PAM Enforces Password Requirements - Minimum Length - Ensure PAM variable minlen is set accordingly
+  ansible.builtin.lineinfile:
     create: true
     dest: /etc/security/pwquality.conf
     regexp: ^#?\s*minlen
@@ -2869,8 +2871,8 @@
   - no_reboot_needed | bool
   - restrict_strategy | bool
 
-- name: Ensure PAM variable ocredit is set accordingly
-  lineinfile:
+- name: Ensure PAM Enforces Password Requirements - Minimum Special Characters - Ensure PAM variable ocredit is set accordingly
+  ansible.builtin.lineinfile:
     create: true
     dest: /etc/security/pwquality.conf
     regexp: ^#?\s*ocredit
@@ -2920,8 +2922,8 @@
   - no_reboot_needed | bool
   - restrict_strategy | bool
 
-- name: Ensure PAM variable ucredit is set accordingly
-  lineinfile:
+- name: Ensure PAM Enforces Password Requirements - Minimum Uppercase Characters - Ensure PAM variable ucredit is set accordingly
+  ansible.builtin.lineinfile:
     create: true
     dest: /etc/security/pwquality.conf
     regexp: ^#?\s*ucredit
@@ -3557,8 +3559,8 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
   - '"audit" in ansible_facts.packages'
+  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
   tags:
   - CCE-83685-8
   - NIST-800-171-3.3.1
@@ -3623,8 +3625,8 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
   - '"audit" in ansible_facts.packages'
+  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
   tags:
   - CCE-83704-7
   - NIST-800-53-CM-6
@@ -3688,8 +3690,8 @@
   - low_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
   - '"audit" in ansible_facts.packages'
+  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
   tags:
   - CCE-83696-5
   - NIST-800-53-AU-3
@@ -3754,8 +3756,8 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
   - '"audit" in ansible_facts.packages'
+  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
   tags:
   - CCE-83686-6
   - NIST-800-53-AU-3
