@@ -10,7 +10,8 @@
   - medium_disruption | bool
   - reboot_required | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"] and not ( lookup("env", "container")
+    == "bwrap-osbuild" ) )
   tags:
   - CCE-86547-7
   - NIST-800-53-CM-6(a)
@@ -35,7 +36,8 @@
   - medium_disruption | bool
   - reboot_required | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"] and not ( lookup("env", "container")
+    == "bwrap-osbuild" ) )
   - is_fips_enabled.stdout.find('FIPS mode is enabled.') == -1
   tags:
   - CCE-86547-7
@@ -63,7 +65,8 @@
   - medium_disruption | bool
   - reboot_required | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"] and not ( lookup("env", "container")
+    == "bwrap-osbuild" ) )
   tags:
   - CCE-86547-7
   - NIST-800-53-CM-6(a)
@@ -3298,11 +3301,9 @@
   - no_empty_passwords
   - no_reboot_needed
 
-- name: restrict usage of su command only to members of wheel group
-  replace:
-    path: /etc/pam.d/su
-    regexp: ^[\s]*#[\s]*auth[\s]+required[\s]+pam_wheel\.so[\s]+use_uid$
-    replace: auth             required        pam_wheel.so use_uid
+- name: Gather the package facts
+  package_facts:
+    manager: auto
   tags:
   - CCE-90085-2
   - PCI-DSS-Req-8.6.1
@@ -3319,6 +3320,29 @@
   - no_reboot_needed | bool
   - restrict_strategy | bool
   - use_pam_wheel_for_su | bool
+
+- name: restrict usage of su command only to members of wheel group
+  replace:
+    path: /etc/pam.d/su
+    regexp: ^[\s]*#[\s]*auth[\s]+required[\s]+pam_wheel\.so[\s]+use_uid$
+    replace: auth             required        pam_wheel.so use_uid
+  when:
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+  - use_pam_wheel_for_su | bool
+  - '"pam" in ansible_facts.packages'
+  tags:
+  - CCE-90085-2
+  - PCI-DSS-Req-8.6.1
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  - use_pam_wheel_for_su
 
 - name: Ensure audit is installed
   package:
@@ -7222,7 +7246,7 @@
   lineinfile:
     create: true
     dest: /etc/modprobe.d/can.conf
-    regexp: can
+    regexp: install\s+can
     line: install can /bin/true
   when:
   - disable_strategy | bool
@@ -7270,7 +7294,7 @@
   lineinfile:
     create: true
     dest: /etc/modprobe.d/sctp.conf
-    regexp: sctp
+    regexp: install\s+sctp
     line: install sctp /bin/true
   when:
   - disable_strategy | bool
@@ -7328,7 +7352,7 @@
   lineinfile:
     create: true
     dest: /etc/modprobe.d/tipc.conf
-    regexp: tipc
+    regexp: install\s+tipc
     line: install tipc /bin/true
   when:
   - disable_strategy | bool
@@ -7380,7 +7404,7 @@
   lineinfile:
     create: true
     dest: /etc/modprobe.d/bluetooth.conf
-    regexp: bluetooth
+    regexp: install\s+bluetooth
     line: install bluetooth /bin/true
   when:
   - disable_strategy | bool
@@ -9563,7 +9587,8 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - package_usbguard_installed | bool
-  - ansible_architecture != "s390x"
+  - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"] and ansible_architecture != "s390x"
+    )
   tags:
   - CCE-84203-9
   - NIST-800-53-CM-8(3)
@@ -9595,8 +9620,8 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - service_usbguard_enabled | bool
-  - ansible_architecture != "s390x"
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"] and ansible_architecture != "s390x"
+    )
   tags:
   - CCE-84205-4
   - NIST-800-53-CM-8(3)(a)
@@ -9621,7 +9646,8 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - usbguard_allow_hid_and_hub | bool
-  - ansible_architecture != "s390x"
+  - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"] and ansible_architecture != "s390x"
+    )
   tags:
   - CCE-84210-4
   - NIST-800-53-CM-8(3)
