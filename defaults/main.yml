@@ -75,6 +75,7 @@ auditd_freq: true
 auditd_log_format: true
 auditd_name_format: true
 chronyd_client_only: true
+configure_bashrc_exec_tmux: true
 configure_crypto_policy: true
 configure_openssl_crypto_policy: true
 configure_ssh_crypto_policy: true
