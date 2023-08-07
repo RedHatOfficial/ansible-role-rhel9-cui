@@ -82,6 +82,8 @@ configure_ssh_crypto_policy: true
 configure_strategy: true
 configure_tmux_lock_after_time: true
 configure_tmux_lock_command: true
+disable_ctrlaltdel_burstaction: true
+disable_ctrlaltdel_reboot: true
 disable_host_auth: true
 disable_strategy: true
 enable_authselect: true
