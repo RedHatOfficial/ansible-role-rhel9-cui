@@ -11,6 +11,7 @@ var_password_pam_minlen: '12'
 var_password_pam_ocredit: '-1'
 var_password_pam_ucredit: '-1'
 var_auditd_flush: incremental_async
+var_auditd_name_format: hostname
 sysctl_kernel_unprivileged_bpf_disabled_value: '2'
 sysctl_kernel_kptr_restrict_value: '1'
 var_selinux_policy_name: targeted
@@ -88,6 +89,7 @@ disable_host_auth: true
 disable_strategy: true
 enable_authselect: true
 enable_dracut_fips_module: true
+enable_fips_mode: true
 enable_strategy: true
 ensure_gpgcheck_globally_activated: true
 ensure_gpgcheck_local_packages: true
