@@ -1,7 +1,7 @@
 galaxy_info:
   role_name: rhel9_cui
   author: ComplianceAsCode development team
-  description: [DRAFT] Unclassified Information in Non-federal Information Systems and Organizations (NIST 800-171)
+  description: DRAFT - Unclassified Information in Non-federal Information Systems and Organizations (NIST 800-171)
 
   issue_tracker_url: https://github.com/ComplianceAsCode/content/issues
 
