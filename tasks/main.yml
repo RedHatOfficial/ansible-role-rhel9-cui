@@ -82,6 +82,126 @@
   - reboot_required
   - restrict_strategy
 
+- name: Enable FIPS Mode - Check to See the Current Status of FIPS Mode
+  ansible.builtin.command: /usr/bin/fips-mode-setup --check
+  register: is_fips_enabled
+  ignore_errors: true
+  changed_when: false
+  when:
+  - enable_fips_mode | bool
+  - high_severity | bool
+  - medium_complexity | bool
+  - medium_disruption | bool
+  - reboot_required | bool
+  - restrict_strategy | bool
+  - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"] and not ( lookup("env", "container")
+    == "bwrap-osbuild" ) )
+  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  tags:
+  - CCE-88742-2
+  - NIST-800-53-CM-3(6)
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-IA-7
+  - NIST-800-53-SC-12
+  - NIST-800-53-SC-12(2)
+  - NIST-800-53-SC-12(3)
+  - NIST-800-53-SC-13
+  - enable_fips_mode
+  - high_severity
+  - medium_complexity
+  - medium_disruption
+  - reboot_required
+  - restrict_strategy
+
+- name: Enable FIPS Mode - Enable FIPS Mode
+  ansible.builtin.command: /usr/bin/fips-mode-setup --enable
+  when:
+  - enable_fips_mode | bool
+  - high_severity | bool
+  - medium_complexity | bool
+  - medium_disruption | bool
+  - reboot_required | bool
+  - restrict_strategy | bool
+  - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"] and not ( lookup("env", "container")
+    == "bwrap-osbuild" ) )
+  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - is_fips_enabled.stdout.find('FIPS mode is enabled.') == -1
+  tags:
+  - CCE-88742-2
+  - NIST-800-53-CM-3(6)
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-IA-7
+  - NIST-800-53-SC-12
+  - NIST-800-53-SC-12(2)
+  - NIST-800-53-SC-12(3)
+  - NIST-800-53-SC-13
+  - enable_fips_mode
+  - high_severity
+  - medium_complexity
+  - medium_disruption
+  - reboot_required
+  - restrict_strategy
+
+- name: Enable FIPS Mode - Configure Crypto Policy
+  ansible.builtin.lineinfile:
+    path: /etc/crypto-policies/config
+    regexp: ^(?!#)(\S+)$
+    line: '{{ var_system_crypto_policy }}'
+    create: true
+  when:
+  - enable_fips_mode | bool
+  - high_severity | bool
+  - medium_complexity | bool
+  - medium_disruption | bool
+  - reboot_required | bool
+  - restrict_strategy | bool
+  - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"] and not ( lookup("env", "container")
+    == "bwrap-osbuild" ) )
+  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  tags:
+  - CCE-88742-2
+  - NIST-800-53-CM-3(6)
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-IA-7
+  - NIST-800-53-SC-12
+  - NIST-800-53-SC-12(2)
+  - NIST-800-53-SC-12(3)
+  - NIST-800-53-SC-13
+  - enable_fips_mode
+  - high_severity
+  - medium_complexity
+  - medium_disruption
+  - reboot_required
+  - restrict_strategy
+
+- name: Enable FIPS Mode - Verify that Crypto Policy is Set (runtime)
+  ansible.builtin.command: /usr/bin/update-crypto-policies --set {{ var_system_crypto_policy }}
+  when:
+  - enable_fips_mode | bool
+  - high_severity | bool
+  - medium_complexity | bool
+  - medium_disruption | bool
+  - reboot_required | bool
+  - restrict_strategy | bool
+  - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"] and not ( lookup("env", "container")
+    == "bwrap-osbuild" ) )
+  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  tags:
+  - CCE-88742-2
+  - NIST-800-53-CM-3(6)
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-IA-7
+  - NIST-800-53-SC-12
+  - NIST-800-53-SC-12(2)
+  - NIST-800-53-SC-12(3)
+  - NIST-800-53-SC-13
+  - enable_fips_mode
+  - high_severity
+  - medium_complexity
+  - medium_disruption
+  - reboot_required
+  - restrict_strategy
+
 - name: Ensure crypto-policies is installed
   package:
     name: crypto-policies
@@ -218,7 +338,8 @@
   - no_reboot_needed | bool
   - unknown_strategy | bool
 
-- name: '{{ rule_title }} - Add .include Line for opensslcnf.config File in crypto_policy Section'
+- name: Configure OpenSSL library to use System Crypto Policy - Add .include Line for opensslcnf.config File in crypto_policy
+    Section
   ansible.builtin.lineinfile:
     create: true
     insertafter: ^\s*\[\s*crypto_policy\s*]\s*
@@ -289,7 +410,7 @@
   lineinfile:
     dest: /etc/sysconfig/sshd
     state: absent
-    regexp: ^\s*(?i)CRYPTO_POLICY.*$
+    regexp: ^(?i)\s*CRYPTO_POLICY.*$
   tags:
   - CCE-83445-7
   - NIST-800-53-AC-17(2)
@@ -3329,12 +3450,31 @@
   - medium_severity
   - no_reboot_needed
 
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-89876-7
+  - configure_tmux_lock_after_time
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  when:
+  - configure_tmux_lock_after_time | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+
 - name: Configure tmux to lock session after inactivity
   block:
   - name: Check for duplicate values
     lineinfile:
       path: /etc/tmux.conf
-      create: false
+      create: true
       regexp: ^\s*set -g lock-after-time\s+
       mode: '0644'
       state: absent
@@ -3344,7 +3484,7 @@
   - name: Deduplicate values from /etc/tmux.conf
     lineinfile:
       path: /etc/tmux.conf
-      create: false
+      create: true
       regexp: ^\s*set -g lock-after-time\s+
       mode: '0644'
       state: absent
@@ -3365,6 +3505,7 @@
   - no_reboot_needed | bool
   - restrict_strategy | bool
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"tmux" in ansible_facts.packages'
   tags:
   - CCE-89876-7
   - configure_tmux_lock_after_time
@@ -3374,12 +3515,34 @@
   - no_reboot_needed
   - restrict_strategy
 
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-90171-0
+  - NIST-800-53-AC-11(a)
+  - NIST-800-53-AC-11(b)
+  - NIST-800-53-CM-6(a)
+  - configure_tmux_lock_command
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  when:
+  - configure_tmux_lock_command | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+
 - name: Configure the tmux Lock Command
   block:
   - name: Check for duplicate values
     lineinfile:
       path: /etc/tmux.conf
-      create: false
+      create: true
       regexp: ^\s*set -g lock-command\s+
       mode: '0644'
       state: absent
@@ -3389,7 +3552,7 @@
   - name: Deduplicate values from /etc/tmux.conf
     lineinfile:
       path: /etc/tmux.conf
-      create: false
+      create: true
       regexp: ^\s*set -g lock-command\s+
       mode: '0644'
       state: absent
@@ -3410,6 +3573,7 @@
   - no_reboot_needed | bool
   - restrict_strategy | bool
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"tmux" in ansible_facts.packages'
   tags:
   - CCE-90171-0
   - NIST-800-53-AC-11(a)
@@ -3879,7 +4043,7 @@
   - name: Check for duplicate values
     lineinfile:
       path: /etc/audit/auditd.conf
-      create: false
+      create: true
       regexp: (?i)^\s*freq\s*=\s*
       state: absent
     check_mode: true
@@ -3888,7 +4052,7 @@
   - name: Deduplicate values from /etc/audit/auditd.conf
     lineinfile:
       path: /etc/audit/auditd.conf
-      create: false
+      create: true
       regexp: (?i)^\s*freq\s*=\s*
       state: absent
     when: dupes.found is defined and dupes.found > 1
@@ -3944,7 +4108,7 @@
   - name: Check for duplicate values
     lineinfile:
       path: /etc/audit/auditd.conf
-      create: false
+      create: true
       regexp: (?i)^\s*log_format\s*=\s*
       state: absent
     check_mode: true
@@ -3953,7 +4117,7 @@
   - name: Deduplicate values from /etc/audit/auditd.conf
     lineinfile:
       path: /etc/audit/auditd.conf
-      create: false
+      create: true
       regexp: (?i)^\s*log_format\s*=\s*
       state: absent
     when: dupes.found is defined and dupes.found > 1
@@ -4005,12 +4169,34 @@
   - no_reboot_needed | bool
   - restrict_strategy | bool
 
-- name: Set hostname as computer node name in audit logs
+- name: Set type of computer node name logging in audit logs - Define Value to Be Used in the Remediation
+  ansible.builtin.set_fact: auditd_name_format_split="{{ var_auditd_name_format.split('|')[0] }}"
+  when:
+  - auditd_name_format | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+  - '"audit" in ansible_facts.packages'
+  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  tags:
+  - CCE-83686-6
+  - NIST-800-53-AU-3
+  - NIST-800-53-CM-6
+  - auditd_name_format
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+
+- name: Set type of computer node name logging in audit logs
   block:
   - name: Check for duplicate values
     lineinfile:
       path: /etc/audit/auditd.conf
-      create: false
+      create: true
       regexp: (?i)^\s*name_format\s*=\s*
       state: absent
     check_mode: true
@@ -4019,7 +4205,7 @@
   - name: Deduplicate values from /etc/audit/auditd.conf
     lineinfile:
       path: /etc/audit/auditd.conf
-      create: false
+      create: true
       regexp: (?i)^\s*name_format\s*=\s*
       state: absent
     when: dupes.found is defined and dupes.found > 1
@@ -4028,7 +4214,7 @@
       path: /etc/audit/auditd.conf
       create: true
       regexp: (?i)^\s*name_format\s*=\s*
-      line: name_format = hostname
+      line: name_format = {{ auditd_name_format_split }}
       state: present
   when:
   - auditd_name_format | bool
@@ -9006,7 +9192,7 @@
   - name: Check for duplicate values
     lineinfile:
       path: /etc/selinux/config
-      create: false
+      create: true
       regexp: ^SELINUXTYPE=
       state: absent
     check_mode: true
@@ -9015,7 +9201,7 @@
   - name: Deduplicate values from /etc/selinux/config
     lineinfile:
       path: /etc/selinux/config
-      create: false
+      create: true
       regexp: ^SELINUXTYPE=
       state: absent
     when: dupes.found is defined and dupes.found > 1
@@ -9054,7 +9240,7 @@
   - name: Check for duplicate values
     lineinfile:
       path: /etc/selinux/config
-      create: false
+      create: true
       regexp: ^SELINUX=
       state: absent
     check_mode: true
@@ -9063,7 +9249,7 @@
   - name: Deduplicate values from /etc/selinux/config
     lineinfile:
       path: /etc/selinux/config
-      create: false
+      create: true
       regexp: ^SELINUX=
       state: absent
     when: dupes.found is defined and dupes.found > 1
@@ -9266,7 +9452,7 @@
   - name: Check for duplicate values
     lineinfile:
       path: /etc/chrony.conf
-      create: false
+      create: true
       regexp: ^\s*port\s+
       state: absent
     check_mode: true
@@ -9275,7 +9461,7 @@
   - name: Deduplicate values from /etc/chrony.conf
     lineinfile:
       path: /etc/chrony.conf
-      create: false
+      create: true
       regexp: ^\s*port\s+
       state: absent
     when: dupes.found is defined and dupes.found > 1
@@ -9476,7 +9662,7 @@
       regexp: (?i)^\s*{{ "HostbasedAuthentication"| regex_escape }}\s+
       line: HostbasedAuthentication no
       state: present
-      insertbefore: ^[#\s]*Match
+      insertbefore: BOF
       validate: /usr/sbin/sshd -t -f %s
   when:
   - disable_host_auth | bool
@@ -9538,7 +9724,7 @@
       regexp: (?i)^\s*{{ "PermitEmptyPasswords"| regex_escape }}\s+
       line: PermitEmptyPasswords no
       state: present
-      insertbefore: ^[#\s]*Match
+      insertbefore: BOF
       validate: /usr/sbin/sshd -t -f %s
   when:
   - high_severity | bool
@@ -9601,7 +9787,7 @@
       regexp: (?i)^\s*{{ "GSSAPIAuthentication"| regex_escape }}\s+
       line: GSSAPIAuthentication no
       state: present
-      insertbefore: ^[#\s]*Match
+      insertbefore: BOF
       validate: /usr/sbin/sshd -t -f %s
   when:
   - low_complexity | bool
@@ -9660,7 +9846,7 @@
       regexp: (?i)^\s*{{ "KerberosAuthentication"| regex_escape }}\s+
       line: KerberosAuthentication no
       state: present
-      insertbefore: ^[#\s]*Match
+      insertbefore: BOF
       validate: /usr/sbin/sshd -t -f %s
   when:
   - low_complexity | bool
@@ -9719,7 +9905,7 @@
       regexp: (?i)^\s*{{ "PermitRootLogin"| regex_escape }}\s+
       line: PermitRootLogin no
       state: present
-      insertbefore: ^[#\s]*Match
+      insertbefore: BOF
       validate: /usr/sbin/sshd -t -f %s
   when:
   - low_complexity | bool
@@ -9785,7 +9971,7 @@
       regexp: (?i)^\s*{{ "Banner"| regex_escape }}\s+
       line: Banner /etc/issue
       state: present
-      insertbefore: ^[#\s]*Match
+      insertbefore: BOF
       validate: /usr/sbin/sshd -t -f %s
   when:
   - low_complexity | bool
@@ -9847,7 +10033,7 @@
       regexp: (?i)^\s*{{ "RekeyLimit"| regex_escape }}\s+
       line: RekeyLimit {{ var_rekey_limit_size }} {{ var_rekey_limit_time }}
       state: present
-      insertbefore: ^[#\s]*Match
+      insertbefore: BOF
       validate: /usr/sbin/sshd -t -f %s
   when:
   - configure_strategy | bool
