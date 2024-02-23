@@ -860,7 +860,7 @@
   - restrict_strategy | bool
 
 - name: Read signatures in GPG key
-  command: gpg --show-keys --with-fingerprint --with-colons "/etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release"
+  command: gpg --show-keys --with-fingerprint --with-colons "{{ rpm_gpg_key_path }}"
   changed_when: false
   register: gpg_fingerprints
   check_mode: false

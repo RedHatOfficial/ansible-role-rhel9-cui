@@ -209,6 +209,7 @@ package_usbguard_installed: true
 reboot_required: true
 require_singleuser_auth: true
 restrict_strategy: true
+rpm_gpg_key_path: /etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
 selinux_policytype: true
 selinux_state: true
 service_auditd_enabled: true
