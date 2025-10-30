@@ -1,3 +1,30 @@
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-86547-7
+  - DISA-STIG-RHEL-09-671010
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-IA-7
+  - NIST-800-53-SC-12
+  - NIST-800-53-SC-12(2)
+  - NIST-800-53-SC-12(3)
+  - NIST-800-53-SC-13
+  - enable_dracut_fips_module
+  - high_severity
+  - medium_complexity
+  - medium_disruption
+  - reboot_required
+  - restrict_strategy
+  when:
+  - DISA_STIG_RHEL_09_671010 | bool
+  - enable_dracut_fips_module | bool
+  - high_severity | bool
+  - medium_complexity | bool
+  - medium_disruption | bool
+  - reboot_required | bool
+  - restrict_strategy | bool
+
 - name: Check to see the current status of FIPS mode
   command: /usr/bin/fips-mode-setup --check
   register: is_fips_enabled
@@ -11,8 +38,7 @@
   - medium_disruption | bool
   - reboot_required | bool
   - restrict_strategy | bool
-  - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"] and not ( lookup("env", "container")
-    == "bwrap-osbuild" ) )
+  - ( not ( lookup("env", "container") == "bwrap-osbuild" ) and "kernel" in ansible_facts.packages )
   tags:
   - CCE-86547-7
   - DISA-STIG-RHEL-09-671010
@@ -39,8 +65,7 @@
   - medium_disruption | bool
   - reboot_required | bool
   - restrict_strategy | bool
-  - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"] and not ( lookup("env", "container")
-    == "bwrap-osbuild" ) )
+  - ( not ( lookup("env", "container") == "bwrap-osbuild" ) and "kernel" in ansible_facts.packages )
   - is_fips_enabled.stdout.find('FIPS mode is enabled.') == -1
   tags:
   - CCE-86547-7
@@ -70,8 +95,7 @@
   - medium_disruption | bool
   - reboot_required | bool
   - restrict_strategy | bool
-  - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"] and not ( lookup("env", "container")
-    == "bwrap-osbuild" ) )
+  - ( not ( lookup("env", "container") == "bwrap-osbuild" ) and "kernel" in ansible_facts.packages )
   tags:
   - CCE-86547-7
   - DISA-STIG-RHEL-09-671010
@@ -88,6 +112,34 @@
   - reboot_required
   - restrict_strategy
 
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-88742-2
+  - DISA-STIG-RHEL-09-671010
+  - NIST-800-53-CM-3(6)
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-IA-7
+  - NIST-800-53-SC-12
+  - NIST-800-53-SC-12(2)
+  - NIST-800-53-SC-12(3)
+  - NIST-800-53-SC-13
+  - enable_fips_mode
+  - high_severity
+  - medium_complexity
+  - medium_disruption
+  - reboot_required
+  - restrict_strategy
+  when:
+  - DISA_STIG_RHEL_09_671010 | bool
+  - enable_fips_mode | bool
+  - high_severity | bool
+  - medium_complexity | bool
+  - medium_disruption | bool
+  - reboot_required | bool
+  - restrict_strategy | bool
+
 - name: Enable FIPS Mode - Check to See the Current Status of FIPS Mode
   ansible.builtin.command: /usr/bin/fips-mode-setup --check
   register: is_fips_enabled
@@ -101,9 +153,7 @@
   - medium_disruption | bool
   - reboot_required | bool
   - restrict_strategy | bool
-  - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"] and not ( lookup("env", "container")
-    == "bwrap-osbuild" ) )
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - ( not ( lookup("env", "container") == "bwrap-osbuild" ) and "kernel" in ansible_facts.packages )
   tags:
   - CCE-88742-2
   - DISA-STIG-RHEL-09-671010
@@ -131,9 +181,7 @@
   - medium_disruption | bool
   - reboot_required | bool
   - restrict_strategy | bool
-  - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"] and not ( lookup("env", "container")
-    == "bwrap-osbuild" ) )
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - ( not ( lookup("env", "container") == "bwrap-osbuild" ) and "kernel" in ansible_facts.packages )
   - is_fips_enabled.stdout.find('FIPS mode is enabled.') == -1
   tags:
   - CCE-88742-2
@@ -166,9 +214,7 @@
   - medium_disruption | bool
   - reboot_required | bool
   - restrict_strategy | bool
-  - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"] and not ( lookup("env", "container")
-    == "bwrap-osbuild" ) )
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - ( not ( lookup("env", "container") == "bwrap-osbuild" ) and "kernel" in ansible_facts.packages )
   tags:
   - CCE-88742-2
   - DISA-STIG-RHEL-09-671010
@@ -196,9 +242,7 @@
   - medium_disruption | bool
   - reboot_required | bool
   - restrict_strategy | bool
-  - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"] and not ( lookup("env", "container")
-    == "bwrap-osbuild" ) )
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - ( not ( lookup("env", "container") == "bwrap-osbuild" ) and "kernel" in ansible_facts.packages )
   tags:
   - CCE-88742-2
   - DISA-STIG-RHEL-09-671010
@@ -256,6 +300,7 @@
   - NIST-800-53-SC-12(2)
   - NIST-800-53-SC-12(3)
   - NIST-800-53-SC-13
+  - PCI-DSSv4-2.2
   - PCI-DSSv4-2.2.7
   - configure_crypto_policy
   - high_severity
@@ -288,6 +333,7 @@
   - NIST-800-53-SC-12(2)
   - NIST-800-53-SC-12(3)
   - NIST-800-53-SC-13
+  - PCI-DSSv4-2.2
   - PCI-DSSv4-2.2.7
   - configure_crypto_policy
   - high_severity
@@ -447,13 +493,13 @@
     regexp: (?i)^\s*CRYPTO_POLICY.*$
   tags:
   - CCE-83445-7
-  - DISA-STIG-RHEL-09-255055
   - NIST-800-53-AC-17(2)
   - NIST-800-53-AC-17(a)
   - NIST-800-53-CM-6(a)
   - NIST-800-53-MA-4(6)
   - NIST-800-53-SC-13
   - PCI-DSS-Req-2.2
+  - PCI-DSSv4-2.2
   - PCI-DSSv4-2.2.7
   - configure_ssh_crypto_policy
   - disable_strategy
@@ -462,13 +508,36 @@
   - medium_severity
   - reboot_required
   when:
-  - DISA_STIG_RHEL_09_255055 | bool
   - configure_ssh_crypto_policy | bool
   - disable_strategy | bool
   - low_complexity | bool
   - medium_disruption | bool
   - medium_severity | bool
   - reboot_required | bool
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-83523-1
+  - DISA-STIG-RHEL-09-432010
+  - NIST-800-53-CM-6(a)
+  - PCI-DSSv4-2.2
+  - PCI-DSSv4-2.2.6
+  - enable_strategy
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - package_sudo_installed
+  when:
+  - DISA_STIG_RHEL_09_432010 | bool
+  - enable_strategy | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - package_sudo_installed | bool
 
 - name: Ensure sudo is installed
   package:
@@ -482,11 +551,12 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - package_sudo_installed | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-83523-1
   - DISA-STIG-RHEL-09-432010
   - NIST-800-53-CM-6(a)
+  - PCI-DSSv4-2.2
   - PCI-DSSv4-2.2.6
   - enable_strategy
   - low_complexity
@@ -642,6 +712,7 @@
   - NIST-800-53-SC-12(3)
   - NIST-800-53-SI-7
   - PCI-DSS-Req-6.2
+  - PCI-DSSv4-6.3
   - PCI-DSSv4-6.3.3
   - configure_strategy
   - ensure_gpgcheck_globally_activated
@@ -690,6 +761,7 @@
   - NIST-800-53-SC-12(3)
   - NIST-800-53-SI-7
   - PCI-DSS-Req-6.2
+  - PCI-DSSv4-6.3
   - PCI-DSSv4-6.3.3
   - configure_strategy
   - ensure_gpgcheck_globally_activated
@@ -795,6 +867,7 @@
   - NIST-800-53-SC-12(3)
   - NIST-800-53-SI-7
   - PCI-DSS-Req-6.2
+  - PCI-DSSv4-6.3
   - PCI-DSSv4-6.3.3
   - enable_strategy
   - ensure_gpgcheck_never_disabled
@@ -844,6 +917,7 @@
   - NIST-800-53-SC-12(3)
   - NIST-800-53-SI-7
   - PCI-DSS-Req-6.2
+  - PCI-DSSv4-6.3
   - PCI-DSSv4-6.3.3
   - enable_strategy
   - ensure_gpgcheck_never_disabled
@@ -868,6 +942,7 @@
   - NIST-800-53-SC-12(3)
   - NIST-800-53-SI-7
   - PCI-DSS-Req-6.2
+  - PCI-DSSv4-6.3
   - PCI-DSSv4-6.3.3
   - ensure_redhat_gpgkey_installed
   - high_severity
@@ -900,6 +975,7 @@
   - NIST-800-53-SC-12(3)
   - NIST-800-53-SI-7
   - PCI-DSS-Req-6.2
+  - PCI-DSSv4-6.3
   - PCI-DSSv4-6.3.3
   - ensure_redhat_gpgkey_installed
   - high_severity
@@ -932,6 +1008,7 @@
   - NIST-800-53-SC-12(3)
   - NIST-800-53-SI-7
   - PCI-DSS-Req-6.2
+  - PCI-DSSv4-6.3
   - PCI-DSSv4-6.3.3
   - ensure_redhat_gpgkey_installed
   - high_severity
@@ -964,6 +1041,7 @@
   - NIST-800-53-SC-12(3)
   - NIST-800-53-SI-7
   - PCI-DSS-Req-6.2
+  - PCI-DSSv4-6.3
   - PCI-DSSv4-6.3.3
   - ensure_redhat_gpgkey_installed
   - high_severity
@@ -1007,6 +1085,7 @@
   - NIST-800-53-SC-12(3)
   - NIST-800-53-SI-7
   - PCI-DSS-Req-6.2
+  - PCI-DSSv4-6.3
   - PCI-DSSv4-6.3.3
   - ensure_redhat_gpgkey_installed
   - high_severity
@@ -1055,6 +1134,7 @@
   - CCE-89732-2
   - DISA-STIG-needed_rules
   - NIST-800-53-AC-3
+  - PCI-DSSv4-8.3
   - PCI-DSSv4-8.3.4
   - configure_strategy
   - enable_authselect
@@ -1090,6 +1170,7 @@
   - CCE-89732-2
   - DISA-STIG-needed_rules
   - NIST-800-53-AC-3
+  - PCI-DSSv4-8.3
   - PCI-DSSv4-8.3.4
   - configure_strategy
   - enable_authselect
@@ -1118,6 +1199,7 @@
   - CCE-89732-2
   - DISA-STIG-needed_rules
   - NIST-800-53-AC-3
+  - PCI-DSSv4-8.3
   - PCI-DSSv4-8.3.4
   - configure_strategy
   - enable_authselect
@@ -1137,6 +1219,7 @@
   - CCE-89732-2
   - DISA-STIG-needed_rules
   - NIST-800-53-AC-3
+  - PCI-DSSv4-8.3
   - PCI-DSSv4-8.3.4
   - configure_strategy
   - enable_authselect
@@ -1171,6 +1254,7 @@
   - CCE-89732-2
   - DISA-STIG-needed_rules
   - NIST-800-53-AC-3
+  - PCI-DSSv4-8.3
   - PCI-DSSv4-8.3.4
   - configure_strategy
   - enable_authselect
@@ -1190,6 +1274,7 @@
   - NIST-800-53-AC-7(a)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-8.1.6
+  - PCI-DSSv4-8.3
   - PCI-DSSv4-8.3.4
   - accounts_passwords_pam_faillock_deny
   - low_complexity
@@ -1227,6 +1312,7 @@
   - NIST-800-53-AC-7(a)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-8.1.6
+  - PCI-DSSv4-8.3
   - PCI-DSSv4-8.3.4
   - accounts_passwords_pam_faillock_deny
   - low_complexity
@@ -1293,6 +1379,7 @@
   - NIST-800-53-AC-7(a)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-8.1.6
+  - PCI-DSSv4-8.3
   - PCI-DSSv4-8.3.4
   - accounts_passwords_pam_faillock_deny
   - low_complexity
@@ -1362,6 +1449,7 @@
   - NIST-800-53-AC-7(a)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-8.1.6
+  - PCI-DSSv4-8.3
   - PCI-DSSv4-8.3.4
   - accounts_passwords_pam_faillock_deny
   - low_complexity
@@ -1391,6 +1479,7 @@
   - NIST-800-53-AC-7(a)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-8.1.6
+  - PCI-DSSv4-8.3
   - PCI-DSSv4-8.3.4
   - accounts_passwords_pam_faillock_deny
   - low_complexity
@@ -1423,6 +1512,7 @@
   - NIST-800-53-AC-7(a)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-8.1.6
+  - PCI-DSSv4-8.3
   - PCI-DSSv4-8.3.4
   - accounts_passwords_pam_faillock_deny
   - low_complexity
@@ -1723,6 +1813,7 @@
   - NIST-800-53-AC-7(a)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-8.1.6
+  - PCI-DSSv4-8.3
   - PCI-DSSv4-8.3.4
   - accounts_passwords_pam_faillock_deny
   - low_complexity
@@ -1812,6 +1903,7 @@
   - NIST-800-53-AC-7(a)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-8.1.6
+  - PCI-DSSv4-8.3
   - PCI-DSSv4-8.3.4
   - accounts_passwords_pam_faillock_deny
   - low_complexity
@@ -2451,6 +2543,7 @@
   - NIST-800-53-AC-7(b)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-8.1.7
+  - PCI-DSSv4-8.3
   - PCI-DSSv4-8.3.4
   - accounts_passwords_pam_faillock_unlock_time
   - low_complexity
@@ -2488,6 +2581,7 @@
   - NIST-800-53-AC-7(b)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-8.1.7
+  - PCI-DSSv4-8.3
   - PCI-DSSv4-8.3.4
   - accounts_passwords_pam_faillock_unlock_time
   - low_complexity
@@ -2554,6 +2648,7 @@
   - NIST-800-53-AC-7(b)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-8.1.7
+  - PCI-DSSv4-8.3
   - PCI-DSSv4-8.3.4
   - accounts_passwords_pam_faillock_unlock_time
   - low_complexity
@@ -2623,6 +2718,7 @@
   - NIST-800-53-AC-7(b)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-8.1.7
+  - PCI-DSSv4-8.3
   - PCI-DSSv4-8.3.4
   - accounts_passwords_pam_faillock_unlock_time
   - low_complexity
@@ -2652,6 +2748,7 @@
   - NIST-800-53-AC-7(b)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-8.1.7
+  - PCI-DSSv4-8.3
   - PCI-DSSv4-8.3.4
   - accounts_passwords_pam_faillock_unlock_time
   - low_complexity
@@ -2684,6 +2781,7 @@
   - NIST-800-53-AC-7(b)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-8.1.7
+  - PCI-DSSv4-8.3
   - PCI-DSSv4-8.3.4
   - accounts_passwords_pam_faillock_unlock_time
   - low_complexity
@@ -2986,6 +3084,7 @@
   - NIST-800-53-AC-7(b)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-8.1.7
+  - PCI-DSSv4-8.3
   - PCI-DSSv4-8.3.4
   - accounts_passwords_pam_faillock_unlock_time
   - low_complexity
@@ -3075,6 +3174,7 @@
   - NIST-800-53-AC-7(b)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-8.1.7
+  - PCI-DSSv4-8.3
   - PCI-DSSv4-8.3.4
   - accounts_passwords_pam_faillock_unlock_time
   - low_complexity
@@ -3094,6 +3194,7 @@
   - NIST-800-53-IA-5(4)
   - NIST-800-53-IA-5(c)
   - PCI-DSS-Req-8.2.3
+  - PCI-DSSv4-8.3
   - PCI-DSSv4-8.3.6
   - accounts_password_pam_dcredit
   - low_complexity
@@ -3133,6 +3234,7 @@
   - NIST-800-53-IA-5(4)
   - NIST-800-53-IA-5(c)
   - PCI-DSS-Req-8.2.3
+  - PCI-DSSv4-8.3
   - PCI-DSSv4-8.3.6
   - accounts_password_pam_dcredit
   - low_complexity
@@ -3152,6 +3254,7 @@
   - NIST-800-53-IA-5(4)
   - NIST-800-53-IA-5(c)
   - PCI-DSS-Req-8.2.3
+  - PCI-DSSv4-8.3
   - PCI-DSSv4-8.3.6
   - accounts_password_pam_lcredit
   - low_complexity
@@ -3191,6 +3294,7 @@
   - NIST-800-53-IA-5(4)
   - NIST-800-53-IA-5(c)
   - PCI-DSS-Req-8.2.3
+  - PCI-DSSv4-8.3
   - PCI-DSSv4-8.3.6
   - accounts_password_pam_lcredit
   - low_complexity
@@ -3211,6 +3315,7 @@
   - NIST-800-53-IA-5(4)
   - NIST-800-53-IA-5(c)
   - PCI-DSS-Req-8.2.3
+  - PCI-DSSv4-8.3
   - PCI-DSSv4-8.3.6
   - accounts_password_pam_minlen
   - low_complexity
@@ -3251,6 +3356,7 @@
   - NIST-800-53-IA-5(4)
   - NIST-800-53-IA-5(c)
   - PCI-DSS-Req-8.2.3
+  - PCI-DSSv4-8.3
   - PCI-DSSv4-8.3.6
   - accounts_password_pam_minlen
   - low_complexity
@@ -3369,6 +3475,29 @@
   - no_reboot_needed
   - restrict_strategy
 
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-90724-6
+  - DISA-STIG-RHEL-09-211055
+  - NIST-800-171-3.4.5
+  - NIST-800-53-CM-6
+  - disable_strategy
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - service_debug-shell_disabled
+  when:
+  - DISA_STIG_RHEL_09_211055 | bool
+  - disable_strategy | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - service_debug_shell_disabled | bool
+
 - name: Disable debug-shell SystemD Service - Collect systemd Services Present in the System
   ansible.builtin.command: systemctl -q list-unit-files --type service
   register: service_exists
@@ -3383,7 +3512,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - service_debug_shell_disabled | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-90724-6
   - DISA-STIG-RHEL-09-211055
@@ -3410,7 +3539,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - service_debug_shell_disabled | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - service_exists.stdout_lines is search("debug-shell.service", multiline=True)
   tags:
   - CCE-90724-6
@@ -3438,7 +3567,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - service_debug_shell_disabled | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-90724-6
   - DISA-STIG-RHEL-09-211055
@@ -3465,7 +3594,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - service_debug_shell_disabled | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - socket_file_exists.stdout_lines is search("debug-shell.socket", multiline=True)
   tags:
   - CCE-90724-6
@@ -3519,7 +3648,7 @@
   - low_complexity | bool
   - low_disruption | bool
   - no_reboot_needed | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - '"systemd" in ansible_facts.packages'
   tags:
   - CCE-90308-8
@@ -3535,6 +3664,30 @@
   - low_disruption
   - no_reboot_needed
 
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-86667-3
+  - DISA-STIG-RHEL-09-211050
+  - NIST-800-171-3.4.5
+  - NIST-800-53-AC-6(1)
+  - NIST-800-53-CM-6(a)
+  - disable_ctrlaltdel_reboot
+  - disable_strategy
+  - high_severity
+  - low_complexity
+  - low_disruption
+  - no_reboot_needed
+  when:
+  - DISA_STIG_RHEL_09_211050 | bool
+  - disable_ctrlaltdel_reboot | bool
+  - disable_strategy | bool
+  - high_severity | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - no_reboot_needed | bool
+
 - name: Disable Ctrl-Alt-Del Reboot Activation
   systemd:
     name: ctrl-alt-del.target
@@ -3549,7 +3702,7 @@
   - low_complexity | bool
   - low_disruption | bool
   - no_reboot_needed | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-86667-3
   - DISA-STIG-RHEL-09-211050
@@ -3562,6 +3715,37 @@
   - low_complexity
   - low_disruption
   - no_reboot_needed
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-90785-7
+  - CJIS-5.5.6
+  - DISA-STIG-RHEL-09-412080
+  - NIST-800-171-3.1.11
+  - NIST-800-53-AC-12
+  - NIST-800-53-AC-17(a)
+  - NIST-800-53-AC-17(a)
+  - NIST-800-53-AC-2(5)
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-SC-10
+  - PCI-DSS-Req-8.1.8
+  - logind_session_timeout
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - reboot_required
+  - restrict_strategy
+  when:
+  - DISA_STIG_RHEL_09_412080 | bool
+  - logind_session_timeout | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - reboot_required | bool
+  - restrict_strategy | bool
 
 - name: Set 'StopIdleSessionSec' to '{{ var_logind_session_timeout }}' in the [Login] section of '/etc/systemd/logind.conf'
   ini_file:
@@ -3579,7 +3763,7 @@
   - medium_severity | bool
   - reboot_required | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ( ansible_distribution == 'RedHat' and ansible_distribution_version is version('8.7', '>=') and ansible_distribution ==
     'RedHat' and ansible_distribution_version is version('9.0', '!=') ) or ansible_distribution == 'OracleLinux' and ansible_distribution_version
     is version('8.7', '>=')
@@ -3603,12 +3787,23 @@
   - reboot_required
   - restrict_strategy
 
-- name: Require single user mode password
-  lineinfile:
-    create: true
-    dest: /usr/lib/systemd/system/rescue.service
-    regexp: ^#?ExecStart=
-    line: ExecStart=-/usr/lib/systemd/systemd-sulogin-shell rescue
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-83594-2
+  - DISA-STIG-RHEL-09-611200
+  - NIST-800-171-3.1.1
+  - NIST-800-171-3.4.5
+  - NIST-800-53-AC-3
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-IA-2
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - require_singleuser_auth
+  - restrict_strategy
   when:
   - DISA_STIG_RHEL_09_611200 | bool
   - low_complexity | bool
@@ -3617,7 +3812,22 @@
   - no_reboot_needed | bool
   - require_singleuser_auth | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+
+- name: Require Authentication for Single User Mode - Require emergency user mode password
+  community.general.ini_file:
+    path: /etc/systemd/system/rescue.service.d/10-oscap.conf
+    section: Service
+    option: ExecStart
+    value: -/usr/lib/systemd/systemd-sulogin-shell rescue
+  when:
+  - DISA_STIG_RHEL_09_611200 | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - require_singleuser_auth | bool
+  - restrict_strategy | bool
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-83594-2
   - DISA-STIG-RHEL-09-611200
@@ -3633,6 +3843,36 @@
   - require_singleuser_auth
   - restrict_strategy
 
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-83611-4
+  - CJIS-5.5.2
+  - DISA-STIG-RHEL-09-611025
+  - NIST-800-171-3.1.1
+  - NIST-800-171-3.1.5
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-IA-5(1)(a)
+  - NIST-800-53-IA-5(c)
+  - PCI-DSS-Req-8.2.3
+  - PCI-DSSv4-8.3
+  - PCI-DSSv4-8.3.1
+  - configure_strategy
+  - high_severity
+  - low_complexity
+  - medium_disruption
+  - no_empty_passwords
+  - no_reboot_needed
+  when:
+  - DISA_STIG_RHEL_09_611025 | bool
+  - configure_strategy | bool
+  - high_severity | bool
+  - low_complexity | bool
+  - medium_disruption | bool
+  - no_empty_passwords | bool
+  - no_reboot_needed | bool
+
 - name: Prevent Login to Accounts With Empty Password - Check if system relies on authselect
   ansible.builtin.stat:
     path: /usr/bin/authselect
@@ -3645,7 +3885,7 @@
   - medium_disruption | bool
   - no_empty_passwords | bool
   - no_reboot_needed | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-83611-4
   - CJIS-5.5.2
@@ -3656,6 +3896,7 @@
   - NIST-800-53-IA-5(1)(a)
   - NIST-800-53-IA-5(c)
   - PCI-DSS-Req-8.2.3
+  - PCI-DSSv4-8.3
   - PCI-DSSv4-8.3.1
   - configure_strategy
   - high_severity
@@ -3712,7 +3953,7 @@
   - medium_disruption | bool
   - no_empty_passwords | bool
   - no_reboot_needed | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - result_authselect_present.stat.exists
   tags:
   - CCE-83611-4
@@ -3724,6 +3965,7 @@
   - NIST-800-53-IA-5(1)(a)
   - NIST-800-53-IA-5(c)
   - PCI-DSS-Req-8.2.3
+  - PCI-DSSv4-8.3
   - PCI-DSSv4-8.3.1
   - configure_strategy
   - high_severity
@@ -3747,7 +3989,7 @@
   - medium_disruption | bool
   - no_empty_passwords | bool
   - no_reboot_needed | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - not result_authselect_present.stat.exists
   tags:
   - CCE-83611-4
@@ -3759,6 +4001,7 @@
   - NIST-800-53-IA-5(1)(a)
   - NIST-800-53-IA-5(c)
   - PCI-DSS-Req-8.2.3
+  - PCI-DSSv4-8.3
   - PCI-DSSv4-8.3.1
   - configure_strategy
   - high_severity
@@ -4021,7 +4264,8 @@
   - reboot_required | bool
   - restrict_strategy | bool
   - '"grub2-common" in ansible_facts.packages'
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"] and ansible_architecture == "x86_64"
+    )
   tags:
   - CCE-83842-5
   - DISA-STIG-RHEL-09-212035
@@ -4346,6 +4590,30 @@
   - no_reboot_needed
   - zipl_bootmap_is_up_to_date
 
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-84021-5
+  - DISA-STIG-RHEL-09-251010
+  - NIST-800-53-CM-6(a)
+  - PCI-DSSv4-1.2
+  - PCI-DSSv4-1.2.1
+  - enable_strategy
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - package_firewalld_installed
+  when:
+  - DISA_STIG_RHEL_09_251010 | bool
+  - enable_strategy | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - package_firewalld_installed | bool
+
 - name: Ensure firewalld is installed
   package:
     name: firewalld
@@ -4358,11 +4626,12 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - package_firewalld_installed | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-84021-5
   - DISA-STIG-RHEL-09-251010
   - NIST-800-53-CM-6(a)
+  - PCI-DSSv4-1.2
   - PCI-DSSv4-1.2.1
   - enable_strategy
   - low_complexity
@@ -4384,6 +4653,7 @@
   - NIST-800-53-CM-6(a)
   - NIST-800-53-CM-7(b)
   - NIST-800-53-SC-7(21)
+  - PCI-DSSv4-1.2
   - PCI-DSSv4-1.2.1
   - enable_strategy
   - low_complexity
@@ -4421,7 +4691,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - service_firewalld_enabled | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - '"firewalld" in ansible_facts.packages'
   tags:
   - CCE-90833-5
@@ -4433,6 +4703,7 @@
   - NIST-800-53-CM-6(a)
   - NIST-800-53-CM-7(b)
   - NIST-800-53-SC-7(21)
+  - PCI-DSSv4-1.2
   - PCI-DSSv4-1.2.1
   - enable_strategy
   - low_complexity
@@ -4440,6 +4711,28 @@
   - medium_severity
   - no_reboot_needed
   - service_firewalld_enabled
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-84134-6
+  - DISA-STIG-RHEL-09-213050
+  - NIST-800-53-AC-18
+  - disable_strategy
+  - kernel_module_can_disabled
+  - low_complexity
+  - medium_disruption
+  - medium_severity
+  - reboot_required
+  when:
+  - DISA_STIG_RHEL_09_213050 | bool
+  - disable_strategy | bool
+  - kernel_module_can_disabled | bool
+  - low_complexity | bool
+  - medium_disruption | bool
+  - medium_severity | bool
+  - reboot_required | bool
 
 - name: Ensure kernel module 'can' is disabled
   lineinfile:
@@ -4455,7 +4748,7 @@
   - medium_disruption | bool
   - medium_severity | bool
   - reboot_required | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-84134-6
   - DISA-STIG-RHEL-09-213050
@@ -4481,7 +4774,7 @@
   - medium_disruption | bool
   - medium_severity | bool
   - reboot_required | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-84134-6
   - DISA-STIG-RHEL-09-213050
@@ -4492,6 +4785,35 @@
   - medium_disruption
   - medium_severity
   - reboot_required
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-84139-5
+  - CJIS-5.10.1
+  - DISA-STIG-RHEL-09-213060
+  - NIST-800-171-3.4.6
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-CM-7(a)
+  - NIST-800-53-CM-7(b)
+  - PCI-DSS-Req-1.4.2
+  - PCI-DSSv4-1.4
+  - PCI-DSSv4-1.4.2
+  - disable_strategy
+  - kernel_module_sctp_disabled
+  - low_complexity
+  - medium_disruption
+  - medium_severity
+  - reboot_required
+  when:
+  - DISA_STIG_RHEL_09_213060 | bool
+  - disable_strategy | bool
+  - kernel_module_sctp_disabled | bool
+  - low_complexity | bool
+  - medium_disruption | bool
+  - medium_severity | bool
+  - reboot_required | bool
 
 - name: Ensure kernel module 'sctp' is disabled
   lineinfile:
@@ -4507,7 +4829,7 @@
   - medium_disruption | bool
   - medium_severity | bool
   - reboot_required | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-84139-5
   - CJIS-5.10.1
@@ -4517,6 +4839,7 @@
   - NIST-800-53-CM-7(a)
   - NIST-800-53-CM-7(b)
   - PCI-DSS-Req-1.4.2
+  - PCI-DSSv4-1.4
   - PCI-DSSv4-1.4.2
   - disable_strategy
   - kernel_module_sctp_disabled
@@ -4539,7 +4862,7 @@
   - medium_disruption | bool
   - medium_severity | bool
   - reboot_required | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-84139-5
   - CJIS-5.10.1
@@ -4549,6 +4872,7 @@
   - NIST-800-53-CM-7(a)
   - NIST-800-53-CM-7(b)
   - PCI-DSS-Req-1.4.2
+  - PCI-DSSv4-1.4
   - PCI-DSSv4-1.4.2
   - disable_strategy
   - kernel_module_sctp_disabled
@@ -4556,6 +4880,30 @@
   - medium_disruption
   - medium_severity
   - reboot_required
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-84065-2
+  - DISA-STIG-RHEL-09-213065
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-CM-7(a)
+  - NIST-800-53-CM-7(b)
+  - disable_strategy
+  - kernel_module_tipc_disabled
+  - low_complexity
+  - low_severity
+  - medium_disruption
+  - reboot_required
+  when:
+  - DISA_STIG_RHEL_09_213065 | bool
+  - disable_strategy | bool
+  - kernel_module_tipc_disabled | bool
+  - low_complexity | bool
+  - low_severity | bool
+  - medium_disruption | bool
+  - reboot_required | bool
 
 - name: Ensure kernel module 'tipc' is disabled
   lineinfile:
@@ -4571,7 +4919,7 @@
   - low_severity | bool
   - medium_disruption | bool
   - reboot_required | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-84065-2
   - DISA-STIG-RHEL-09-213065
@@ -4599,7 +4947,7 @@
   - low_severity | bool
   - medium_disruption | bool
   - reboot_required | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-84065-2
   - DISA-STIG-RHEL-09-213065
@@ -4612,6 +4960,35 @@
   - low_severity
   - medium_disruption
   - reboot_required
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-84067-8
+  - CJIS-5.13.1.3
+  - DISA-STIG-RHEL-09-291035
+  - NIST-800-171-3.1.16
+  - NIST-800-53-AC-18(3)
+  - NIST-800-53-AC-18(a)
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-CM-7(a)
+  - NIST-800-53-CM-7(b)
+  - NIST-800-53-MP-7
+  - disable_strategy
+  - kernel_module_bluetooth_disabled
+  - low_complexity
+  - medium_disruption
+  - medium_severity
+  - reboot_required
+  when:
+  - DISA_STIG_RHEL_09_291035 | bool
+  - disable_strategy | bool
+  - kernel_module_bluetooth_disabled | bool
+  - low_complexity | bool
+  - medium_disruption | bool
+  - medium_severity | bool
+  - reboot_required | bool
 
 - name: Ensure kernel module 'bluetooth' is disabled
   lineinfile:
@@ -4627,7 +5004,7 @@
   - medium_disruption | bool
   - medium_severity | bool
   - reboot_required | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-84067-8
   - CJIS-5.13.1.3
@@ -4660,7 +5037,7 @@
   - medium_disruption | bool
   - medium_severity | bool
   - reboot_required | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-84067-8
   - CJIS-5.13.1.3
@@ -4679,6 +5056,33 @@
   - medium_severity
   - reboot_required
 
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-83882-1
+  - DISA-STIG-RHEL-09-231160
+  - NIST-800-53-AC-6
+  - NIST-800-53-AC-6(1)
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-CM-7(a)
+  - NIST-800-53-CM-7(b)
+  - NIST-800-53-MP-7
+  - configure_strategy
+  - high_disruption
+  - low_complexity
+  - medium_severity
+  - mount_option_var_log_audit_nodev
+  - no_reboot_needed
+  when:
+  - DISA_STIG_RHEL_09_231160 | bool
+  - configure_strategy | bool
+  - high_disruption | bool
+  - low_complexity | bool
+  - medium_severity | bool
+  - mount_option_var_log_audit_nodev | bool
+  - no_reboot_needed | bool
+
 - name: 'Add nodev Option to /var/log/audit: Check information associated to mountpoint'
   command: findmnt --fstab '/var/log/audit'
   register: device_name
@@ -4692,8 +5096,9 @@
   - medium_severity | bool
   - mount_option_var_log_audit_nodev | bool
   - no_reboot_needed | bool
-  - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"] and "/var/log/audit" in ansible_mounts
-    | map(attribute="mount") | list )
+  - ( not ( "kernel" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
+    ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz", "podman", "container"] ) )
+  - '"/var/log/audit" in ansible_mounts | map(attribute="mount") | list'
   tags:
   - CCE-83882-1
   - DISA-STIG-RHEL-09-231160
@@ -4724,8 +5129,9 @@
   - medium_severity | bool
   - mount_option_var_log_audit_nodev | bool
   - no_reboot_needed | bool
-  - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"] and "/var/log/audit" in ansible_mounts
-    | map(attribute="mount") | list )
+  - ( not ( "kernel" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
+    ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz", "podman", "container"] ) )
+  - '"/var/log/audit" in ansible_mounts | map(attribute="mount") | list'
   - device_name.stdout is defined and device_name.stdout_lines is defined
   - (device_name.stdout | length > 0)
   tags:
@@ -4764,8 +5170,9 @@
   - medium_severity | bool
   - mount_option_var_log_audit_nodev | bool
   - no_reboot_needed | bool
-  - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"] and "/var/log/audit" in ansible_mounts
-    | map(attribute="mount") | list )
+  - ( not ( "kernel" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
+    ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz", "podman", "container"] ) )
+  - '"/var/log/audit" in ansible_mounts | map(attribute="mount") | list'
   - ("--fstab" | length == 0)
   - device_name.stdout is defined and device_name.stdout_lines is defined
   - (device_name.stdout | length == 0)
@@ -4796,8 +5203,9 @@
   - medium_severity | bool
   - mount_option_var_log_audit_nodev | bool
   - no_reboot_needed | bool
-  - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"] and "/var/log/audit" in ansible_mounts
-    | map(attribute="mount") | list )
+  - ( not ( "kernel" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
+    ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz", "podman", "container"] ) )
+  - '"/var/log/audit" in ansible_mounts | map(attribute="mount") | list'
   - mount_info is defined and "nodev" not in mount_info.options
   tags:
   - CCE-83882-1
@@ -4830,8 +5238,9 @@
   - medium_severity | bool
   - mount_option_var_log_audit_nodev | bool
   - no_reboot_needed | bool
-  - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"] and "/var/log/audit" in ansible_mounts
-    | map(attribute="mount") | list )
+  - ( not ( "kernel" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
+    ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz", "podman", "container"] ) )
+  - '"/var/log/audit" in ansible_mounts | map(attribute="mount") | list'
   - mount_info is defined
   - (device_name.stdout is defined and (device_name.stdout | length > 0)) or ("--fstab" | length == 0)
   tags:
@@ -4850,6 +5259,33 @@
   - mount_option_var_log_audit_nodev
   - no_reboot_needed
 
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-83878-9
+  - DISA-STIG-RHEL-09-231165
+  - NIST-800-53-AC-6
+  - NIST-800-53-AC-6(1)
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-CM-7(a)
+  - NIST-800-53-CM-7(b)
+  - NIST-800-53-MP-7
+  - configure_strategy
+  - high_disruption
+  - low_complexity
+  - medium_severity
+  - mount_option_var_log_audit_noexec
+  - no_reboot_needed
+  when:
+  - DISA_STIG_RHEL_09_231165 | bool
+  - configure_strategy | bool
+  - high_disruption | bool
+  - low_complexity | bool
+  - medium_severity | bool
+  - mount_option_var_log_audit_noexec | bool
+  - no_reboot_needed | bool
+
 - name: 'Add noexec Option to /var/log/audit: Check information associated to mountpoint'
   command: findmnt --fstab '/var/log/audit'
   register: device_name
@@ -4863,8 +5299,9 @@
   - medium_severity | bool
   - mount_option_var_log_audit_noexec | bool
   - no_reboot_needed | bool
-  - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"] and "/var/log/audit" in ansible_mounts
-    | map(attribute="mount") | list )
+  - ( not ( "kernel" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
+    ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz", "podman", "container"] ) )
+  - '"/var/log/audit" in ansible_mounts | map(attribute="mount") | list'
   tags:
   - CCE-83878-9
   - DISA-STIG-RHEL-09-231165
@@ -4895,8 +5332,9 @@
   - medium_severity | bool
   - mount_option_var_log_audit_noexec | bool
   - no_reboot_needed | bool
-  - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"] and "/var/log/audit" in ansible_mounts
-    | map(attribute="mount") | list )
+  - ( not ( "kernel" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
+    ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz", "podman", "container"] ) )
+  - '"/var/log/audit" in ansible_mounts | map(attribute="mount") | list'
   - device_name.stdout is defined and device_name.stdout_lines is defined
   - (device_name.stdout | length > 0)
   tags:
@@ -4935,8 +5373,9 @@
   - medium_severity | bool
   - mount_option_var_log_audit_noexec | bool
   - no_reboot_needed | bool
-  - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"] and "/var/log/audit" in ansible_mounts
-    | map(attribute="mount") | list )
+  - ( not ( "kernel" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
+    ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz", "podman", "container"] ) )
+  - '"/var/log/audit" in ansible_mounts | map(attribute="mount") | list'
   - ("--fstab" | length == 0)
   - device_name.stdout is defined and device_name.stdout_lines is defined
   - (device_name.stdout | length == 0)
@@ -4967,8 +5406,9 @@
   - medium_severity | bool
   - mount_option_var_log_audit_noexec | bool
   - no_reboot_needed | bool
-  - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"] and "/var/log/audit" in ansible_mounts
-    | map(attribute="mount") | list )
+  - ( not ( "kernel" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
+    ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz", "podman", "container"] ) )
+  - '"/var/log/audit" in ansible_mounts | map(attribute="mount") | list'
   - mount_info is defined and "noexec" not in mount_info.options
   tags:
   - CCE-83878-9
@@ -5001,8 +5441,9 @@
   - medium_severity | bool
   - mount_option_var_log_audit_noexec | bool
   - no_reboot_needed | bool
-  - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"] and "/var/log/audit" in ansible_mounts
-    | map(attribute="mount") | list )
+  - ( not ( "kernel" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
+    ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz", "podman", "container"] ) )
+  - '"/var/log/audit" in ansible_mounts | map(attribute="mount") | list'
   - mount_info is defined
   - (device_name.stdout is defined and (device_name.stdout | length > 0)) or ("--fstab" | length == 0)
   tags:
@@ -5021,6 +5462,33 @@
   - mount_option_var_log_audit_noexec
   - no_reboot_needed
 
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-83893-8
+  - DISA-STIG-RHEL-09-231170
+  - NIST-800-53-AC-6
+  - NIST-800-53-AC-6(1)
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-CM-7(a)
+  - NIST-800-53-CM-7(b)
+  - NIST-800-53-MP-7
+  - configure_strategy
+  - high_disruption
+  - low_complexity
+  - medium_severity
+  - mount_option_var_log_audit_nosuid
+  - no_reboot_needed
+  when:
+  - DISA_STIG_RHEL_09_231170 | bool
+  - configure_strategy | bool
+  - high_disruption | bool
+  - low_complexity | bool
+  - medium_severity | bool
+  - mount_option_var_log_audit_nosuid | bool
+  - no_reboot_needed | bool
+
 - name: 'Add nosuid Option to /var/log/audit: Check information associated to mountpoint'
   command: findmnt --fstab '/var/log/audit'
   register: device_name
@@ -5034,8 +5502,9 @@
   - medium_severity | bool
   - mount_option_var_log_audit_nosuid | bool
   - no_reboot_needed | bool
-  - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"] and "/var/log/audit" in ansible_mounts
-    | map(attribute="mount") | list )
+  - ( not ( "kernel" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
+    ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz", "podman", "container"] ) )
+  - '"/var/log/audit" in ansible_mounts | map(attribute="mount") | list'
   tags:
   - CCE-83893-8
   - DISA-STIG-RHEL-09-231170
@@ -5066,8 +5535,9 @@
   - medium_severity | bool
   - mount_option_var_log_audit_nosuid | bool
   - no_reboot_needed | bool
-  - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"] and "/var/log/audit" in ansible_mounts
-    | map(attribute="mount") | list )
+  - ( not ( "kernel" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
+    ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz", "podman", "container"] ) )
+  - '"/var/log/audit" in ansible_mounts | map(attribute="mount") | list'
   - device_name.stdout is defined and device_name.stdout_lines is defined
   - (device_name.stdout | length > 0)
   tags:
@@ -5106,8 +5576,9 @@
   - medium_severity | bool
   - mount_option_var_log_audit_nosuid | bool
   - no_reboot_needed | bool
-  - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"] and "/var/log/audit" in ansible_mounts
-    | map(attribute="mount") | list )
+  - ( not ( "kernel" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
+    ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz", "podman", "container"] ) )
+  - '"/var/log/audit" in ansible_mounts | map(attribute="mount") | list'
   - ("--fstab" | length == 0)
   - device_name.stdout is defined and device_name.stdout_lines is defined
   - (device_name.stdout | length == 0)
@@ -5138,8 +5609,9 @@
   - medium_severity | bool
   - mount_option_var_log_audit_nosuid | bool
   - no_reboot_needed | bool
-  - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"] and "/var/log/audit" in ansible_mounts
-    | map(attribute="mount") | list )
+  - ( not ( "kernel" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
+    ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz", "podman", "container"] ) )
+  - '"/var/log/audit" in ansible_mounts | map(attribute="mount") | list'
   - mount_info is defined and "nosuid" not in mount_info.options
   tags:
   - CCE-83893-8
@@ -5172,8 +5644,9 @@
   - medium_severity | bool
   - mount_option_var_log_audit_nosuid | bool
   - no_reboot_needed | bool
-  - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"] and "/var/log/audit" in ansible_mounts
-    | map(attribute="mount") | list )
+  - ( not ( "kernel" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
+    ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz", "podman", "container"] ) )
+  - '"/var/log/audit" in ansible_mounts | map(attribute="mount") | list'
   - mount_info is defined
   - (device_name.stdout is defined and (device_name.stdout | length > 0)) or ("--fstab" | length == 0)
   tags:
@@ -5192,6 +5665,25 @@
   - mount_option_var_log_audit_nosuid
   - no_reboot_needed
 
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-86005-6
+  - disable_strategy
+  - low_complexity
+  - medium_disruption
+  - medium_severity
+  - reboot_required
+  - sysctl_kernel_core_pattern_empty_string
+  when:
+  - disable_strategy | bool
+  - low_complexity | bool
+  - medium_disruption | bool
+  - medium_severity | bool
+  - reboot_required | bool
+  - sysctl_kernel_core_pattern_empty_string | bool
+
 - name: List /etc/sysctl.d/*.conf files
   find:
     paths:
@@ -5208,7 +5700,7 @@
   - medium_severity | bool
   - reboot_required | bool
   - sysctl_kernel_core_pattern_empty_string | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-86005-6
   - disable_strategy
@@ -5231,7 +5723,7 @@
   - medium_severity | bool
   - reboot_required | bool
   - sysctl_kernel_core_pattern_empty_string | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-86005-6
   - disable_strategy
@@ -5253,7 +5745,7 @@
   - medium_severity | bool
   - reboot_required | bool
   - sysctl_kernel_core_pattern_empty_string | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-86005-6
   - disable_strategy
@@ -5276,7 +5768,7 @@
   - medium_severity | bool
   - reboot_required | bool
   - sysctl_kernel_core_pattern_empty_string | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-86005-6
   - disable_strategy
@@ -5285,6 +5777,25 @@
   - medium_severity
   - reboot_required
   - sysctl_kernel_core_pattern_empty_string
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-86003-1
+  - disable_strategy
+  - low_complexity
+  - medium_disruption
+  - medium_severity
+  - reboot_required
+  - sysctl_kernel_core_uses_pid
+  when:
+  - disable_strategy | bool
+  - low_complexity | bool
+  - medium_disruption | bool
+  - medium_severity | bool
+  - reboot_required | bool
+  - sysctl_kernel_core_uses_pid | bool
 
 - name: List /etc/sysctl.d/*.conf files
   find:
@@ -5303,7 +5814,7 @@
   - medium_severity | bool
   - reboot_required | bool
   - sysctl_kernel_core_uses_pid | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-86003-1
   - disable_strategy
@@ -5326,7 +5837,7 @@
   - medium_severity | bool
   - reboot_required | bool
   - sysctl_kernel_core_uses_pid | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-86003-1
   - disable_strategy
@@ -5350,7 +5861,7 @@
   - medium_severity | bool
   - reboot_required | bool
   - sysctl_kernel_core_uses_pid | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-86003-1
   - disable_strategy
@@ -5359,6 +5870,30 @@
   - medium_severity
   - reboot_required
   - sysctl_kernel_core_uses_pid
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-83952-2
+  - DISA-STIG-RHEL-09-213010
+  - NIST-800-171-3.1.5
+  - NIST-800-53-SI-11(a)
+  - NIST-800-53-SI-11(b)
+  - disable_strategy
+  - low_complexity
+  - low_severity
+  - medium_disruption
+  - reboot_required
+  - sysctl_kernel_dmesg_restrict
+  when:
+  - DISA_STIG_RHEL_09_213010 | bool
+  - disable_strategy | bool
+  - low_complexity | bool
+  - low_severity | bool
+  - medium_disruption | bool
+  - reboot_required | bool
+  - sysctl_kernel_dmesg_restrict | bool
 
 - name: List /etc/sysctl.d/*.conf files
   find:
@@ -5378,7 +5913,7 @@
   - medium_disruption | bool
   - reboot_required | bool
   - sysctl_kernel_dmesg_restrict | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-83952-2
   - DISA-STIG-RHEL-09-213010
@@ -5406,7 +5941,7 @@
   - medium_disruption | bool
   - reboot_required | bool
   - sysctl_kernel_dmesg_restrict | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-83952-2
   - DISA-STIG-RHEL-09-213010
@@ -5435,7 +5970,7 @@
   - medium_disruption | bool
   - reboot_required | bool
   - sysctl_kernel_dmesg_restrict | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-83952-2
   - DISA-STIG-RHEL-09-213010
@@ -5448,6 +5983,28 @@
   - medium_disruption
   - reboot_required
   - sysctl_kernel_dmesg_restrict
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-83954-8
+  - DISA-STIG-RHEL-09-213020
+  - NIST-800-53-CM-6
+  - disable_strategy
+  - low_complexity
+  - medium_disruption
+  - medium_severity
+  - reboot_required
+  - sysctl_kernel_kexec_load_disabled
+  when:
+  - DISA_STIG_RHEL_09_213020 | bool
+  - disable_strategy | bool
+  - low_complexity | bool
+  - medium_disruption | bool
+  - medium_severity | bool
+  - reboot_required | bool
+  - sysctl_kernel_kexec_load_disabled | bool
 
 - name: List /etc/sysctl.d/*.conf files
   find:
@@ -5467,7 +6024,7 @@
   - medium_severity | bool
   - reboot_required | bool
   - sysctl_kernel_kexec_load_disabled | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-83954-8
   - DISA-STIG-RHEL-09-213020
@@ -5493,7 +6050,7 @@
   - medium_severity | bool
   - reboot_required | bool
   - sysctl_kernel_kexec_load_disabled | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-83954-8
   - DISA-STIG-RHEL-09-213020
@@ -5520,7 +6077,7 @@
   - medium_severity | bool
   - reboot_required | bool
   - sysctl_kernel_kexec_load_disabled | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-83954-8
   - DISA-STIG-RHEL-09-213020
@@ -5531,6 +6088,28 @@
   - medium_severity
   - reboot_required
   - sysctl_kernel_kexec_load_disabled
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-83959-7
+  - DISA-STIG-RHEL-09-213015
+  - NIST-800-53-AC-6
+  - disable_strategy
+  - low_complexity
+  - low_severity
+  - medium_disruption
+  - reboot_required
+  - sysctl_kernel_perf_event_paranoid
+  when:
+  - DISA_STIG_RHEL_09_213015 | bool
+  - disable_strategy | bool
+  - low_complexity | bool
+  - low_severity | bool
+  - medium_disruption | bool
+  - reboot_required | bool
+  - sysctl_kernel_perf_event_paranoid | bool
 
 - name: List /etc/sysctl.d/*.conf files
   find:
@@ -5550,7 +6129,7 @@
   - medium_disruption | bool
   - reboot_required | bool
   - sysctl_kernel_perf_event_paranoid | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-83959-7
   - DISA-STIG-RHEL-09-213015
@@ -5576,7 +6155,7 @@
   - medium_disruption | bool
   - reboot_required | bool
   - sysctl_kernel_perf_event_paranoid | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-83959-7
   - DISA-STIG-RHEL-09-213015
@@ -5603,7 +6182,7 @@
   - medium_disruption | bool
   - reboot_required | bool
   - sysctl_kernel_perf_event_paranoid | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-83959-7
   - DISA-STIG-RHEL-09-213015
@@ -5614,6 +6193,27 @@
   - medium_disruption
   - reboot_required
   - sysctl_kernel_perf_event_paranoid
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-87712-6
+  - NIST-800-53-AC-6
+  - NIST-800-53-SC-7(10)
+  - disable_strategy
+  - low_complexity
+  - medium_disruption
+  - medium_severity
+  - reboot_required
+  - sysctl_kernel_unprivileged_bpf_disabled_accept_default
+  when:
+  - disable_strategy | bool
+  - low_complexity | bool
+  - medium_disruption | bool
+  - medium_severity | bool
+  - reboot_required | bool
+  - sysctl_kernel_unprivileged_bpf_disabled_accept_default | bool
 
 - name: List /etc/sysctl.d/*.conf files
   find:
@@ -5632,7 +6232,7 @@
   - medium_severity | bool
   - reboot_required | bool
   - sysctl_kernel_unprivileged_bpf_disabled_accept_default | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-87712-6
   - NIST-800-53-AC-6
@@ -5657,7 +6257,7 @@
   - medium_severity | bool
   - reboot_required | bool
   - sysctl_kernel_unprivileged_bpf_disabled_accept_default | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-87712-6
   - NIST-800-53-AC-6
@@ -5683,7 +6283,7 @@
   - medium_severity | bool
   - reboot_required | bool
   - sysctl_kernel_unprivileged_bpf_disabled_accept_default | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-87712-6
   - NIST-800-53-AC-6
@@ -5694,6 +6294,28 @@
   - medium_severity
   - reboot_required
   - sysctl_kernel_unprivileged_bpf_disabled_accept_default
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-83965-4
+  - DISA-STIG-RHEL-09-213080
+  - NIST-800-53-SC-7(10)
+  - disable_strategy
+  - low_complexity
+  - medium_disruption
+  - medium_severity
+  - reboot_required
+  - sysctl_kernel_yama_ptrace_scope
+  when:
+  - DISA_STIG_RHEL_09_213080 | bool
+  - disable_strategy | bool
+  - low_complexity | bool
+  - medium_disruption | bool
+  - medium_severity | bool
+  - reboot_required | bool
+  - sysctl_kernel_yama_ptrace_scope | bool
 
 - name: List /etc/sysctl.d/*.conf files
   find:
@@ -5713,7 +6335,7 @@
   - medium_severity | bool
   - reboot_required | bool
   - sysctl_kernel_yama_ptrace_scope | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-83965-4
   - DISA-STIG-RHEL-09-213080
@@ -5739,7 +6361,7 @@
   - medium_severity | bool
   - reboot_required | bool
   - sysctl_kernel_yama_ptrace_scope | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-83965-4
   - DISA-STIG-RHEL-09-213080
@@ -5766,7 +6388,7 @@
   - medium_severity | bool
   - reboot_required | bool
   - sysctl_kernel_yama_ptrace_scope | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-83965-4
   - DISA-STIG-RHEL-09-213080
@@ -5777,6 +6399,29 @@
   - medium_severity
   - reboot_required
   - sysctl_kernel_yama_ptrace_scope
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-83956-3
+  - DISA-STIG-RHEL-09-213105
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-SC-39
+  - disable_strategy
+  - low_complexity
+  - medium_disruption
+  - medium_severity
+  - reboot_required
+  - sysctl_user_max_user_namespaces
+  when:
+  - DISA_STIG_RHEL_09_213105 | bool
+  - disable_strategy | bool
+  - low_complexity | bool
+  - medium_disruption | bool
+  - medium_severity | bool
+  - reboot_required | bool
+  - sysctl_user_max_user_namespaces | bool
 
 - name: List /etc/sysctl.d/*.conf files
   find:
@@ -5796,7 +6441,7 @@
   - medium_severity | bool
   - reboot_required | bool
   - sysctl_user_max_user_namespaces | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-83956-3
   - DISA-STIG-RHEL-09-213105
@@ -5823,7 +6468,7 @@
   - medium_severity | bool
   - reboot_required | bool
   - sysctl_user_max_user_namespaces | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-83956-3
   - DISA-STIG-RHEL-09-213105
@@ -5851,7 +6496,7 @@
   - medium_severity | bool
   - reboot_required | bool
   - sysctl_user_max_user_namespaces | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-83956-3
   - DISA-STIG-RHEL-09-213105
@@ -5863,6 +6508,28 @@
   - medium_severity
   - reboot_required
   - sysctl_user_max_user_namespaces
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-83974-6
+  - DISA-STIG-RHEL-09-213100
+  - NIST-800-53-SC-7(10)
+  - disable_strategy
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - service_systemd-coredump_disabled
+  when:
+  - DISA_STIG_RHEL_09_213100 | bool
+  - disable_strategy | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - service_systemd_coredump_disabled | bool
 
 - name: Disable acquiring, saving, and processing core dumps - Collect systemd Socket Units Present in the System
   ansible.builtin.command:
@@ -5877,7 +6544,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - service_systemd_coredump_disabled | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-83974-6
   - DISA-STIG-RHEL-09-213100
@@ -5903,7 +6570,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - service_systemd_coredump_disabled | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - result_systemd_unit_files.stdout_lines is search("systemd-coredump.socket")
   tags:
   - CCE-83974-6
@@ -5915,6 +6582,31 @@
   - medium_severity
   - no_reboot_needed
   - service_systemd-coredump_disabled
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-83972-0
+  - DISA-STIG-RHEL-09-213025
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-SC-30
+  - NIST-800-53-SC-30(2)
+  - NIST-800-53-SC-30(5)
+  - disable_strategy
+  - low_complexity
+  - medium_disruption
+  - medium_severity
+  - reboot_required
+  - sysctl_kernel_kptr_restrict
+  when:
+  - DISA_STIG_RHEL_09_213025 | bool
+  - disable_strategy | bool
+  - low_complexity | bool
+  - medium_disruption | bool
+  - medium_severity | bool
+  - reboot_required | bool
+  - sysctl_kernel_kptr_restrict | bool
 
 - name: List /etc/sysctl.d/*.conf files
   find:
@@ -5934,7 +6626,7 @@
   - medium_severity | bool
   - reboot_required | bool
   - sysctl_kernel_kptr_restrict | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-83972-0
   - DISA-STIG-RHEL-09-213025
@@ -5963,7 +6655,7 @@
   - medium_severity | bool
   - reboot_required | bool
   - sysctl_kernel_kptr_restrict | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-83972-0
   - DISA-STIG-RHEL-09-213025
@@ -5993,7 +6685,7 @@
   - medium_severity | bool
   - reboot_required | bool
   - sysctl_kernel_kptr_restrict | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-83972-0
   - DISA-STIG-RHEL-09-213025
@@ -6008,13 +6700,42 @@
   - reboot_required
   - sysctl_kernel_kptr_restrict
 
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-84074-4
+  - DISA-STIG-RHEL-09-431015
+  - NIST-800-171-3.1.2
+  - NIST-800-171-3.7.2
+  - NIST-800-53-AC-3
+  - NIST-800-53-AC-3(3)(a)
+  - NIST-800-53-AU-9
+  - NIST-800-53-SC-7(21)
+  - PCI-DSSv4-1.2
+  - PCI-DSSv4-1.2.6
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - reboot_required
+  - restrict_strategy
+  - selinux_policytype
+  when:
+  - DISA_STIG_RHEL_09_431015 | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - reboot_required | bool
+  - restrict_strategy | bool
+  - selinux_policytype | bool
+
 - name: Configure SELinux Policy
   block:
   - name: Check for duplicate values
     lineinfile:
       path: /etc/selinux/config
       create: true
-      regexp: ^SELINUXTYPE=
+      regexp: (?i)^SELINUXTYPE=
       state: absent
     check_mode: true
     changed_when: false
@@ -6023,14 +6744,14 @@
     lineinfile:
       path: /etc/selinux/config
       create: true
-      regexp: ^SELINUXTYPE=
+      regexp: (?i)^SELINUXTYPE=
       state: absent
     when: dupes.found is defined and dupes.found > 1
   - name: Insert correct line to /etc/selinux/config
     lineinfile:
       path: /etc/selinux/config
       create: true
-      regexp: ^SELINUXTYPE=
+      regexp: (?i)^SELINUXTYPE=
       line: SELINUXTYPE={{ var_selinux_policy_name }}
       state: present
   when:
@@ -6041,7 +6762,7 @@
   - reboot_required | bool
   - restrict_strategy | bool
   - selinux_policytype | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-84074-4
   - DISA-STIG-RHEL-09-431015
@@ -6051,6 +6772,7 @@
   - NIST-800-53-AC-3(3)(a)
   - NIST-800-53-AU-9
   - NIST-800-53-SC-7(21)
+  - PCI-DSSv4-1.2
   - PCI-DSSv4-1.2.6
   - low_complexity
   - low_disruption
@@ -6059,13 +6781,42 @@
   - restrict_strategy
   - selinux_policytype
 
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-84079-3
+  - DISA-STIG-RHEL-09-431010
+  - NIST-800-171-3.1.2
+  - NIST-800-171-3.7.2
+  - NIST-800-53-AC-3
+  - NIST-800-53-AC-3(3)(a)
+  - NIST-800-53-AU-9
+  - NIST-800-53-SC-7(21)
+  - PCI-DSSv4-1.2
+  - PCI-DSSv4-1.2.6
+  - high_severity
+  - low_complexity
+  - low_disruption
+  - no_reboot_needed
+  - restrict_strategy
+  - selinux_state
+  when:
+  - DISA_STIG_RHEL_09_431010 | bool
+  - high_severity | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+  - selinux_state | bool
+
 - name: Ensure SELinux State is Enforcing
   block:
   - name: Check for duplicate values
     lineinfile:
       path: /etc/selinux/config
       create: true
-      regexp: ^SELINUX=
+      regexp: (?i)^SELINUX=
       state: absent
     check_mode: true
     changed_when: false
@@ -6074,14 +6825,14 @@
     lineinfile:
       path: /etc/selinux/config
       create: true
-      regexp: ^SELINUX=
+      regexp: (?i)^SELINUX=
       state: absent
     when: dupes.found is defined and dupes.found > 1
   - name: Insert correct line to /etc/selinux/config
     lineinfile:
       path: /etc/selinux/config
       create: true
-      regexp: ^SELINUX=
+      regexp: (?i)^SELINUX=
       line: SELINUX={{ var_selinux_state }}
       state: present
   when:
@@ -6092,7 +6843,7 @@
   - no_reboot_needed | bool
   - restrict_strategy | bool
   - selinux_state | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-84079-3
   - DISA-STIG-RHEL-09-431010
@@ -6102,6 +6853,7 @@
   - NIST-800-53-AC-3(3)(a)
   - NIST-800-53-AU-9
   - NIST-800-53-SC-7(21)
+  - PCI-DSSv4-1.2
   - PCI-DSSv4-1.2.6
   - high_severity
   - low_complexity
@@ -6109,6 +6861,30 @@
   - no_reboot_needed
   - restrict_strategy
   - selinux_state
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-84232-8
+  - DISA-STIG-RHEL-09-213115
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-CM-7(a)
+  - NIST-800-53-CM-7(b)
+  - disable_strategy
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - service_kdump_disabled
+  when:
+  - DISA_STIG_RHEL_09_213115 | bool
+  - disable_strategy | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - service_kdump_disabled | bool
 
 - name: Disable KDump Kernel Crash Analyzer (kdump) - Collect systemd Services Present in the System
   ansible.builtin.command: systemctl -q list-unit-files --type service
@@ -6124,7 +6900,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - service_kdump_disabled | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-84232-8
   - DISA-STIG-RHEL-09-213115
@@ -6152,7 +6928,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - service_kdump_disabled | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - service_exists.stdout_lines is search("kdump.service", multiline=True)
   tags:
   - CCE-84232-8
@@ -6181,7 +6957,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - service_kdump_disabled | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-84232-8
   - DISA-STIG-RHEL-09-213115
@@ -6209,7 +6985,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - service_kdump_disabled | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - socket_file_exists.stdout_lines is search("kdump.socket", multiline=True)
   tags:
   - CCE-84232-8
@@ -6224,6 +7000,29 @@
   - no_reboot_needed
   - service_kdump_disabled
 
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-84224-5
+  - DISA-STIG-RHEL-09-433010
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-SI-4(22)
+  - enable_strategy
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - package_fapolicyd_installed
+  when:
+  - DISA_STIG_RHEL_09_433010 | bool
+  - enable_strategy | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - package_fapolicyd_installed | bool
+
 - name: Ensure fapolicyd is installed
   package:
     name: fapolicyd
@@ -6236,7 +7035,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - package_fapolicyd_installed | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-84224-5
   - DISA-STIG-RHEL-09-433010
@@ -6248,6 +7047,29 @@
   - medium_severity
   - no_reboot_needed
   - package_fapolicyd_installed
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-84227-8
+  - DISA-STIG-RHEL-09-433015
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-SI-4(22)
+  - enable_strategy
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - service_fapolicyd_enabled
+  when:
+  - DISA_STIG_RHEL_09_433015 | bool
+  - enable_strategy | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - service_fapolicyd_enabled | bool
 
 - name: Enable the File Access Policy Service - Enable service fapolicyd
   block:
@@ -6270,7 +7092,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - service_fapolicyd_enabled | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-84227-8
   - DISA-STIG-RHEL-09-433015
@@ -6282,6 +7104,30 @@
   - medium_severity
   - no_reboot_needed
   - service_fapolicyd_enabled
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-84215-3
+  - DISA-STIG-RHEL-09-252010
+  - PCI-DSS-Req-10.4
+  - PCI-DSSv4-10.6
+  - PCI-DSSv4-10.6.1
+  - enable_strategy
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - package_chrony_installed
+  when:
+  - DISA_STIG_RHEL_09_252010 | bool
+  - enable_strategy | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - package_chrony_installed | bool
 
 - name: Ensure chrony is installed
   package:
@@ -6295,11 +7141,12 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - package_chrony_installed | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-84215-3
   - DISA-STIG-RHEL-09-252010
   - PCI-DSS-Req-10.4
+  - PCI-DSSv4-10.6
   - PCI-DSSv4-10.6.1
   - enable_strategy
   - low_complexity
@@ -6308,40 +7155,9 @@
   - no_reboot_needed
   - package_chrony_installed
 
-- name: Disable chrony daemon from acting as server
-  block:
-  - name: Check for duplicate values
-    lineinfile:
-      path: /etc/chrony.conf
-      create: true
-      regexp: ^\s*port\s+
-      state: absent
-    check_mode: true
-    changed_when: false
-    register: dupes
-  - name: Deduplicate values from /etc/chrony.conf
-    lineinfile:
-      path: /etc/chrony.conf
-      create: true
-      regexp: ^\s*port\s+
-      state: absent
-    when: dupes.found is defined and dupes.found > 1
-  - name: Insert correct line to /etc/chrony.conf
-    lineinfile:
-      path: /etc/chrony.conf
-      create: true
-      regexp: ^\s*port\s+
-      line: port 0
-      state: present
-  when:
-  - DISA_STIG_RHEL_09_252025 | bool
-  - chronyd_client_only | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - low_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+- name: Gather the package facts
+  package_facts:
+    manager: auto
   tags:
   - CCE-87543-5
   - DISA-STIG-RHEL-09-252025
@@ -6353,6 +7169,81 @@
   - low_severity
   - no_reboot_needed
   - restrict_strategy
+  when:
+  - DISA_STIG_RHEL_09_252025 | bool
+  - chronyd_client_only | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - low_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+
+- name: Disable chrony daemon from acting as server
+  block:
+  - name: Check for duplicate values
+    lineinfile:
+      path: /etc/chrony.conf
+      create: true
+      regexp: (?i)^\s*port\s+
+      state: absent
+    check_mode: true
+    changed_when: false
+    register: dupes
+  - name: Deduplicate values from /etc/chrony.conf
+    lineinfile:
+      path: /etc/chrony.conf
+      create: true
+      regexp: (?i)^\s*port\s+
+      state: absent
+    when: dupes.found is defined and dupes.found > 1
+  - name: Insert correct line to /etc/chrony.conf
+    lineinfile:
+      path: /etc/chrony.conf
+      create: true
+      regexp: (?i)^\s*port\s+
+      line: port 0
+      state: present
+  when:
+  - DISA_STIG_RHEL_09_252025 | bool
+  - chronyd_client_only | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - low_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+  - '"kernel" in ansible_facts.packages'
+  tags:
+  - CCE-87543-5
+  - DISA-STIG-RHEL-09-252025
+  - NIST-800-53-AU-12(1)
+  - NIST-800-53-AU-8(1)
+  - chronyd_client_only
+  - low_complexity
+  - low_disruption
+  - low_severity
+  - no_reboot_needed
+  - restrict_strategy
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-90836-8
+  - DISA-STIG-RHEL-09-255020
+  - enable_strategy
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - package_openssh-clients_installed
+  when:
+  - DISA_STIG_RHEL_09_255020 | bool
+  - enable_strategy | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - package_openssh_clients_installed | bool
 
 - name: Ensure openssh-clients is installed
   package:
@@ -6366,7 +7257,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - package_openssh_clients_installed | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-90836-8
   - DISA-STIG-RHEL-09-255020
@@ -6376,6 +7267,28 @@
   - medium_severity
   - no_reboot_needed
   - package_openssh-clients_installed
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-90823-6
+  - DISA-STIG-RHEL-09-255010
+  - NIST-800-53-CM-6(a)
+  - enable_strategy
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - package_openssh-server_installed
+  when:
+  - DISA_STIG_RHEL_09_255010 | bool
+  - enable_strategy | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - package_openssh_server_installed | bool
 
 - name: Ensure openssh-server is installed
   package:
@@ -6389,7 +7302,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - package_openssh_server_installed | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-90823-6
   - DISA-STIG-RHEL-09-255010
@@ -6400,6 +7313,25 @@
   - medium_severity
   - no_reboot_needed
   - package_openssh-server_installed
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-87522-9
+  - configure_strategy
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - ssh_client_rekey_limit
+  when:
+  - configure_strategy | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - ssh_client_rekey_limit | bool
 
 - name: Ensure RekeyLimit is not configured in /etc/ssh/ssh_config
   lineinfile:
@@ -6414,7 +7346,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - ssh_client_rekey_limit | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-87522-9
   - configure_strategy
@@ -6437,7 +7369,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - ssh_client_rekey_limit | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-87522-9
   - configure_strategy
@@ -6460,7 +7392,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - ssh_client_rekey_limit | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-87522-9
   - configure_strategy
@@ -6484,7 +7416,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - ssh_client_rekey_limit | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-87522-9
   - configure_strategy
@@ -6494,13 +7426,43 @@
   - no_reboot_needed
   - ssh_client_rekey_limit
 
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-90816-0
+  - CJIS-5.5.6
+  - DISA-STIG-RHEL-09-255080
+  - NIST-800-171-3.1.12
+  - NIST-800-53-AC-17(a)
+  - NIST-800-53-AC-3
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-CM-7(a)
+  - NIST-800-53-CM-7(b)
+  - PCI-DSSv4-8.3
+  - PCI-DSSv4-8.3.1
+  - disable_host_auth
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  when:
+  - DISA_STIG_RHEL_09_255080 | bool
+  - disable_host_auth | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+
 - name: Disable Host-Based Authentication
   block:
   - name: Deduplicate values from /etc/ssh/sshd_config
     lineinfile:
       path: /etc/ssh/sshd_config
       create: false
-      regexp: (?i)^\s*{{ "HostbasedAuthentication"| regex_escape }}\s+
+      regexp: (?i)(?i)^\s*{{ "HostbasedAuthentication"| regex_escape }}\s+
       state: absent
   - name: Check if /etc/ssh/sshd_config.d exists
     stat:
@@ -6518,7 +7480,7 @@
     lineinfile:
       path: '{{ item.path }}'
       create: false
-      regexp: (?i)^\s*{{ "HostbasedAuthentication"| regex_escape }}\s+
+      regexp: (?i)(?i)^\s*{{ "HostbasedAuthentication"| regex_escape }}\s+
       state: absent
     with_items: '{{ _etc_ssh_sshd_config_d_has_parameter.files }}'
     when: _etc_ssh_sshd_config_d_has_parameter.matched
@@ -6526,7 +7488,7 @@
     lineinfile:
       path: /etc/ssh/sshd_config.d/01-complianceascode-reinforce-os-defaults.conf
       create: true
-      regexp: (?i)^\s*{{ "HostbasedAuthentication"| regex_escape }}\s+
+      regexp: (?i)(?i)^\s*{{ "HostbasedAuthentication"| regex_escape }}\s+
       line: HostbasedAuthentication no
       state: present
       insertbefore: BOF
@@ -6539,7 +7501,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-90816-0
   - CJIS-5.5.6
@@ -6550,6 +7512,7 @@
   - NIST-800-53-CM-6(a)
   - NIST-800-53-CM-7(a)
   - NIST-800-53-CM-7(b)
+  - PCI-DSSv4-8.3
   - PCI-DSSv4-8.3.1
   - disable_host_auth
   - low_complexity
@@ -6558,13 +7521,44 @@
   - no_reboot_needed
   - restrict_strategy
 
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-90799-8
+  - CJIS-5.5.6
+  - DISA-STIG-RHEL-09-255040
+  - NIST-800-171-3.1.1
+  - NIST-800-171-3.1.5
+  - NIST-800-53-AC-17(a)
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-CM-7(a)
+  - NIST-800-53-CM-7(b)
+  - PCI-DSS-Req-2.2.4
+  - PCI-DSSv4-2.2
+  - PCI-DSSv4-2.2.6
+  - high_severity
+  - low_complexity
+  - low_disruption
+  - no_reboot_needed
+  - restrict_strategy
+  - sshd_disable_empty_passwords
+  when:
+  - DISA_STIG_RHEL_09_255040 | bool
+  - high_severity | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+  - sshd_disable_empty_passwords | bool
+
 - name: Disable SSH Access via Empty Passwords
   block:
   - name: Deduplicate values from /etc/ssh/sshd_config
     lineinfile:
       path: /etc/ssh/sshd_config
       create: false
-      regexp: (?i)^\s*{{ "PermitEmptyPasswords"| regex_escape }}\s+
+      regexp: (?i)(?i)^\s*{{ "PermitEmptyPasswords"| regex_escape }}\s+
       state: absent
   - name: Check if /etc/ssh/sshd_config.d exists
     stat:
@@ -6582,7 +7576,7 @@
     lineinfile:
       path: '{{ item.path }}'
       create: false
-      regexp: (?i)^\s*{{ "PermitEmptyPasswords"| regex_escape }}\s+
+      regexp: (?i)(?i)^\s*{{ "PermitEmptyPasswords"| regex_escape }}\s+
       state: absent
     with_items: '{{ _etc_ssh_sshd_config_d_has_parameter.files }}'
     when: _etc_ssh_sshd_config_d_has_parameter.matched
@@ -6590,7 +7584,7 @@
     lineinfile:
       path: /etc/ssh/sshd_config.d/01-complianceascode-reinforce-os-defaults.conf
       create: true
-      regexp: (?i)^\s*{{ "PermitEmptyPasswords"| regex_escape }}\s+
+      regexp: (?i)(?i)^\s*{{ "PermitEmptyPasswords"| regex_escape }}\s+
       line: PermitEmptyPasswords no
       state: present
       insertbefore: BOF
@@ -6603,7 +7597,7 @@
   - no_reboot_needed | bool
   - restrict_strategy | bool
   - sshd_disable_empty_passwords | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-90799-8
   - CJIS-5.5.6
@@ -6615,6 +7609,7 @@
   - NIST-800-53-CM-7(a)
   - NIST-800-53-CM-7(b)
   - PCI-DSS-Req-2.2.4
+  - PCI-DSSv4-2.2
   - PCI-DSSv4-2.2.6
   - high_severity
   - low_complexity
@@ -6623,13 +7618,39 @@
   - restrict_strategy
   - sshd_disable_empty_passwords
 
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-90808-7
+  - DISA-STIG-RHEL-09-255135
+  - NIST-800-171-3.1.12
+  - NIST-800-53-AC-17(a)
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-CM-7(a)
+  - NIST-800-53-CM-7(b)
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  - sshd_disable_gssapi_auth
+  when:
+  - DISA_STIG_RHEL_09_255135 | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+  - sshd_disable_gssapi_auth | bool
+
 - name: Disable GSSAPI Authentication
   block:
   - name: Deduplicate values from /etc/ssh/sshd_config
     lineinfile:
       path: /etc/ssh/sshd_config
       create: false
-      regexp: (?i)^\s*{{ "GSSAPIAuthentication"| regex_escape }}\s+
+      regexp: (?i)(?i)^\s*{{ "GSSAPIAuthentication"| regex_escape }}\s+
       state: absent
   - name: Check if /etc/ssh/sshd_config.d exists
     stat:
@@ -6647,7 +7668,7 @@
     lineinfile:
       path: '{{ item.path }}'
       create: false
-      regexp: (?i)^\s*{{ "GSSAPIAuthentication"| regex_escape }}\s+
+      regexp: (?i)(?i)^\s*{{ "GSSAPIAuthentication"| regex_escape }}\s+
       state: absent
     with_items: '{{ _etc_ssh_sshd_config_d_has_parameter.files }}'
     when: _etc_ssh_sshd_config_d_has_parameter.matched
@@ -6655,7 +7676,7 @@
     lineinfile:
       path: /etc/ssh/sshd_config.d/01-complianceascode-reinforce-os-defaults.conf
       create: true
-      regexp: (?i)^\s*{{ "GSSAPIAuthentication"| regex_escape }}\s+
+      regexp: (?i)(?i)^\s*{{ "GSSAPIAuthentication"| regex_escape }}\s+
       line: GSSAPIAuthentication no
       state: present
       insertbefore: BOF
@@ -6668,7 +7689,7 @@
   - no_reboot_needed | bool
   - restrict_strategy | bool
   - sshd_disable_gssapi_auth | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-90808-7
   - DISA-STIG-RHEL-09-255135
@@ -6684,13 +7705,39 @@
   - restrict_strategy
   - sshd_disable_gssapi_auth
 
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-90802-0
+  - DISA-STIG-RHEL-09-255140
+  - NIST-800-171-3.1.12
+  - NIST-800-53-AC-17(a)
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-CM-7(a)
+  - NIST-800-53-CM-7(b)
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  - sshd_disable_kerb_auth
+  when:
+  - DISA_STIG_RHEL_09_255140 | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+  - sshd_disable_kerb_auth | bool
+
 - name: Disable Kerberos Authentication
   block:
   - name: Deduplicate values from /etc/ssh/sshd_config
     lineinfile:
       path: /etc/ssh/sshd_config
       create: false
-      regexp: (?i)^\s*{{ "KerberosAuthentication"| regex_escape }}\s+
+      regexp: (?i)(?i)^\s*{{ "KerberosAuthentication"| regex_escape }}\s+
       state: absent
   - name: Check if /etc/ssh/sshd_config.d exists
     stat:
@@ -6708,7 +7755,7 @@
     lineinfile:
       path: '{{ item.path }}'
       create: false
-      regexp: (?i)^\s*{{ "KerberosAuthentication"| regex_escape }}\s+
+      regexp: (?i)(?i)^\s*{{ "KerberosAuthentication"| regex_escape }}\s+
       state: absent
     with_items: '{{ _etc_ssh_sshd_config_d_has_parameter.files }}'
     when: _etc_ssh_sshd_config_d_has_parameter.matched
@@ -6716,7 +7763,7 @@
     lineinfile:
       path: /etc/ssh/sshd_config.d/01-complianceascode-reinforce-os-defaults.conf
       create: true
-      regexp: (?i)^\s*{{ "KerberosAuthentication"| regex_escape }}\s+
+      regexp: (?i)(?i)^\s*{{ "KerberosAuthentication"| regex_escape }}\s+
       line: KerberosAuthentication no
       state: present
       insertbefore: BOF
@@ -6729,7 +7776,7 @@
   - no_reboot_needed | bool
   - restrict_strategy | bool
   - sshd_disable_kerb_auth | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-90802-0
   - DISA-STIG-RHEL-09-255140
@@ -6745,13 +7792,47 @@
   - restrict_strategy
   - sshd_disable_kerb_auth
 
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-90800-4
+  - CJIS-5.5.6
+  - DISA-STIG-RHEL-09-255045
+  - NIST-800-171-3.1.1
+  - NIST-800-171-3.1.5
+  - NIST-800-53-AC-17(a)
+  - NIST-800-53-AC-6(2)
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-CM-7(a)
+  - NIST-800-53-CM-7(b)
+  - NIST-800-53-IA-2
+  - NIST-800-53-IA-2(5)
+  - PCI-DSS-Req-2.2.4
+  - PCI-DSSv4-2.2
+  - PCI-DSSv4-2.2.6
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  - sshd_disable_root_login
+  when:
+  - DISA_STIG_RHEL_09_255045 | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+  - sshd_disable_root_login | bool
+
 - name: Disable SSH Root Login
   block:
   - name: Deduplicate values from /etc/ssh/sshd_config
     lineinfile:
       path: /etc/ssh/sshd_config
       create: false
-      regexp: (?i)^\s*{{ "PermitRootLogin"| regex_escape }}\s+
+      regexp: (?i)(?i)^\s*{{ "PermitRootLogin"| regex_escape }}\s+
       state: absent
   - name: Check if /etc/ssh/sshd_config.d exists
     stat:
@@ -6769,7 +7850,7 @@
     lineinfile:
       path: '{{ item.path }}'
       create: false
-      regexp: (?i)^\s*{{ "PermitRootLogin"| regex_escape }}\s+
+      regexp: (?i)(?i)^\s*{{ "PermitRootLogin"| regex_escape }}\s+
       state: absent
     with_items: '{{ _etc_ssh_sshd_config_d_has_parameter.files }}'
     when: _etc_ssh_sshd_config_d_has_parameter.matched
@@ -6777,7 +7858,7 @@
     lineinfile:
       path: /etc/ssh/sshd_config.d/00-complianceascode-hardening.conf
       create: true
-      regexp: (?i)^\s*{{ "PermitRootLogin"| regex_escape }}\s+
+      regexp: (?i)(?i)^\s*{{ "PermitRootLogin"| regex_escape }}\s+
       line: PermitRootLogin no
       state: present
       insertbefore: BOF
@@ -6790,7 +7871,7 @@
   - no_reboot_needed | bool
   - restrict_strategy | bool
   - sshd_disable_root_login | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-90800-4
   - CJIS-5.5.6
@@ -6805,6 +7886,7 @@
   - NIST-800-53-IA-2
   - NIST-800-53-IA-2(5)
   - PCI-DSS-Req-2.2.4
+  - PCI-DSSv4-2.2
   - PCI-DSSv4-2.2.6
   - low_complexity
   - low_disruption
@@ -6813,13 +7895,41 @@
   - restrict_strategy
   - sshd_disable_root_login
 
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-90807-9
+  - CJIS-5.5.6
+  - DISA-STIG-RHEL-09-255025
+  - NIST-800-171-3.1.9
+  - NIST-800-53-AC-17(a)
+  - NIST-800-53-AC-8(a)
+  - NIST-800-53-AC-8(c)
+  - NIST-800-53-CM-6(a)
+  - PCI-DSS-Req-2.2.4
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  - sshd_enable_warning_banner
+  when:
+  - DISA_STIG_RHEL_09_255025 | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+  - sshd_enable_warning_banner | bool
+
 - name: Enable SSH Warning Banner
   block:
   - name: Deduplicate values from /etc/ssh/sshd_config
     lineinfile:
       path: /etc/ssh/sshd_config
       create: false
-      regexp: (?i)^\s*{{ "Banner"| regex_escape }}\s+
+      regexp: (?i)(?i)^\s*{{ "Banner"| regex_escape }}\s+
       state: absent
   - name: Check if /etc/ssh/sshd_config.d exists
     stat:
@@ -6837,7 +7947,7 @@
     lineinfile:
       path: '{{ item.path }}'
       create: false
-      regexp: (?i)^\s*{{ "Banner"| regex_escape }}\s+
+      regexp: (?i)(?i)^\s*{{ "Banner"| regex_escape }}\s+
       state: absent
     with_items: '{{ _etc_ssh_sshd_config_d_has_parameter.files }}'
     when: _etc_ssh_sshd_config_d_has_parameter.matched
@@ -6845,7 +7955,7 @@
     lineinfile:
       path: /etc/ssh/sshd_config.d/00-complianceascode-hardening.conf
       create: true
-      regexp: (?i)^\s*{{ "Banner"| regex_escape }}\s+
+      regexp: (?i)(?i)^\s*{{ "Banner"| regex_escape }}\s+
       line: Banner /etc/issue
       state: present
       insertbefore: BOF
@@ -6858,7 +7968,7 @@
   - no_reboot_needed | bool
   - restrict_strategy | bool
   - sshd_enable_warning_banner | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-90807-9
   - CJIS-5.5.6
@@ -6876,13 +7986,34 @@
   - restrict_strategy
   - sshd_enable_warning_banner
 
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-90815-2
+  - DISA-STIG-RHEL-09-255090
+  - configure_strategy
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - sshd_rekey_limit
+  when:
+  - DISA_STIG_RHEL_09_255090 | bool
+  - configure_strategy | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - sshd_rekey_limit | bool
+
 - name: Force frequent session key renegotiation
   block:
   - name: Deduplicate values from /etc/ssh/sshd_config
     lineinfile:
       path: /etc/ssh/sshd_config
       create: false
-      regexp: (?i)^\s*{{ "RekeyLimit"| regex_escape }}\s+
+      regexp: (?i)(?i)^\s*{{ "RekeyLimit"| regex_escape }}\s+
       state: absent
   - name: Check if /etc/ssh/sshd_config.d exists
     stat:
@@ -6900,7 +8031,7 @@
     lineinfile:
       path: '{{ item.path }}'
       create: false
-      regexp: (?i)^\s*{{ "RekeyLimit"| regex_escape }}\s+
+      regexp: (?i)(?i)^\s*{{ "RekeyLimit"| regex_escape }}\s+
       state: absent
     with_items: '{{ _etc_ssh_sshd_config_d_has_parameter.files }}'
     when: _etc_ssh_sshd_config_d_has_parameter.matched
@@ -6908,7 +8039,7 @@
     lineinfile:
       path: /etc/ssh/sshd_config.d/00-complianceascode-hardening.conf
       create: true
-      regexp: (?i)^\s*{{ "RekeyLimit"| regex_escape }}\s+
+      regexp: (?i)(?i)^\s*{{ "RekeyLimit"| regex_escape }}\s+
       line: RekeyLimit {{ var_rekey_limit_size }} {{ var_rekey_limit_time }}
       state: present
       insertbefore: BOF
@@ -6921,7 +8052,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - sshd_rekey_limit | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-90815-2
   - DISA-STIG-RHEL-09-255090
@@ -6931,6 +8062,29 @@
   - medium_severity
   - no_reboot_needed
   - sshd_rekey_limit
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-84203-9
+  - DISA-STIG-RHEL-09-291015
+  - NIST-800-53-CM-8(3)
+  - NIST-800-53-IA-3
+  - enable_strategy
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - package_usbguard_installed
+  when:
+  - DISA_STIG_RHEL_09_291015 | bool
+  - enable_strategy | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - package_usbguard_installed | bool
 
 - name: Ensure usbguard is installed
   package:
@@ -6944,8 +8098,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - package_usbguard_installed | bool
-  - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"] and ansible_architecture != "s390x"
-    )
+  - ( ansible_architecture != "s390x" and "kernel" in ansible_facts.packages )
   tags:
   - CCE-84203-9
   - DISA-STIG-RHEL-09-291015
@@ -6957,6 +8110,29 @@
   - medium_severity
   - no_reboot_needed
   - package_usbguard_installed
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-84205-4
+  - DISA-STIG-RHEL-09-291020
+  - NIST-800-53-CM-8(3)(a)
+  - NIST-800-53-IA-3
+  - enable_strategy
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - service_usbguard_enabled
+  when:
+  - DISA_STIG_RHEL_09_291020 | bool
+  - enable_strategy | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - service_usbguard_enabled | bool
 
 - name: Enable the USBGuard Service - Enable service usbguard
   block:
@@ -6979,8 +8155,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - service_usbguard_enabled | bool
-  - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"] and ansible_architecture != "s390x"
-    )
+  - ( ansible_architecture != "s390x" and "kernel" in ansible_facts.packages )
   tags:
   - CCE-84205-4
   - DISA-STIG-RHEL-09-291020
@@ -7023,7 +8198,7 @@
     lineinfile:
       path: /etc/usbguard/usbguard-daemon.conf
       create: true
-      regexp: ^\s*AuditBackend=
+      regexp: (?i)^\s*AuditBackend=
       state: absent
     check_mode: true
     changed_when: false
@@ -7032,14 +8207,14 @@
     lineinfile:
       path: /etc/usbguard/usbguard-daemon.conf
       create: true
-      regexp: ^\s*AuditBackend=
+      regexp: (?i)^\s*AuditBackend=
       state: absent
     when: dupes.found is defined and dupes.found > 1
   - name: Insert correct line to /etc/usbguard/usbguard-daemon.conf
     lineinfile:
       path: /etc/usbguard/usbguard-daemon.conf
       create: true
-      regexp: ^\s*AuditBackend=
+      regexp: (?i)^\s*AuditBackend=
       line: AuditBackend=LinuxAudit
       state: present
   when:
@@ -7050,8 +8225,7 @@
   - low_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"] and ansible_architecture != "s390x"
-    )
+  - ( ansible_architecture != "s390x" and "kernel" in ansible_facts.packages )
   - '"usbguard" in ansible_facts.packages'
   tags:
   - CCE-84206-2
@@ -7066,21 +8240,9 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Allow HID devices and hubs
-  lineinfile:
-    path: /etc/usbguard/rules.conf
-    create: true
-    line: allow with-interface match-all { 03:*:* 09:00:* }
-    state: present
-  when:
-  - configure_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - usbguard_allow_hid_and_hub | bool
-  - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"] and ansible_architecture != "s390x"
-    )
+- name: Gather the package facts
+  package_facts:
+    manager: auto
   tags:
   - CCE-84210-4
   - NIST-800-53-CM-8(3)
@@ -7091,6 +8253,70 @@
   - medium_severity
   - no_reboot_needed
   - usbguard_allow_hid_and_hub
+  when:
+  - configure_strategy | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - usbguard_allow_hid_and_hub | bool
+
+- name: Allow HID devices and hubs
+  lineinfile:
+    path: /etc/usbguard/rules.conf
+    create: true
+    regexp: ''
+    line: allow with-interface match-all { 03:*:* 09:00:* }
+    state: present
+  when:
+  - configure_strategy | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - usbguard_allow_hid_and_hub | bool
+  - ( ansible_architecture != "s390x" and "kernel" in ansible_facts.packages )
+  tags:
+  - CCE-84210-4
+  - NIST-800-53-CM-8(3)
+  - NIST-800-53-IA-3
+  - configure_strategy
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - usbguard_allow_hid_and_hub
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-83649-4
+  - DISA-STIG-RHEL-09-653010
+  - NIST-800-53-AC-7(a)
+  - NIST-800-53-AU-12(2)
+  - NIST-800-53-AU-14
+  - NIST-800-53-AU-2(a)
+  - NIST-800-53-AU-7(1)
+  - NIST-800-53-AU-7(2)
+  - NIST-800-53-CM-6(a)
+  - PCI-DSS-Req-10.1
+  - PCI-DSSv4-10.2
+  - PCI-DSSv4-10.2.1
+  - enable_strategy
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - package_audit_installed
+  when:
+  - DISA_STIG_RHEL_09_653010 | bool
+  - enable_strategy | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - package_audit_installed | bool
 
 - name: Ensure audit is installed
   package:
@@ -7104,7 +8330,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - package_audit_installed | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-83649-4
   - DISA-STIG-RHEL-09-653010
@@ -7116,6 +8342,7 @@
   - NIST-800-53-AU-7(2)
   - NIST-800-53-CM-6(a)
   - PCI-DSS-Req-10.1
+  - PCI-DSSv4-10.2
   - PCI-DSSv4-10.2.1
   - enable_strategy
   - low_complexity
@@ -7144,6 +8371,7 @@
   - NIST-800-53-CM-6(a)
   - NIST-800-53-SI-4(23)
   - PCI-DSS-Req-10.1
+  - PCI-DSSv4-10.2
   - PCI-DSSv4-10.2.1
   - enable_strategy
   - low_complexity
@@ -7181,7 +8409,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - service_auditd_enabled | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - '"audit" in ansible_facts.packages'
   tags:
   - CCE-90829-3
@@ -7200,6 +8428,7 @@
   - NIST-800-53-CM-6(a)
   - NIST-800-53-SI-4(23)
   - PCI-DSS-Req-10.1
+  - PCI-DSSv4-10.2
   - PCI-DSSv4-10.2.1
   - enable_strategy
   - low_complexity
@@ -7222,6 +8451,7 @@
   - NIST-800-53-CM-6(a)
   - NIST-800-53-IR-5(1)
   - PCI-DSS-Req-10.3
+  - PCI-DSSv4-10.7
   - PCI-DSSv4-10.7.2
   - grub2_audit_argument
   - low_disruption
@@ -7248,7 +8478,7 @@
   - medium_complexity | bool
   - reboot_required | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - '"grub2-common" in ansible_facts.packages'
   tags:
   - CCE-83651-0
@@ -7261,6 +8491,7 @@
   - NIST-800-53-CM-6(a)
   - NIST-800-53-IR-5(1)
   - PCI-DSS-Req-10.3
+  - PCI-DSSv4-10.7
   - PCI-DSSv4-10.7.2
   - grub2_audit_argument
   - low_disruption
@@ -7276,6 +8507,7 @@
   - CCE-83652-8
   - DISA-STIG-RHEL-09-653120
   - NIST-800-53-CM-6(a)
+  - PCI-DSSv4-10.7
   - PCI-DSSv4-10.7.2
   - grub2_audit_backlog_limit_argument
   - low_disruption
@@ -7302,12 +8534,13 @@
   - medium_complexity | bool
   - reboot_required | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - '"grub2-common" in ansible_facts.packages'
   tags:
   - CCE-83652-8
   - DISA-STIG-RHEL-09-653120
   - NIST-800-53-CM-6(a)
+  - PCI-DSSv4-10.7
   - PCI-DSSv4-10.7.2
   - grub2_audit_backlog_limit_argument
   - low_disruption
@@ -7353,7 +8586,7 @@
   - no_reboot_needed | bool
   - restrict_strategy | bool
   - '"audit" in ansible_facts.packages'
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-83685-8
   - NIST-800-171-3.3.1
@@ -7394,7 +8627,7 @@
     lineinfile:
       path: /etc/audit/auditd.conf
       create: true
-      regexp: (?i)^\s*freq\s*=\s*
+      regexp: (?i)(?i)^\s*freq\s*=\s*
       state: absent
     check_mode: true
     changed_when: false
@@ -7403,14 +8636,14 @@
     lineinfile:
       path: /etc/audit/auditd.conf
       create: true
-      regexp: (?i)^\s*freq\s*=\s*
+      regexp: (?i)(?i)^\s*freq\s*=\s*
       state: absent
     when: dupes.found is defined and dupes.found > 1
   - name: Insert correct line to /etc/audit/auditd.conf
     lineinfile:
       path: /etc/audit/auditd.conf
       create: true
-      regexp: (?i)^\s*freq\s*=\s*
+      regexp: (?i)(?i)^\s*freq\s*=\s*
       line: freq = 50
       state: present
   when:
@@ -7422,7 +8655,7 @@
   - no_reboot_needed | bool
   - restrict_strategy | bool
   - '"audit" in ansible_facts.packages'
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-83704-7
   - DISA-STIG-RHEL-09-653095
@@ -7463,7 +8696,7 @@
     lineinfile:
       path: /etc/audit/auditd.conf
       create: true
-      regexp: (?i)^\s*log_format\s*=\s*
+      regexp: (?i)(?i)^\s*log_format\s*=\s*
       state: absent
     check_mode: true
     changed_when: false
@@ -7472,14 +8705,14 @@
     lineinfile:
       path: /etc/audit/auditd.conf
       create: true
-      regexp: (?i)^\s*log_format\s*=\s*
+      regexp: (?i)(?i)^\s*log_format\s*=\s*
       state: absent
     when: dupes.found is defined and dupes.found > 1
   - name: Insert correct line to /etc/audit/auditd.conf
     lineinfile:
       path: /etc/audit/auditd.conf
       create: true
-      regexp: (?i)^\s*log_format\s*=\s*
+      regexp: (?i)(?i)^\s*log_format\s*=\s*
       line: log_format = ENRICHED
       state: present
   when:
@@ -7491,7 +8724,7 @@
   - no_reboot_needed | bool
   - restrict_strategy | bool
   - '"audit" in ansible_facts.packages'
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-83696-5
   - DISA-STIG-RHEL-09-653100
@@ -7512,6 +8745,7 @@
   - DISA-STIG-RHEL-09-653060
   - NIST-800-53-AU-3
   - NIST-800-53-CM-6
+  - PCI-DSSv4-10.2
   - PCI-DSSv4-10.2.2
   - auditd_name_format
   - low_complexity
@@ -7539,12 +8773,13 @@
   - no_reboot_needed | bool
   - restrict_strategy | bool
   - '"audit" in ansible_facts.packages'
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-83686-6
   - DISA-STIG-RHEL-09-653060
   - NIST-800-53-AU-3
   - NIST-800-53-CM-6
+  - PCI-DSSv4-10.2
   - PCI-DSSv4-10.2.2
   - auditd_name_format
   - low_complexity
@@ -7559,7 +8794,7 @@
     lineinfile:
       path: /etc/audit/auditd.conf
       create: true
-      regexp: (?i)^\s*name_format\s*=\s*
+      regexp: (?i)(?i)^\s*name_format\s*=\s*
       state: absent
     check_mode: true
     changed_when: false
@@ -7568,14 +8803,14 @@
     lineinfile:
       path: /etc/audit/auditd.conf
       create: true
-      regexp: (?i)^\s*name_format\s*=\s*
+      regexp: (?i)(?i)^\s*name_format\s*=\s*
       state: absent
     when: dupes.found is defined and dupes.found > 1
   - name: Insert correct line to /etc/audit/auditd.conf
     lineinfile:
       path: /etc/audit/auditd.conf
       create: true
-      regexp: (?i)^\s*name_format\s*=\s*
+      regexp: (?i)(?i)^\s*name_format\s*=\s*
       line: name_format = {{ auditd_name_format_split }}
       state: present
   when:
@@ -7587,12 +8822,13 @@
   - no_reboot_needed | bool
   - restrict_strategy | bool
   - '"audit" in ansible_facts.packages'
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-83686-6
   - DISA-STIG-RHEL-09-653060
   - NIST-800-53-AU-3
   - NIST-800-53-CM-6
+  - PCI-DSSv4-10.2
   - PCI-DSSv4-10.2.2
   - auditd_name_format
   - low_complexity
@@ -7600,6 +8836,26 @@
   - medium_severity
   - no_reboot_needed
   - restrict_strategy
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-83672-6
+  - NIST-800-53-AU-2(a)
+  - audit_access_failed
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  when:
+  - audit_access_failed | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
 
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-3-access-failed.rules according to policy
   copy:
@@ -7625,7 +8881,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ( not ( ansible_architecture == "aarch64" ) and not ( ansible_architecture == "ppc64le" ) )
   tags:
   - CCE-83672-6
@@ -7648,7 +8904,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ( not ( ansible_architecture == "aarch64" ) and not ( ansible_architecture == "ppc64le" ) )
   tags:
   - CCE-83672-6
@@ -7659,6 +8915,26 @@
   - medium_severity
   - no_reboot_needed
   - restrict_strategy
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-85922-3
+  - NIST-800-53-AU-2(a)
+  - audit_access_failed_aarch64
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  when:
+  - audit_access_failed_aarch64 | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
 
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-3-access-failed.rules according to policy
   copy:
@@ -7683,7 +8959,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ansible_architecture == "aarch64"
   tags:
   - CCE-85922-3
@@ -7706,7 +8982,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ansible_architecture == "aarch64"
   tags:
   - CCE-85922-3
@@ -7717,6 +8993,26 @@
   - medium_severity
   - no_reboot_needed
   - restrict_strategy
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-86001-5
+  - NIST-800-53-AU-2(a)
+  - audit_access_failed_ppc64le
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  when:
+  - audit_access_failed_ppc64le | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
 
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-3-access-failed.rules according to policy
   copy:
@@ -7737,7 +9033,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ansible_architecture == "ppc64le"
   tags:
   - CCE-86001-5
@@ -7760,7 +9056,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ansible_architecture == "ppc64le"
   tags:
   - CCE-86001-5
@@ -7771,6 +9067,26 @@
   - medium_severity
   - no_reboot_needed
   - restrict_strategy
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-83653-6
+  - NIST-800-53-AU-2(a)
+  - audit_access_success
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  when:
+  - audit_access_success | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
 
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-3-access-success.rules according to policy
   copy:
@@ -7792,7 +9108,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ( not ( ansible_architecture == "aarch64" ) and not ( ansible_architecture == "ppc64le" ) )
   tags:
   - CCE-83653-6
@@ -7815,7 +9131,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ( not ( ansible_architecture == "aarch64" ) and not ( ansible_architecture == "ppc64le" ) )
   tags:
   - CCE-83653-6
@@ -7826,6 +9142,26 @@
   - medium_severity
   - no_reboot_needed
   - restrict_strategy
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-85924-9
+  - NIST-800-53-AU-2(a)
+  - audit_access_success_aarch64
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  when:
+  - audit_access_success_aarch64 | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
 
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-3-access-success.rules according to policy
   copy:
@@ -7847,7 +9183,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ansible_architecture == "aarch64"
   tags:
   - CCE-85924-9
@@ -7870,7 +9206,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ansible_architecture == "aarch64"
   tags:
   - CCE-85924-9
@@ -7881,6 +9217,26 @@
   - medium_severity
   - no_reboot_needed
   - restrict_strategy
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-85999-1
+  - NIST-800-53-AU-2(a)
+  - audit_access_success_ppc64le
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  when:
+  - audit_access_success_ppc64le | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
 
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-3-access-success.rules according to policy
   copy:
@@ -7900,7 +9256,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ansible_architecture == "ppc64le"
   tags:
   - CCE-85999-1
@@ -7923,7 +9279,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ansible_architecture == "ppc64le"
   tags:
   - CCE-85999-1
@@ -7934,6 +9290,26 @@
   - medium_severity
   - no_reboot_needed
   - restrict_strategy
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-83670-0
+  - NIST-800-53-AU-2(a)
+  - audit_basic_configuration
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  when:
+  - audit_basic_configuration | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
 
 - name: Put contents into /etc/audit/rules.d/10-base-config.rules according to policy
   copy:
@@ -7969,7 +9345,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-83670-0
   - NIST-800-53-AU-2(a)
@@ -7991,7 +9367,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-83670-0
   - NIST-800-53-AU-2(a)
@@ -8002,6 +9378,26 @@
   - no_reboot_needed
   - restrict_strategy
 
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-83669-2
+  - NIST-800-53-AU-2(a)
+  - audit_create_failed
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  when:
+  - audit_create_failed | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-1-create-failed.rules according to policy
   copy:
     dest: /etc/audit/rules.d/30-ospp-v42-1-create-failed.rules
@@ -8040,7 +9436,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ( not ( ansible_architecture == "aarch64" ) and not ( ansible_architecture == "ppc64le" ) )
   tags:
   - CCE-83669-2
@@ -8063,7 +9459,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ( not ( ansible_architecture == "aarch64" ) and not ( ansible_architecture == "ppc64le" ) )
   tags:
   - CCE-83669-2
@@ -8074,6 +9470,26 @@
   - medium_severity
   - no_reboot_needed
   - restrict_strategy
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-85898-5
+  - NIST-800-53-AU-2(a)
+  - audit_create_failed_aarch64
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  when:
+  - audit_create_failed_aarch64 | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
 
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-1-create-failed.rules according to policy
   copy:
@@ -8105,7 +9521,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ansible_architecture == "aarch64"
   tags:
   - CCE-85898-5
@@ -8128,7 +9544,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ansible_architecture == "aarch64"
   tags:
   - CCE-85898-5
@@ -8139,6 +9555,26 @@
   - medium_severity
   - no_reboot_needed
   - restrict_strategy
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-85997-5
+  - NIST-800-53-AU-2(a)
+  - audit_create_failed_ppc64le
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  when:
+  - audit_create_failed_ppc64le | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
 
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-1-create-failed.rules according to policy
   copy:
@@ -8166,7 +9602,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ansible_architecture == "ppc64le"
   tags:
   - CCE-85997-5
@@ -8189,7 +9625,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ansible_architecture == "ppc64le"
   tags:
   - CCE-85997-5
@@ -8201,6 +9637,26 @@
   - no_reboot_needed
   - restrict_strategy
 
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-83668-4
+  - NIST-800-53-AU-2(a)
+  - audit_create_success
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  when:
+  - audit_create_success | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-1-create-success.rules according to policy
   copy:
     dest: /etc/audit/rules.d/30-ospp-v42-1-create-success.rules
@@ -8227,7 +9683,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ( not ( ansible_architecture == "aarch64" ) and not ( ansible_architecture == "ppc64le" ) )
   tags:
   - CCE-83668-4
@@ -8250,7 +9706,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ( not ( ansible_architecture == "aarch64" ) and not ( ansible_architecture == "ppc64le" ) )
   tags:
   - CCE-83668-4
@@ -8261,6 +9717,26 @@
   - medium_severity
   - no_reboot_needed
   - restrict_strategy
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-85905-8
+  - NIST-800-53-AU-2(a)
+  - audit_create_success_aarch64
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  when:
+  - audit_create_success_aarch64 | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
 
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-1-create-success.rules according to policy
   copy:
@@ -8284,7 +9760,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ansible_architecture == "aarch64"
   tags:
   - CCE-85905-8
@@ -8307,7 +9783,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ansible_architecture == "aarch64"
   tags:
   - CCE-85905-8
@@ -8318,6 +9794,26 @@
   - medium_severity
   - no_reboot_needed
   - restrict_strategy
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-85985-0
+  - NIST-800-53-AU-2(a)
+  - audit_create_success_ppc64le
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  when:
+  - audit_create_success_ppc64le | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
 
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-1-create-success.rules according to policy
   copy:
@@ -8339,7 +9835,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ansible_architecture == "ppc64le"
   tags:
   - CCE-85985-0
@@ -8362,7 +9858,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ansible_architecture == "ppc64le"
   tags:
   - CCE-85985-0
@@ -8373,6 +9869,26 @@
   - medium_severity
   - no_reboot_needed
   - restrict_strategy
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-83667-6
+  - NIST-800-53-AU-2(a)
+  - audit_delete_failed
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  when:
+  - audit_delete_failed | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
 
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-4-delete-failed.rules according to policy
   copy:
@@ -8396,7 +9912,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ( not ( ansible_architecture == "aarch64" ) and not ( ansible_architecture == "ppc64le" ) )
   tags:
   - CCE-83667-6
@@ -8419,7 +9935,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ( not ( ansible_architecture == "aarch64" ) and not ( ansible_architecture == "ppc64le" ) )
   tags:
   - CCE-83667-6
@@ -8430,6 +9946,26 @@
   - medium_severity
   - no_reboot_needed
   - restrict_strategy
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-85937-1
+  - NIST-800-53-AU-2(a)
+  - audit_delete_failed_aarch64
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  when:
+  - audit_delete_failed_aarch64 | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
 
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-4-delete-failed.rules according to policy
   copy:
@@ -8453,7 +9989,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ansible_architecture == "aarch64"
   tags:
   - CCE-85937-1
@@ -8476,7 +10012,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ansible_architecture == "aarch64"
   tags:
   - CCE-85937-1
@@ -8487,6 +10023,26 @@
   - medium_severity
   - no_reboot_needed
   - restrict_strategy
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-90787-3
+  - NIST-800-53-AU-2(a)
+  - audit_delete_failed_ppc64le
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  when:
+  - audit_delete_failed_ppc64le | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
 
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-4-delete-failed.rules according to policy
   copy:
@@ -8506,7 +10062,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ansible_architecture == "ppc64le"
   tags:
   - CCE-90787-3
@@ -8529,7 +10085,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ansible_architecture == "ppc64le"
   tags:
   - CCE-90787-3
@@ -8540,6 +10096,26 @@
   - medium_severity
   - no_reboot_needed
   - restrict_strategy
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-83680-9
+  - NIST-800-53-AU-2(a)
+  - audit_delete_success
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  when:
+  - audit_delete_success | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
 
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-4-delete-success.rules according to policy
   copy:
@@ -8559,7 +10135,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ( not ( ansible_architecture == "aarch64" ) and not ( ansible_architecture == "ppc64le" ) )
   tags:
   - CCE-83680-9
@@ -8582,7 +10158,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ( not ( ansible_architecture == "aarch64" ) and not ( ansible_architecture == "ppc64le" ) )
   tags:
   - CCE-83680-9
@@ -8593,6 +10169,26 @@
   - medium_severity
   - no_reboot_needed
   - restrict_strategy
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-85939-7
+  - NIST-800-53-AU-2(a)
+  - audit_delete_success_aarch64
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  when:
+  - audit_delete_success_aarch64 | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
 
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-4-delete-success.rules according to policy
   copy:
@@ -8612,7 +10208,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ansible_architecture == "aarch64"
   tags:
   - CCE-85939-7
@@ -8635,7 +10231,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ansible_architecture == "aarch64"
   tags:
   - CCE-85939-7
@@ -8646,6 +10242,26 @@
   - medium_severity
   - no_reboot_needed
   - restrict_strategy
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-90789-9
+  - NIST-800-53-AU-2(a)
+  - audit_delete_success_ppc64le
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  when:
+  - audit_delete_success_ppc64le | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
 
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-4-delete-success.rules according to policy
   copy:
@@ -8663,7 +10279,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ansible_architecture == "ppc64le"
   tags:
   - CCE-90789-9
@@ -8686,7 +10302,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ansible_architecture == "ppc64le"
   tags:
   - CCE-90789-9
@@ -8697,6 +10313,26 @@
   - medium_severity
   - no_reboot_needed
   - restrict_strategy
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-83673-4
+  - NIST-800-53-AU-2(a)
+  - audit_immutable_login_uids
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  when:
+  - audit_immutable_login_uids | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
 
 - name: Put contents into /etc/audit/rules.d/11-loginuid.rules according to policy
   copy:
@@ -8715,7 +10351,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-83673-4
   - NIST-800-53-AU-2(a)
@@ -8737,7 +10373,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-83673-4
   - NIST-800-53-AU-2(a)
@@ -8748,6 +10384,26 @@
   - no_reboot_needed
   - restrict_strategy
 
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-83671-8
+  - NIST-800-53-AU-2(a)
+  - audit_modify_failed
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  when:
+  - audit_modify_failed | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-2-modify-failed.rules according to policy
   copy:
     dest: /etc/audit/rules.d/30-ospp-v42-2-modify-failed.rules
@@ -8786,7 +10442,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ( not ( ansible_architecture == "aarch64" ) and not ( ansible_architecture == "ppc64le" ) )
   tags:
   - CCE-83671-8
@@ -8809,7 +10465,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ( not ( ansible_architecture == "aarch64" ) and not ( ansible_architecture == "ppc64le" ) )
   tags:
   - CCE-83671-8
@@ -8820,6 +10476,26 @@
   - medium_severity
   - no_reboot_needed
   - restrict_strategy
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-85907-4
+  - NIST-800-53-AU-2(a)
+  - audit_modify_failed_aarch64
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  when:
+  - audit_modify_failed_aarch64 | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
 
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-2-modify-failed.rules according to policy
   copy:
@@ -8855,7 +10531,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ansible_architecture == "aarch64"
   tags:
   - CCE-85907-4
@@ -8878,7 +10554,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ansible_architecture == "aarch64"
   tags:
   - CCE-85907-4
@@ -8889,6 +10565,26 @@
   - medium_severity
   - no_reboot_needed
   - restrict_strategy
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-90790-7
+  - NIST-800-53-AU-2(a)
+  - audit_modify_failed_ppc64le
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  when:
+  - audit_modify_failed_ppc64le | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
 
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-2-modify-failed.rules according to policy
   copy:
@@ -8916,7 +10612,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ansible_architecture == "ppc64le"
   tags:
   - CCE-90790-7
@@ -8939,7 +10635,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ansible_architecture == "ppc64le"
   tags:
   - CCE-90790-7
@@ -8951,6 +10647,26 @@
   - no_reboot_needed
   - restrict_strategy
 
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-83681-7
+  - NIST-800-53-AU-2(a)
+  - audit_modify_success
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  when:
+  - audit_modify_success | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-2-modify-success.rules according to policy
   copy:
     dest: /etc/audit/rules.d/30-ospp-v42-2-modify-success.rules
@@ -8977,7 +10693,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ( not ( ansible_architecture == "aarch64" ) and not ( ansible_architecture == "ppc64le" ) )
   tags:
   - CCE-83681-7
@@ -9000,7 +10716,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ( not ( ansible_architecture == "aarch64" ) and not ( ansible_architecture == "ppc64le" ) )
   tags:
   - CCE-83681-7
@@ -9011,6 +10727,26 @@
   - medium_severity
   - no_reboot_needed
   - restrict_strategy
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-85909-0
+  - NIST-800-53-AU-2(a)
+  - audit_modify_success_aarch64
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  when:
+  - audit_modify_success_aarch64 | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
 
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-2-modify-success.rules according to policy
   copy:
@@ -9036,7 +10772,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ansible_architecture == "aarch64"
   tags:
   - CCE-85909-0
@@ -9059,7 +10795,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ansible_architecture == "aarch64"
   tags:
   - CCE-85909-0
@@ -9070,6 +10806,26 @@
   - medium_severity
   - no_reboot_needed
   - restrict_strategy
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-90791-5
+  - NIST-800-53-AU-2(a)
+  - audit_modify_success_ppc64le
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  when:
+  - audit_modify_success_ppc64le | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
 
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-2-modify-success.rules according to policy
   copy:
@@ -9091,7 +10847,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ansible_architecture == "ppc64le"
   tags:
   - CCE-90791-5
@@ -9114,7 +10870,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ansible_architecture == "ppc64le"
   tags:
   - CCE-90791-5
@@ -9125,6 +10881,26 @@
   - medium_severity
   - no_reboot_needed
   - restrict_strategy
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-90814-5
+  - NIST-800-53-AU-2(a)
+  - audit_module_load
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  when:
+  - audit_module_load | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
 
 - name: Put contents into /etc/audit/rules.d/43-module-load.rules according to policy
   copy:
@@ -9150,7 +10926,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - not ( ansible_architecture == "ppc64le" )
   tags:
   - CCE-90814-5
@@ -9173,7 +10949,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - not ( ansible_architecture == "ppc64le" )
   tags:
   - CCE-90814-5
@@ -9184,6 +10960,26 @@
   - medium_severity
   - no_reboot_needed
   - restrict_strategy
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-90788-1
+  - NIST-800-53-AU-2(a)
+  - audit_module_load_ppc64le
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  when:
+  - audit_module_load_ppc64le | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
 
 - name: Put contents into /etc/audit/rules.d/43-module-load.rules according to policy
   copy:
@@ -9205,7 +11001,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ansible_architecture == "ppc64le"
   tags:
   - CCE-90788-1
@@ -9228,7 +11024,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ansible_architecture == "ppc64le"
   tags:
   - CCE-90788-1
@@ -9240,6 +11036,26 @@
   - no_reboot_needed
   - restrict_strategy
 
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-83655-1
+  - NIST-800-53-AU-2(a)
+  - audit_ospp_general
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  when:
+  - audit_ospp_general | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42.rules according to policy
   copy:
     dest: /etc/audit/rules.d/30-ospp-v42.rules
@@ -9311,13 +11127,21 @@
 
       ## gshadow for writes
 
-      -a always,exit -F path=/etc/passwd -F perm=wa -F auid>=1000 -F auid!=unset -F key=user-modify
+      -a always,exit -F arch=b32 -F path=/etc/passwd -F perm=wa -F auid>=1000 -F auid!=unset -F key=user-modify
 
-      -a always,exit -F path=/etc/shadow -F perm=wa -F auid>=1000 -F auid!=unset -F key=user-modify
+      -a always,exit -F arch=b64 -F path=/etc/passwd -F perm=wa -F auid>=1000 -F auid!=unset -F key=user-modify
 
-      -a always,exit -F path=/etc/group -F perm=wa -F auid>=1000 -F auid!=unset -F key=group-modify
+      -a always,exit -F arch=b32 -F path=/etc/shadow -F perm=wa -F auid>=1000 -F auid!=unset -F key=user-modify
 
-      -a always,exit -F path=/etc/gshadow -F perm=wa -F auid>=1000 -F auid!=unset -F key=group-modify
+      -a always,exit -F arch=b64 -F path=/etc/shadow -F perm=wa -F auid>=1000 -F auid!=unset -F key=user-modify
+
+      -a always,exit -F arch=b32 -F path=/etc/group -F perm=wa -F auid>=1000 -F auid!=unset -F key=group-modify
+
+      -a always,exit -F arch=b64 -F path=/etc/group -F perm=wa -F auid>=1000 -F auid!=unset -F key=group-modify
+
+      -a always,exit -F arch=b32 -F path=/etc/gshadow -F perm=wa -F auid>=1000 -F auid!=unset -F key=group-modify
+
+      -a always,exit -F arch=b64 -F path=/etc/gshadow -F perm=wa -F auid>=1000 -F auid!=unset -F key=group-modify
 
 
 
@@ -9327,70 +11151,116 @@
 
       ## requirements are only for ones that affect system configuration.
 
-      -a always,exit -F path=/usr/sbin/unix_chkpwd -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+      -a always,exit -F arch=b32 -F path=/usr/sbin/unix_chkpwd -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
 
-      -a always,exit -F path=/usr/sbin/usernetctl -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+      -a always,exit -F arch=b64 -F path=/usr/sbin/unix_chkpwd -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
 
-      -a always,exit -F path=/usr/sbin/userhelper -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+      -a always,exit -F arch=b32 -F path=/usr/sbin/usernetctl -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
 
-      -a always,exit -F path=/usr/sbin/seunshare -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+      -a always,exit -F arch=b64 -F path=/usr/sbin/usernetctl -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
 
-      -a always,exit -F path=/usr/bin/mount -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+      -a always,exit -F arch=b32 -F path=/usr/sbin/userhelper -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
 
-      -a always,exit -F path=/usr/bin/newgrp -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+      -a always,exit -F arch=b64 -F path=/usr/sbin/userhelper -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
 
-      -a always,exit -F path=/usr/bin/newuidmap -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+      -a always,exit -F arch=b32 -F path=/usr/sbin/seunshare -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
 
-      -a always,exit -F path=/usr/bin/gpasswd -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+      -a always,exit -F arch=b64 -F path=/usr/sbin/seunshare -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
 
-      -a always,exit -F path=/usr/bin/newgidmap -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+      -a always,exit -F arch=b32 -F path=/usr/bin/mount -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
 
-      -a always,exit -F path=/usr/bin/umount -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+      -a always,exit -F arch=b64 -F path=/usr/bin/mount -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
 
-      -a always,exit -F path=/usr/bin/passwd -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+      -a always,exit -F arch=b32 -F path=/usr/bin/newgrp -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
 
-      -a always,exit -F path=/usr/bin/crontab -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+      -a always,exit -F arch=b64 -F path=/usr/bin/newgrp -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
 
-      -a always,exit -F path=/usr/bin/at -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+      -a always,exit -F arch=b32 -F path=/usr/bin/newuidmap -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
 
-      -a always,exit -F path=/usr/sbin/grub2-set-bootflag -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+      -a always,exit -F arch=b64 -F path=/usr/bin/newuidmap -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+
+      -a always,exit -F arch=b32 -F path=/usr/bin/gpasswd -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+
+      -a always,exit -F arch=b64 -F path=/usr/bin/gpasswd -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+
+      -a always,exit -F arch=b32 -F path=/usr/bin/newgidmap -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+
+      -a always,exit -F arch=b64 -F path=/usr/bin/newgidmap -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+
+      -a always,exit -F arch=b32 -F path=/usr/bin/umount -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+
+      -a always,exit -F arch=b64 -F path=/usr/bin/umount -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+
+      -a always,exit -F arch=b32 -F path=/usr/bin/passwd -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+
+      -a always,exit -F arch=b64 -F path=/usr/bin/passwd -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+
+      -a always,exit -F arch=b32 -F path=/usr/bin/crontab -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+
+      -a always,exit -F arch=b64 -F path=/usr/bin/crontab -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+
+      -a always,exit -F arch=b32 -F path=/usr/bin/at -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+
+      -a always,exit -F arch=b64 -F path=/usr/bin/at -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+
+      -a always,exit -F arch=b32 -F path=/usr/sbin/grub2-set-bootflag -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+
+      -a always,exit -F arch=b64 -F path=/usr/sbin/grub2-set-bootflag -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
 
 
       ## Privilege escalation via su or sudo. This is entirely handled by pam.
 
       ## Special case for systemd-run. It is not audit aware, specifically watch it
 
-      -a always,exit -F path=/usr/bin/systemd-run -F perm=x -F auid!=unset -F key=maybe-escalation
+      -a always,exit -F arch=b32 -F path=/usr/bin/systemd-run -F perm=x -F auid!=unset -F key=maybe-escalation
+
+      -a always,exit -F arch=b64 -F path=/usr/bin/systemd-run -F perm=x -F auid!=unset -F key=maybe-escalation
 
       ## Special case for pkexec. It is not audit aware, specifically watch it
 
-      -a always,exit -F path=/usr/bin/pkexec -F perm=x -F key=maybe-escalation
+      -a always,exit -F arch=b32 -F path=/usr/bin/pkexec -F perm=x -F key=maybe-escalation
+
+      -a always,exit -F arch=b64 -F path=/usr/bin/pkexec -F perm=x -F key=maybe-escalation
 
 
 
       ## Watch for configuration changes to privilege escalation.
 
-      -a always,exit -F path=/etc/sudoers -F perm=wa -F key=special-config-changes
+      -a always,exit -F arch=b32 -F path=/etc/sudoers -F perm=wa -F key=special-config-changes
 
-      -a always,exit -F dir=/etc/sudoers.d/ -F perm=wa -F key=special-config-changes
+      -a always,exit -F arch=b64 -F path=/etc/sudoers -F perm=wa -F key=special-config-changes
+
+      -a always,exit -F arch=b32 -F dir=/etc/sudoers.d/ -F perm=wa -F key=special-config-changes
+
+      -a always,exit -F arch=b64 -F dir=/etc/sudoers.d/ -F perm=wa -F key=special-config-changes
 
 
       ## Audit log access
 
-      -a always,exit -F dir=/var/log/audit/ -F perm=r -F auid>=1000 -F auid!=unset -F key=access-audit-trail
+      -a always,exit -F arch=b32 -F dir=/var/log/audit/ -F perm=r -F auid>=1000 -F auid!=unset -F key=access-audit-trail
+
+      -a always,exit -F arch=b64 -F dir=/var/log/audit/ -F perm=r -F auid>=1000 -F auid!=unset -F key=access-audit-trail
 
       ## Attempts to Alter Process and Session Initiation Information
 
-      -a always,exit -F path=/var/run/utmp -F perm=wa -F auid>=1000 -F auid!=unset -F key=session
+      -a always,exit -F arch=b32 -F path=/var/run/utmp -F perm=wa -F auid>=1000 -F auid!=unset -F key=session
 
-      -a always,exit -F path=/var/log/btmp -F perm=wa -F auid>=1000 -F auid!=unset -F key=session
+      -a always,exit -F arch=b64 -F path=/var/run/utmp -F perm=wa -F auid>=1000 -F auid!=unset -F key=session
 
-      -a always,exit -F path=/var/log/wtmp -F perm=wa -F auid>=1000 -F auid!=unset -F key=session
+      -a always,exit -F arch=b32 -F path=/var/log/btmp -F perm=wa -F auid>=1000 -F auid!=unset -F key=session
+
+      -a always,exit -F arch=b64 -F path=/var/log/btmp -F perm=wa -F auid>=1000 -F auid!=unset -F key=session
+
+      -a always,exit -F arch=b32 -F path=/var/log/wtmp -F perm=wa -F auid>=1000 -F auid!=unset -F key=session
+
+      -a always,exit -F arch=b64 -F path=/var/log/wtmp -F perm=wa -F auid>=1000 -F auid!=unset -F key=session
 
 
       ## Attempts to modify MAC controls
 
-      -a always,exit -F dir=/etc/selinux/ -F perm=wa -F auid>=1000 -F auid!=unset -F key=MAC-policy
+      -a always,exit -F arch=b32 -F dir=/etc/selinux/ -F perm=wa -F auid>=1000 -F auid!=unset -F key=MAC-policy
+
+      -a always,exit -F arch=b64 -F dir=/etc/selinux/ -F perm=wa -F auid>=1000 -F auid!=unset -F key=MAC-policy
 
 
       ## Software updates. This is entirely handled by rpm.
@@ -9420,7 +11290,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ( not ( ansible_architecture == "aarch64" ) and not ( ansible_architecture == "ppc64le" ) )
   tags:
   - CCE-83655-1
@@ -9443,7 +11313,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ( not ( ansible_architecture == "aarch64" ) and not ( ansible_architecture == "ppc64le" ) )
   tags:
   - CCE-83655-1
@@ -9454,6 +11324,26 @@
   - medium_severity
   - no_reboot_needed
   - restrict_strategy
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-85893-6
+  - NIST-800-53-AU-2(a)
+  - audit_ospp_general_aarch64
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  when:
+  - audit_ospp_general_aarch64 | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
 
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42.rules according to policy
   copy:
@@ -9522,13 +11412,21 @@
 
       ## gshadow for writes
 
-      -a always,exit -F path=/etc/passwd -F perm=wa -F auid>=1000 -F auid!=unset -F key=user-modify
+      -a always,exit -F arch=b32 -F path=/etc/passwd -F perm=wa -F auid>=1000 -F auid!=unset -F key=user-modify
 
-      -a always,exit -F path=/etc/shadow -F perm=wa -F auid>=1000 -F auid!=unset -F key=user-modify
+      -a always,exit -F arch=b64 -F path=/etc/passwd -F perm=wa -F auid>=1000 -F auid!=unset -F key=user-modify
 
-      -a always,exit -F path=/etc/group -F perm=wa -F auid>=1000 -F auid!=unset -F key=group-modify
+      -a always,exit -F arch=b32 -F path=/etc/shadow -F perm=wa -F auid>=1000 -F auid!=unset -F key=user-modify
 
-      -a always,exit -F path=/etc/gshadow -F perm=wa -F auid>=1000 -F auid!=unset -F key=group-modify
+      -a always,exit -F arch=b64 -F path=/etc/shadow -F perm=wa -F auid>=1000 -F auid!=unset -F key=user-modify
+
+      -a always,exit -F arch=b32 -F path=/etc/group -F perm=wa -F auid>=1000 -F auid!=unset -F key=group-modify
+
+      -a always,exit -F arch=b64 -F path=/etc/group -F perm=wa -F auid>=1000 -F auid!=unset -F key=group-modify
+
+      -a always,exit -F arch=b32 -F path=/etc/gshadow -F perm=wa -F auid>=1000 -F auid!=unset -F key=group-modify
+
+      -a always,exit -F arch=b64 -F path=/etc/gshadow -F perm=wa -F auid>=1000 -F auid!=unset -F key=group-modify
 
 
 
@@ -9538,70 +11436,116 @@
 
       ## requirements are only for ones that affect system configuration.
 
-      -a always,exit -F path=/usr/sbin/unix_chkpwd -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+      -a always,exit -F arch=b32 -F path=/usr/sbin/unix_chkpwd -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
 
-      -a always,exit -F path=/usr/sbin/usernetctl -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+      -a always,exit -F arch=b64 -F path=/usr/sbin/unix_chkpwd -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
 
-      -a always,exit -F path=/usr/sbin/userhelper -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+      -a always,exit -F arch=b32 -F path=/usr/sbin/usernetctl -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
 
-      -a always,exit -F path=/usr/sbin/seunshare -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+      -a always,exit -F arch=b64 -F path=/usr/sbin/usernetctl -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
 
-      -a always,exit -F path=/usr/bin/mount -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+      -a always,exit -F arch=b32 -F path=/usr/sbin/userhelper -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
 
-      -a always,exit -F path=/usr/bin/newgrp -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+      -a always,exit -F arch=b64 -F path=/usr/sbin/userhelper -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
 
-      -a always,exit -F path=/usr/bin/newuidmap -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+      -a always,exit -F arch=b32 -F path=/usr/sbin/seunshare -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
 
-      -a always,exit -F path=/usr/bin/gpasswd -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+      -a always,exit -F arch=b64 -F path=/usr/sbin/seunshare -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
 
-      -a always,exit -F path=/usr/bin/newgidmap -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+      -a always,exit -F arch=b32 -F path=/usr/bin/mount -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
 
-      -a always,exit -F path=/usr/bin/umount -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+      -a always,exit -F arch=b64 -F path=/usr/bin/mount -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
 
-      -a always,exit -F path=/usr/bin/passwd -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+      -a always,exit -F arch=b32 -F path=/usr/bin/newgrp -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
 
-      -a always,exit -F path=/usr/bin/crontab -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+      -a always,exit -F arch=b64 -F path=/usr/bin/newgrp -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
 
-      -a always,exit -F path=/usr/bin/at -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+      -a always,exit -F arch=b32 -F path=/usr/bin/newuidmap -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
 
-      -a always,exit -F path=/usr/sbin/grub2-set-bootflag -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+      -a always,exit -F arch=b64 -F path=/usr/bin/newuidmap -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+
+      -a always,exit -F arch=b32 -F path=/usr/bin/gpasswd -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+
+      -a always,exit -F arch=b64 -F path=/usr/bin/gpasswd -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+
+      -a always,exit -F arch=b32 -F path=/usr/bin/newgidmap -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+
+      -a always,exit -F arch=b64 -F path=/usr/bin/newgidmap -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+
+      -a always,exit -F arch=b32 -F path=/usr/bin/umount -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+
+      -a always,exit -F arch=b64 -F path=/usr/bin/umount -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+
+      -a always,exit -F arch=b32 -F path=/usr/bin/passwd -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+
+      -a always,exit -F arch=b64 -F path=/usr/bin/passwd -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+
+      -a always,exit -F arch=b32 -F path=/usr/bin/crontab -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+
+      -a always,exit -F arch=b64 -F path=/usr/bin/crontab -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+
+      -a always,exit -F arch=b32 -F path=/usr/bin/at -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+
+      -a always,exit -F arch=b64 -F path=/usr/bin/at -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+
+      -a always,exit -F arch=b32 -F path=/usr/sbin/grub2-set-bootflag -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+
+      -a always,exit -F arch=b64 -F path=/usr/sbin/grub2-set-bootflag -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
 
 
       ## Privilege escalation via su or sudo. This is entirely handled by pam.
 
       ## Special case for systemd-run. It is not audit aware, specifically watch it
 
-      -a always,exit -F path=/usr/bin/systemd-run -F perm=x -F auid!=unset -F key=maybe-escalation
+      -a always,exit -F arch=b32 -F path=/usr/bin/systemd-run -F perm=x -F auid!=unset -F key=maybe-escalation
+
+      -a always,exit -F arch=b64 -F path=/usr/bin/systemd-run -F perm=x -F auid!=unset -F key=maybe-escalation
 
       ## Special case for pkexec. It is not audit aware, specifically watch it
 
-      -a always,exit -F path=/usr/bin/pkexec -F perm=x -F key=maybe-escalation
+      -a always,exit -F arch=b32 -F path=/usr/bin/pkexec -F perm=x -F key=maybe-escalation
+
+      -a always,exit -F arch=b64 -F path=/usr/bin/pkexec -F perm=x -F key=maybe-escalation
 
 
 
       ## Watch for configuration changes to privilege escalation.
 
-      -a always,exit -F path=/etc/sudoers -F perm=wa -F key=special-config-changes
+      -a always,exit -F arch=b32 -F path=/etc/sudoers -F perm=wa -F key=special-config-changes
 
-      -a always,exit -F dir=/etc/sudoers.d/ -F perm=wa -F key=special-config-changes
+      -a always,exit -F arch=b64 -F path=/etc/sudoers -F perm=wa -F key=special-config-changes
+
+      -a always,exit -F arch=b32 -F dir=/etc/sudoers.d/ -F perm=wa -F key=special-config-changes
+
+      -a always,exit -F arch=b64 -F dir=/etc/sudoers.d/ -F perm=wa -F key=special-config-changes
 
 
       ## Audit log access
 
-      -a always,exit -F dir=/var/log/audit/ -F perm=r -F auid>=1000 -F auid!=unset -F key=access-audit-trail
+      -a always,exit -F arch=b32 -F dir=/var/log/audit/ -F perm=r -F auid>=1000 -F auid!=unset -F key=access-audit-trail
+
+      -a always,exit -F arch=b64 -F dir=/var/log/audit/ -F perm=r -F auid>=1000 -F auid!=unset -F key=access-audit-trail
 
       ## Attempts to Alter Process and Session Initiation Information
 
-      -a always,exit -F path=/var/run/utmp -F perm=wa -F auid>=1000 -F auid!=unset -F key=session
+      -a always,exit -F arch=b32 -F path=/var/run/utmp -F perm=wa -F auid>=1000 -F auid!=unset -F key=session
 
-      -a always,exit -F path=/var/log/btmp -F perm=wa -F auid>=1000 -F auid!=unset -F key=session
+      -a always,exit -F arch=b64 -F path=/var/run/utmp -F perm=wa -F auid>=1000 -F auid!=unset -F key=session
 
-      -a always,exit -F path=/var/log/wtmp -F perm=wa -F auid>=1000 -F auid!=unset -F key=session
+      -a always,exit -F arch=b32 -F path=/var/log/btmp -F perm=wa -F auid>=1000 -F auid!=unset -F key=session
+
+      -a always,exit -F arch=b64 -F path=/var/log/btmp -F perm=wa -F auid>=1000 -F auid!=unset -F key=session
+
+      -a always,exit -F arch=b32 -F path=/var/log/wtmp -F perm=wa -F auid>=1000 -F auid!=unset -F key=session
+
+      -a always,exit -F arch=b64 -F path=/var/log/wtmp -F perm=wa -F auid>=1000 -F auid!=unset -F key=session
 
 
       ## Attempts to modify MAC controls
 
-      -a always,exit -F dir=/etc/selinux/ -F perm=wa -F auid>=1000 -F auid!=unset -F key=MAC-policy
+      -a always,exit -F arch=b32 -F dir=/etc/selinux/ -F perm=wa -F auid>=1000 -F auid!=unset -F key=MAC-policy
+
+      -a always,exit -F arch=b64 -F dir=/etc/selinux/ -F perm=wa -F auid>=1000 -F auid!=unset -F key=MAC-policy
 
 
       ## Software updates. This is entirely handled by rpm.
@@ -9631,7 +11575,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ansible_architecture == "aarch64"
   tags:
   - CCE-85893-6
@@ -9654,7 +11598,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ansible_architecture == "aarch64"
   tags:
   - CCE-85893-6
@@ -9665,6 +11609,26 @@
   - medium_severity
   - no_reboot_needed
   - restrict_strategy
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-90786-5
+  - NIST-800-53-AU-2(a)
+  - audit_ospp_general_ppc64le
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  when:
+  - audit_ospp_general_ppc64le | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
 
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42.rules according to policy
   copy:
@@ -9727,13 +11691,21 @@
 
       ## gshadow for writes
 
-      -a always,exit -F path=/etc/passwd -F perm=wa -F auid>=1000 -F auid!=unset -F key=user-modify
+      -a always,exit -F arch=b32 -F path=/etc/passwd -F perm=wa -F auid>=1000 -F auid!=unset -F key=user-modify
 
-      -a always,exit -F path=/etc/shadow -F perm=wa -F auid>=1000 -F auid!=unset -F key=user-modify
+      -a always,exit -F arch=b64 -F path=/etc/passwd -F perm=wa -F auid>=1000 -F auid!=unset -F key=user-modify
 
-      -a always,exit -F path=/etc/group -F perm=wa -F auid>=1000 -F auid!=unset -F key=group-modify
+      -a always,exit -F arch=b32 -F path=/etc/shadow -F perm=wa -F auid>=1000 -F auid!=unset -F key=user-modify
 
-      -a always,exit -F path=/etc/gshadow -F perm=wa -F auid>=1000 -F auid!=unset -F key=group-modify
+      -a always,exit -F arch=b64 -F path=/etc/shadow -F perm=wa -F auid>=1000 -F auid!=unset -F key=user-modify
+
+      -a always,exit -F arch=b32 -F path=/etc/group -F perm=wa -F auid>=1000 -F auid!=unset -F key=group-modify
+
+      -a always,exit -F arch=b64 -F path=/etc/group -F perm=wa -F auid>=1000 -F auid!=unset -F key=group-modify
+
+      -a always,exit -F arch=b32 -F path=/etc/gshadow -F perm=wa -F auid>=1000 -F auid!=unset -F key=group-modify
+
+      -a always,exit -F arch=b64 -F path=/etc/gshadow -F perm=wa -F auid>=1000 -F auid!=unset -F key=group-modify
 
 
 
@@ -9743,70 +11715,116 @@
 
       ## requirements are only for ones that affect system configuration.
 
-      -a always,exit -F path=/usr/sbin/unix_chkpwd -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+      -a always,exit -F arch=b32 -F path=/usr/sbin/unix_chkpwd -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
 
-      -a always,exit -F path=/usr/sbin/usernetctl -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+      -a always,exit -F arch=b64 -F path=/usr/sbin/unix_chkpwd -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
 
-      -a always,exit -F path=/usr/sbin/userhelper -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+      -a always,exit -F arch=b32 -F path=/usr/sbin/usernetctl -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
 
-      -a always,exit -F path=/usr/sbin/seunshare -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+      -a always,exit -F arch=b64 -F path=/usr/sbin/usernetctl -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
 
-      -a always,exit -F path=/usr/bin/mount -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+      -a always,exit -F arch=b32 -F path=/usr/sbin/userhelper -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
 
-      -a always,exit -F path=/usr/bin/newgrp -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+      -a always,exit -F arch=b64 -F path=/usr/sbin/userhelper -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
 
-      -a always,exit -F path=/usr/bin/newuidmap -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+      -a always,exit -F arch=b32 -F path=/usr/sbin/seunshare -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
 
-      -a always,exit -F path=/usr/bin/gpasswd -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+      -a always,exit -F arch=b64 -F path=/usr/sbin/seunshare -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
 
-      -a always,exit -F path=/usr/bin/newgidmap -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+      -a always,exit -F arch=b32 -F path=/usr/bin/mount -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
 
-      -a always,exit -F path=/usr/bin/umount -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+      -a always,exit -F arch=b64 -F path=/usr/bin/mount -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
 
-      -a always,exit -F path=/usr/bin/passwd -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+      -a always,exit -F arch=b32 -F path=/usr/bin/newgrp -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
 
-      -a always,exit -F path=/usr/bin/crontab -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+      -a always,exit -F arch=b64 -F path=/usr/bin/newgrp -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
 
-      -a always,exit -F path=/usr/bin/at -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+      -a always,exit -F arch=b32 -F path=/usr/bin/newuidmap -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
 
-      -a always,exit -F path=/usr/sbin/grub2-set-bootflag -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+      -a always,exit -F arch=b64 -F path=/usr/bin/newuidmap -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+
+      -a always,exit -F arch=b32 -F path=/usr/bin/gpasswd -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+
+      -a always,exit -F arch=b64 -F path=/usr/bin/gpasswd -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+
+      -a always,exit -F arch=b32 -F path=/usr/bin/newgidmap -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+
+      -a always,exit -F arch=b64 -F path=/usr/bin/newgidmap -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+
+      -a always,exit -F arch=b32 -F path=/usr/bin/umount -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+
+      -a always,exit -F arch=b64 -F path=/usr/bin/umount -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+
+      -a always,exit -F arch=b32 -F path=/usr/bin/passwd -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+
+      -a always,exit -F arch=b64 -F path=/usr/bin/passwd -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+
+      -a always,exit -F arch=b32 -F path=/usr/bin/crontab -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+
+      -a always,exit -F arch=b64 -F path=/usr/bin/crontab -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+
+      -a always,exit -F arch=b32 -F path=/usr/bin/at -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+
+      -a always,exit -F arch=b64 -F path=/usr/bin/at -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+
+      -a always,exit -F arch=b32 -F path=/usr/sbin/grub2-set-bootflag -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
+
+      -a always,exit -F arch=b64 -F path=/usr/sbin/grub2-set-bootflag -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
 
 
       ## Privilege escalation via su or sudo. This is entirely handled by pam.
 
       ## Special case for systemd-run. It is not audit aware, specifically watch it
 
-      -a always,exit -F path=/usr/bin/systemd-run -F perm=x -F auid!=unset -F key=maybe-escalation
+      -a always,exit -F arch=b32 -F path=/usr/bin/systemd-run -F perm=x -F auid!=unset -F key=maybe-escalation
+
+      -a always,exit -F arch=b64 -F path=/usr/bin/systemd-run -F perm=x -F auid!=unset -F key=maybe-escalation
 
       ## Special case for pkexec. It is not audit aware, specifically watch it
 
-      -a always,exit -F path=/usr/bin/pkexec -F perm=x -F key=maybe-escalation
+      -a always,exit -F arch=b32 -F path=/usr/bin/pkexec -F perm=x -F key=maybe-escalation
+
+      -a always,exit -F arch=b64 -F path=/usr/bin/pkexec -F perm=x -F key=maybe-escalation
 
 
 
       ## Watch for configuration changes to privilege escalation.
 
-      -a always,exit -F path=/etc/sudoers -F perm=wa -F key=special-config-changes
+      -a always,exit -F arch=b32 -F path=/etc/sudoers -F perm=wa -F key=special-config-changes
 
-      -a always,exit -F dir=/etc/sudoers.d/ -F perm=wa -F key=special-config-changes
+      -a always,exit -F arch=b64 -F path=/etc/sudoers -F perm=wa -F key=special-config-changes
+
+      -a always,exit -F arch=b32 -F dir=/etc/sudoers.d/ -F perm=wa -F key=special-config-changes
+
+      -a always,exit -F arch=b64 -F dir=/etc/sudoers.d/ -F perm=wa -F key=special-config-changes
 
 
       ## Audit log access
 
-      -a always,exit -F dir=/var/log/audit/ -F perm=r -F auid>=1000 -F auid!=unset -F key=access-audit-trail
+      -a always,exit -F arch=b32 -F dir=/var/log/audit/ -F perm=r -F auid>=1000 -F auid!=unset -F key=access-audit-trail
+
+      -a always,exit -F arch=b64 -F dir=/var/log/audit/ -F perm=r -F auid>=1000 -F auid!=unset -F key=access-audit-trail
 
       ## Attempts to Alter Process and Session Initiation Information
 
-      -a always,exit -F path=/var/run/utmp -F perm=wa -F auid>=1000 -F auid!=unset -F key=session
+      -a always,exit -F arch=b32 -F path=/var/run/utmp -F perm=wa -F auid>=1000 -F auid!=unset -F key=session
 
-      -a always,exit -F path=/var/log/btmp -F perm=wa -F auid>=1000 -F auid!=unset -F key=session
+      -a always,exit -F arch=b64 -F path=/var/run/utmp -F perm=wa -F auid>=1000 -F auid!=unset -F key=session
 
-      -a always,exit -F path=/var/log/wtmp -F perm=wa -F auid>=1000 -F auid!=unset -F key=session
+      -a always,exit -F arch=b32 -F path=/var/log/btmp -F perm=wa -F auid>=1000 -F auid!=unset -F key=session
+
+      -a always,exit -F arch=b64 -F path=/var/log/btmp -F perm=wa -F auid>=1000 -F auid!=unset -F key=session
+
+      -a always,exit -F arch=b32 -F path=/var/log/wtmp -F perm=wa -F auid>=1000 -F auid!=unset -F key=session
+
+      -a always,exit -F arch=b64 -F path=/var/log/wtmp -F perm=wa -F auid>=1000 -F auid!=unset -F key=session
 
 
       ## Attempts to modify MAC controls
 
-      -a always,exit -F dir=/etc/selinux/ -F perm=wa -F auid>=1000 -F auid!=unset -F key=MAC-policy
+      -a always,exit -F arch=b32 -F dir=/etc/selinux/ -F perm=wa -F auid>=1000 -F auid!=unset -F key=MAC-policy
+
+      -a always,exit -F arch=b64 -F dir=/etc/selinux/ -F perm=wa -F auid>=1000 -F auid!=unset -F key=MAC-policy
 
 
       ## Software updates. This is entirely handled by rpm.
@@ -9836,7 +11854,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ansible_architecture == "ppc64le"
   tags:
   - CCE-90786-5
@@ -9859,7 +11877,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ansible_architecture == "ppc64le"
   tags:
   - CCE-90786-5
@@ -9870,6 +11888,26 @@
   - medium_severity
   - no_reboot_needed
   - restrict_strategy
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-83675-9
+  - NIST-800-53-AU-2(a)
+  - audit_owner_change_failed
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  when:
+  - audit_owner_change_failed | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
 
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-6-owner-change-failed.rules according to policy
   copy:
@@ -9893,7 +11931,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ( not ( ansible_architecture == "aarch64" ) and not ( ansible_architecture == "ppc64le" ) )
   tags:
   - CCE-83675-9
@@ -9916,7 +11954,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ( not ( ansible_architecture == "aarch64" ) and not ( ansible_architecture == "ppc64le" ) )
   tags:
   - CCE-83675-9
@@ -9927,6 +11965,26 @@
   - medium_severity
   - no_reboot_needed
   - restrict_strategy
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-85942-1
+  - NIST-800-53-AU-2(a)
+  - audit_owner_change_failed_aarch64
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  when:
+  - audit_owner_change_failed_aarch64 | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
 
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-6-owner-change-failed.rules according to policy
   copy:
@@ -9950,7 +12008,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ansible_architecture == "aarch64"
   tags:
   - CCE-85942-1
@@ -9973,7 +12031,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ansible_architecture == "aarch64"
   tags:
   - CCE-85942-1
@@ -9984,6 +12042,26 @@
   - medium_severity
   - no_reboot_needed
   - restrict_strategy
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-85988-4
+  - NIST-800-53-AU-2(a)
+  - audit_owner_change_failed_ppc64le
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  when:
+  - audit_owner_change_failed_ppc64le | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
 
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-6-owner-change-failed.rules according to policy
   copy:
@@ -10003,7 +12081,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ansible_architecture == "ppc64le"
   tags:
   - CCE-85988-4
@@ -10026,7 +12104,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ansible_architecture == "ppc64le"
   tags:
   - CCE-85988-4
@@ -10037,6 +12115,26 @@
   - medium_severity
   - no_reboot_needed
   - restrict_strategy
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-83658-5
+  - NIST-800-53-AU-2(a)
+  - audit_owner_change_success
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  when:
+  - audit_owner_change_success | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
 
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-6-owner-change-success.rules according to policy
   copy:
@@ -10056,7 +12154,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ( not ( ansible_architecture == "aarch64" ) and not ( ansible_architecture == "ppc64le" ) )
   tags:
   - CCE-83658-5
@@ -10079,7 +12177,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ( not ( ansible_architecture == "aarch64" ) and not ( ansible_architecture == "ppc64le" ) )
   tags:
   - CCE-83658-5
@@ -10090,6 +12188,26 @@
   - medium_severity
   - no_reboot_needed
   - restrict_strategy
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-85948-8
+  - NIST-800-53-AU-2(a)
+  - audit_owner_change_success_aarch64
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  when:
+  - audit_owner_change_success_aarch64 | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
 
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-6-owner-change-success.rules according to policy
   copy:
@@ -10109,7 +12227,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ansible_architecture == "aarch64"
   tags:
   - CCE-85948-8
@@ -10132,7 +12250,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ansible_architecture == "aarch64"
   tags:
   - CCE-85948-8
@@ -10143,6 +12261,26 @@
   - medium_severity
   - no_reboot_needed
   - restrict_strategy
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-85998-3
+  - NIST-800-53-AU-2(a)
+  - audit_owner_change_success_ppc64le
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  when:
+  - audit_owner_change_success_ppc64le | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
 
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-6-owner-change-success.rules according to policy
   copy:
@@ -10160,7 +12298,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ansible_architecture == "ppc64le"
   tags:
   - CCE-85998-3
@@ -10183,7 +12321,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ansible_architecture == "ppc64le"
   tags:
   - CCE-85998-3
@@ -10194,6 +12332,26 @@
   - medium_severity
   - no_reboot_needed
   - restrict_strategy
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-83676-7
+  - NIST-800-53-AU-2(a)
+  - audit_perm_change_failed
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  when:
+  - audit_perm_change_failed | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
 
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-5-perm-change-failed.rules according to policy
   copy:
@@ -10221,7 +12379,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ( not ( ansible_architecture == "aarch64" ) and not ( ansible_architecture == "ppc64le" ) )
   tags:
   - CCE-83676-7
@@ -10244,7 +12402,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ( not ( ansible_architecture == "aarch64" ) and not ( ansible_architecture == "ppc64le" ) )
   tags:
   - CCE-83676-7
@@ -10255,6 +12413,26 @@
   - medium_severity
   - no_reboot_needed
   - restrict_strategy
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-85950-4
+  - NIST-800-53-AU-2(a)
+  - audit_perm_change_failed_aarch64
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  when:
+  - audit_perm_change_failed_aarch64 | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
 
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-5-perm-change-failed.rules according to policy
   copy:
@@ -10282,7 +12460,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ansible_architecture == "aarch64"
   tags:
   - CCE-85950-4
@@ -10305,7 +12483,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ansible_architecture == "aarch64"
   tags:
   - CCE-85950-4
@@ -10316,6 +12494,26 @@
   - medium_severity
   - no_reboot_needed
   - restrict_strategy
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-86000-7
+  - NIST-800-53-AU-2(a)
+  - audit_perm_change_failed_ppc64le
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  when:
+  - audit_perm_change_failed_ppc64le | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
 
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-5-perm-change-failed.rules according to policy
   copy:
@@ -10337,7 +12535,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ansible_architecture == "ppc64le"
   tags:
   - CCE-86000-7
@@ -10360,7 +12558,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ansible_architecture == "ppc64le"
   tags:
   - CCE-86000-7
@@ -10371,6 +12569,26 @@
   - medium_severity
   - no_reboot_needed
   - restrict_strategy
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-83678-3
+  - NIST-800-53-AU-2(a)
+  - audit_perm_change_success
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  when:
+  - audit_perm_change_success | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
 
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-5-perm-change-success.rules according to policy
   copy:
@@ -10392,7 +12610,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ( not ( ansible_architecture == "aarch64" ) and not ( ansible_architecture == "ppc64le" ) )
   tags:
   - CCE-83678-3
@@ -10415,7 +12633,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ( not ( ansible_architecture == "aarch64" ) and not ( ansible_architecture == "ppc64le" ) )
   tags:
   - CCE-83678-3
@@ -10426,6 +12644,26 @@
   - medium_severity
   - no_reboot_needed
   - restrict_strategy
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-85952-0
+  - NIST-800-53-AU-2(a)
+  - audit_perm_change_success_aarch64
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  when:
+  - audit_perm_change_success_aarch64 | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
 
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-5-perm-change-success.rules according to policy
   copy:
@@ -10447,7 +12685,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ansible_architecture == "aarch64"
   tags:
   - CCE-85952-0
@@ -10470,7 +12708,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ansible_architecture == "aarch64"
   tags:
   - CCE-85952-0
@@ -10481,6 +12719,26 @@
   - medium_severity
   - no_reboot_needed
   - restrict_strategy
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-86002-3
+  - NIST-800-53-AU-2(a)
+  - audit_perm_change_success_ppc64le
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  when:
+  - audit_perm_change_success_ppc64le | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
 
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-5-perm-change-success.rules according to policy
   copy:
@@ -10499,7 +12757,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ansible_architecture == "ppc64le"
   tags:
   - CCE-86002-3
@@ -10522,7 +12780,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - '"kernel" in ansible_facts.packages'
   - ansible_architecture == "ppc64le"
   tags:
   - CCE-86002-3
