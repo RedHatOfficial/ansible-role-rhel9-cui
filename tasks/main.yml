@@ -1045,10 +1045,11 @@
   - medium_severity | bool
   - no_reboot_needed | bool
 
-- name: Enable authselect - Select authselect profile
+- name: Enable authselect - Check Current authselect Profile
   ansible.builtin.command:
-    cmd: authselect select "{{ var_authselect_profile }}"
-  register: result_authselect_select
+    cmd: authselect current
+  register: result_authselect_current
+  changed_when: false
   failed_when: false
   tags:
   - CCE-89732-2
@@ -1070,10 +1071,11 @@
   - medium_severity | bool
   - no_reboot_needed | bool
 
-- name: Enable authselect - Verify if PAM has been altered
+- name: Enable authselect - Try to Select an authselect Profile
   ansible.builtin.command:
-    cmd: rpm -qV pam
-  register: result_altered_authselect
+    cmd: authselect select "{{ var_authselect_profile }}"
+  register: result_authselect_select
+  changed_when: result_authselect_select.rc == 0
   failed_when: false
   when:
   - DISA_STIG_needed_rules | bool
@@ -1083,6 +1085,34 @@
   - medium_disruption | bool
   - medium_severity | bool
   - no_reboot_needed | bool
+  - result_authselect_current.rc != 0
+  tags:
+  - CCE-89732-2
+  - DISA-STIG-needed_rules
+  - NIST-800-53-AC-3
+  - PCI-DSSv4-8.3.4
+  - configure_strategy
+  - enable_authselect
+  - low_complexity
+  - medium_disruption
+  - medium_severity
+  - no_reboot_needed
+
+- name: Enable authselect - Verify If pam Has Been Altered
+  ansible.builtin.command:
+    cmd: rpm -qV pam
+  register: result_altered_authselect
+  changed_when: false
+  failed_when: false
+  when:
+  - DISA_STIG_needed_rules | bool
+  - configure_strategy | bool
+  - enable_authselect | bool
+  - low_complexity | bool
+  - medium_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - result_authselect_select is not skipped
   - result_authselect_select.rc != 0
   tags:
   - CCE-89732-2
@@ -1096,12 +1126,13 @@
   - medium_severity
   - no_reboot_needed
 
-- name: Enable authselect - Informative message based on the authselect integrity check
+- name: Enable authselect - Informative Message Based on authselect Integrity Check
   ansible.builtin.assert:
     that:
-    - result_altered_authselect is skipped or result_altered_authselect.rc == 0
+    - result_authselect_current.rc == 0 or result_altered_authselect is skipped or result_altered_authselect.rc == 0
     fail_msg:
-    - Files in the 'pam' package have been altered, so the authselect configuration won't be forced.
+    - authselect is not used but files from the 'pam' package have been altered, so the authselect configuration won't be
+      forced.
   tags:
   - CCE-89732-2
   - DISA-STIG-needed_rules
@@ -1122,7 +1153,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
 
-- name: Enable authselect - Force authselect profile select
+- name: Enable authselect - Force authselect Profile Selection
   ansible.builtin.command:
     cmd: authselect select --force "{{ var_authselect_profile }}"
   when:
@@ -1133,8 +1164,9 @@
   - medium_disruption | bool
   - medium_severity | bool
   - no_reboot_needed | bool
+  - result_authselect_current.rc != 0
   - result_authselect_select.rc != 0
-  - result_altered_authselect is skipped or result_altered_authselect.rc == 0
+  - result_altered_authselect.rc == 0
   tags:
   - CCE-89732-2
   - DISA-STIG-needed_rules
@@ -1518,6 +1550,10 @@
           pam_file_path: /etc/authselect/{{ authselect_custom_profile }}/{{ pam_file_path | basename }}
       when:
       - result_authselect_present.stat.exists
+    - name: Lock Accounts After Failed Password Attempts - Define a fact for control already filtered in case filters are
+        used
+      ansible.builtin.set_fact:
+        pam_module_control: ''
     - name: Lock Accounts After Failed Password Attempts - Ensure the "deny" option from "pam_faillock.so" is not present
         in {{ pam_file_path }}
       ansible.builtin.replace:
@@ -1650,6 +1686,10 @@
           pam_file_path: /etc/authselect/{{ authselect_custom_profile }}/{{ pam_file_path | basename }}
       when:
       - result_authselect_present.stat.exists
+    - name: Lock Accounts After Failed Password Attempts - Define a fact for control already filtered in case filters are
+        used
+      ansible.builtin.set_fact:
+        pam_module_control: ''
     - name: Lock Accounts After Failed Password Attempts - Ensure the "deny" option from "pam_faillock.so" is not present
         in {{ pam_file_path }}
       ansible.builtin.replace:
@@ -2134,6 +2174,10 @@
           pam_file_path: /etc/authselect/{{ authselect_custom_profile }}/{{ pam_file_path | basename }}
       when:
       - result_authselect_present.stat.exists
+    - name: Set Interval For Counting Failed Password Attempts - Define a fact for control already filtered in case filters
+        are used
+      ansible.builtin.set_fact:
+        pam_module_control: ''
     - name: Set Interval For Counting Failed Password Attempts - Ensure the "fail_interval" option from "pam_faillock.so"
         is not present in {{ pam_file_path }}
       ansible.builtin.replace:
@@ -2270,6 +2314,10 @@
           pam_file_path: /etc/authselect/{{ authselect_custom_profile }}/{{ pam_file_path | basename }}
       when:
       - result_authselect_present.stat.exists
+    - name: Set Interval For Counting Failed Password Attempts - Define a fact for control already filtered in case filters
+        are used
+      ansible.builtin.set_fact:
+        pam_module_control: ''
     - name: Set Interval For Counting Failed Password Attempts - Ensure the "fail_interval" option from "pam_faillock.so"
         is not present in {{ pam_file_path }}
       ansible.builtin.replace:
@@ -2764,6 +2812,10 @@
           pam_file_path: /etc/authselect/{{ authselect_custom_profile }}/{{ pam_file_path | basename }}
       when:
       - result_authselect_present.stat.exists
+    - name: Set Lockout Time for Failed Password Attempts - Define a fact for control already filtered in case filters are
+        used
+      ansible.builtin.set_fact:
+        pam_module_control: ''
     - name: Set Lockout Time for Failed Password Attempts - Ensure the "unlock_time" option from "pam_faillock.so" is not
         present in {{ pam_file_path }}
       ansible.builtin.replace:
@@ -2897,6 +2949,10 @@
           pam_file_path: /etc/authselect/{{ authselect_custom_profile }}/{{ pam_file_path | basename }}
       when:
       - result_authselect_present.stat.exists
+    - name: Set Lockout Time for Failed Password Attempts - Define a fact for control already filtered in case filters are
+        used
+      ansible.builtin.set_fact:
+        pam_module_control: ''
     - name: Set Lockout Time for Failed Password Attempts - Ensure the "unlock_time" option from "pam_faillock.so" is not
         present in {{ pam_file_path }}
       ansible.builtin.replace:
@@ -3340,7 +3396,7 @@
   - no_reboot_needed
   - service_debug-shell_disabled
 
-- name: Disable debug-shell SystemD Service - Ensure "debug-shell.service" is Masked
+- name: Disable debug-shell SystemD Service - Ensure debug-shell.service is Masked
   ansible.builtin.systemd:
     name: debug-shell.service
     state: stopped
@@ -3355,7 +3411,7 @@
   - no_reboot_needed | bool
   - service_debug_shell_disabled | bool
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  - service_exists.stdout_lines is search("debug-shell.service",multiline=True)
+  - service_exists.stdout_lines is search("debug-shell.service", multiline=True)
   tags:
   - CCE-90724-6
   - DISA-STIG-RHEL-09-211055
@@ -3395,12 +3451,12 @@
   - no_reboot_needed
   - service_debug-shell_disabled
 
-- name: Disable socket debug-shell
+- name: Disable debug-shell SystemD Service - Disable Socket debug-shell
   ansible.builtin.systemd:
     name: debug-shell.socket
-    enabled: 'no'
+    enabled: false
     state: stopped
-    masked: 'yes'
+    masked: true
   when:
   - DISA_STIG_RHEL_09_211055 | bool
   - disable_strategy | bool
@@ -3410,7 +3466,7 @@
   - no_reboot_needed | bool
   - service_debug_shell_disabled | bool
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  - socket_file_exists.stdout_lines is search("debug-shell.socket",multiline=True)
+  - socket_file_exists.stdout_lines is search("debug-shell.socket", multiline=True)
   tags:
   - CCE-90724-6
   - DISA-STIG-RHEL-09-211055
@@ -3507,6 +3563,46 @@
   - low_disruption
   - no_reboot_needed
 
+- name: Set 'StopIdleSessionSec' to '{{ var_logind_session_timeout }}' in the [Login] section of '/etc/systemd/logind.conf'
+  ini_file:
+    path: /etc/systemd/logind.conf
+    section: Login
+    option: StopIdleSessionSec
+    value: '{{ var_logind_session_timeout }}'
+    create: true
+    mode: 420
+  when:
+  - DISA_STIG_RHEL_09_412080 | bool
+  - logind_session_timeout | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - reboot_required | bool
+  - restrict_strategy | bool
+  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - ( ansible_distribution == 'RedHat' and ansible_distribution_version is version('8.7', '>=') and ansible_distribution ==
+    'RedHat' and ansible_distribution_version is version('9.0', '!=') ) or ansible_distribution == 'OracleLinux' and ansible_distribution_version
+    is version('8.7', '>=')
+  tags:
+  - CCE-90785-7
+  - CJIS-5.5.6
+  - DISA-STIG-RHEL-09-412080
+  - NIST-800-171-3.1.11
+  - NIST-800-53-AC-12
+  - NIST-800-53-AC-17(a)
+  - NIST-800-53-AC-17(a)
+  - NIST-800-53-AC-2(5)
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-SC-10
+  - PCI-DSS-Req-8.1.8
+  - logind_session_timeout
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - reboot_required
+  - restrict_strategy
+
 - name: Require single user mode password
   lineinfile:
     create: true
@@ -3535,268 +3631,6 @@
   - medium_severity
   - no_reboot_needed
   - require_singleuser_auth
-  - restrict_strategy
-
-- name: Ensure tmux is installed
-  package:
-    name: tmux
-    state: present
-  when:
-  - DISA_STIG_RHEL_09_412010 | bool
-  - enable_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - package_tmux_installed | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  tags:
-  - CCE-83599-1
-  - DISA-STIG-RHEL-09-412010
-  - NIST-800-171-3.1.10
-  - NIST-800-53-CM-6(a)
-  - enable_strategy
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - package_tmux_installed
-
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-90586-9
-  - configure_bashrc_exec_tmux
-  - configure_strategy
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  when:
-  - configure_bashrc_exec_tmux | bool
-  - configure_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-
-- name: 'Support session locking with tmux: Determine If the Tmux Launch Script Is Present in /etc/bashrc'
-  ansible.builtin.find:
-    paths: /etc
-    patterns: bashrc
-    contains: .*case "$name" in sshd|login\) exec tmux ;; esac.*
-  register: tmux_in_bashrc
-  when:
-  - configure_bashrc_exec_tmux | bool
-  - configure_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  - '"tmux" in ansible_facts.packages'
-  tags:
-  - CCE-90586-9
-  - configure_bashrc_exec_tmux
-  - configure_strategy
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-
-- name: 'Support session locking with tmux: Determine If the Tmux Launch Script Is Present in /etc/profile.d/*.sh'
-  ansible.builtin.find:
-    paths: /etc/profile.d
-    patterns: '*.sh'
-    contains: .*case "$name" in sshd|login\) exec tmux ;; esac.*
-  register: tmux_in_profile_d
-  when:
-  - configure_bashrc_exec_tmux | bool
-  - configure_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  - '"tmux" in ansible_facts.packages'
-  tags:
-  - CCE-90586-9
-  - configure_bashrc_exec_tmux
-  - configure_strategy
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-
-- name: 'Support session locking with tmux: Insert the Correct Script into /etc/profile.d/tmux.sh'
-  ansible.builtin.blockinfile:
-    path: /etc/profile.d/tmux.sh
-    block: "if [ \"$PS1\" ]; then\n  parent=$(ps -o ppid= -p $$)\n  name=$(ps -o comm= -p $parent)\n  case \"$name\" in sshd|login)\
-      \ exec tmux ;; esac\nfi\n"
-    create: true
-  when:
-  - configure_bashrc_exec_tmux | bool
-  - configure_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  - '"tmux" in ansible_facts.packages'
-  - tmux_in_bashrc is defined and tmux_in_bashrc.matched == 0
-  - tmux_in_profile_d is defined and tmux_in_profile_d.matched == 0
-  tags:
-  - CCE-90586-9
-  - configure_bashrc_exec_tmux
-  - configure_strategy
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-89876-7
-  - DISA-STIG-RHEL-09-412025
-  - configure_tmux_lock_after_time
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - DISA_STIG_RHEL_09_412025 | bool
-  - configure_tmux_lock_after_time | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-
-- name: Configure tmux to lock session after inactivity
-  block:
-  - name: Check for duplicate values
-    lineinfile:
-      path: /etc/tmux.conf
-      create: true
-      regexp: ^\s*set -g lock-after-time\s+
-      mode: '0644'
-      state: absent
-    check_mode: true
-    changed_when: false
-    register: dupes
-  - name: Deduplicate values from /etc/tmux.conf
-    lineinfile:
-      path: /etc/tmux.conf
-      create: true
-      regexp: ^\s*set -g lock-after-time\s+
-      mode: '0644'
-      state: absent
-    when: dupes.found is defined and dupes.found > 1
-  - name: Insert correct line to /etc/tmux.conf
-    lineinfile:
-      path: /etc/tmux.conf
-      create: true
-      regexp: ^\s*set -g lock-after-time\s+
-      mode: '0644'
-      line: set -g lock-after-time 900
-      state: present
-  when:
-  - DISA_STIG_RHEL_09_412025 | bool
-  - configure_tmux_lock_after_time | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  - '"tmux" in ansible_facts.packages'
-  tags:
-  - CCE-89876-7
-  - DISA-STIG-RHEL-09-412025
-  - configure_tmux_lock_after_time
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-90171-0
-  - DISA-STIG-RHEL-09-412020
-  - NIST-800-53-AC-11(a)
-  - NIST-800-53-AC-11(b)
-  - NIST-800-53-CM-6(a)
-  - configure_tmux_lock_command
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - DISA_STIG_RHEL_09_412020 | bool
-  - configure_tmux_lock_command | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-
-- name: Configure the tmux Lock Command
-  block:
-  - name: Check for duplicate values
-    lineinfile:
-      path: /etc/tmux.conf
-      create: true
-      regexp: ^\s*set -g lock-command\s+
-      mode: '0644'
-      state: absent
-    check_mode: true
-    changed_when: false
-    register: dupes
-  - name: Deduplicate values from /etc/tmux.conf
-    lineinfile:
-      path: /etc/tmux.conf
-      create: true
-      regexp: ^\s*set -g lock-command\s+
-      mode: '0644'
-      state: absent
-    when: dupes.found is defined and dupes.found > 1
-  - name: Insert correct line to /etc/tmux.conf
-    lineinfile:
-      path: /etc/tmux.conf
-      create: true
-      regexp: ^\s*set -g lock-command\s+
-      mode: '0644'
-      line: set -g lock-command vlock
-      state: present
-  when:
-  - DISA_STIG_RHEL_09_412020 | bool
-  - configure_tmux_lock_command | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  - '"tmux" in ansible_facts.packages'
-  tags:
-  - CCE-90171-0
-  - DISA-STIG-RHEL-09-412020
-  - NIST-800-53-AC-11(a)
-  - NIST-800-53-AC-11(b)
-  - NIST-800-53-CM-6(a)
-  - configure_tmux_lock_command
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
   - restrict_strategy
 
 - name: Prevent Login to Accounts With Empty Password - Check if system relies on authselect
@@ -4566,17 +4400,17 @@
   - no_reboot_needed | bool
   - service_firewalld_enabled | bool
 
-- name: Enable service firewalld
+- name: Verify firewalld Enabled - Enable service firewalld
   block:
   - name: Gather the package facts
     package_facts:
       manager: auto
-  - name: Enable service firewalld
-    systemd:
+  - name: Verify firewalld Enabled - Enable Service firewalld
+    ansible.builtin.systemd:
       name: firewalld
-      enabled: 'yes'
+      enabled: true
       state: started
-      masked: 'no'
+      masked: false
     when:
     - '"firewalld" in ansible_facts.packages'
   when:
@@ -6304,7 +6138,7 @@
   - no_reboot_needed
   - service_kdump_disabled
 
-- name: Disable KDump Kernel Crash Analyzer (kdump) - Ensure "kdump.service" is Masked
+- name: Disable KDump Kernel Crash Analyzer (kdump) - Ensure kdump.service is Masked
   ansible.builtin.systemd:
     name: kdump.service
     state: stopped
@@ -6319,7 +6153,7 @@
   - no_reboot_needed | bool
   - service_kdump_disabled | bool
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  - service_exists.stdout_lines is search("kdump.service",multiline=True)
+  - service_exists.stdout_lines is search("kdump.service", multiline=True)
   tags:
   - CCE-84232-8
   - DISA-STIG-RHEL-09-213115
@@ -6361,12 +6195,12 @@
   - no_reboot_needed
   - service_kdump_disabled
 
-- name: Disable socket kdump
+- name: Disable KDump Kernel Crash Analyzer (kdump) - Disable Socket kdump
   ansible.builtin.systemd:
     name: kdump.socket
-    enabled: 'no'
+    enabled: false
     state: stopped
-    masked: 'yes'
+    masked: true
   when:
   - DISA_STIG_RHEL_09_213115 | bool
   - disable_strategy | bool
@@ -6376,7 +6210,7 @@
   - no_reboot_needed | bool
   - service_kdump_disabled | bool
   - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
-  - socket_file_exists.stdout_lines is search("kdump.socket",multiline=True)
+  - socket_file_exists.stdout_lines is search("kdump.socket", multiline=True)
   tags:
   - CCE-84232-8
   - DISA-STIG-RHEL-09-213115
@@ -6415,17 +6249,17 @@
   - no_reboot_needed
   - package_fapolicyd_installed
 
-- name: Enable service fapolicyd
+- name: Enable the File Access Policy Service - Enable service fapolicyd
   block:
   - name: Gather the package facts
     package_facts:
       manager: auto
-  - name: Enable service fapolicyd
-    systemd:
+  - name: Enable the File Access Policy Service - Enable Service fapolicyd
+    ansible.builtin.systemd:
       name: fapolicyd
-      enabled: 'yes'
+      enabled: true
       state: started
-      masked: 'no'
+      masked: false
     when:
     - '"fapolicyd" in ansible_facts.packages'
   when:
@@ -7124,17 +6958,17 @@
   - no_reboot_needed
   - package_usbguard_installed
 
-- name: Enable service usbguard
+- name: Enable the USBGuard Service - Enable service usbguard
   block:
   - name: Gather the package facts
     package_facts:
       manager: auto
-  - name: Enable service usbguard
-    systemd:
+  - name: Enable the USBGuard Service - Enable Service usbguard
+    ansible.builtin.systemd:
       name: usbguard
-      enabled: 'yes'
+      enabled: true
       state: started
-      masked: 'no'
+      masked: false
     when:
     - '"usbguard" in ansible_facts.packages'
   when:
@@ -7158,6 +6992,79 @@
   - medium_severity
   - no_reboot_needed
   - service_usbguard_enabled
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
+  tags:
+  - CCE-84206-2
+  - DISA-STIG-RHEL-09-291025
+  - NIST-800-53-AU-2
+  - NIST-800-53-CM-8(3)
+  - NIST-800-53-IA-3
+  - configure_usbguard_auditbackend
+  - low_complexity
+  - low_disruption
+  - low_severity
+  - no_reboot_needed
+  - restrict_strategy
+  when:
+  - DISA_STIG_RHEL_09_291025 | bool
+  - configure_usbguard_auditbackend | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - low_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+
+- name: Log USBGuard daemon audit events using Linux Audit
+  block:
+  - name: Check for duplicate values
+    lineinfile:
+      path: /etc/usbguard/usbguard-daemon.conf
+      create: true
+      regexp: ^\s*AuditBackend=
+      state: absent
+    check_mode: true
+    changed_when: false
+    register: dupes
+  - name: Deduplicate values from /etc/usbguard/usbguard-daemon.conf
+    lineinfile:
+      path: /etc/usbguard/usbguard-daemon.conf
+      create: true
+      regexp: ^\s*AuditBackend=
+      state: absent
+    when: dupes.found is defined and dupes.found > 1
+  - name: Insert correct line to /etc/usbguard/usbguard-daemon.conf
+    lineinfile:
+      path: /etc/usbguard/usbguard-daemon.conf
+      create: true
+      regexp: ^\s*AuditBackend=
+      line: AuditBackend=LinuxAudit
+      state: present
+  when:
+  - DISA_STIG_RHEL_09_291025 | bool
+  - configure_usbguard_auditbackend | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - low_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+  - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"] and ansible_architecture != "s390x"
+    )
+  - '"usbguard" in ansible_facts.packages'
+  tags:
+  - CCE-84206-2
+  - DISA-STIG-RHEL-09-291025
+  - NIST-800-53-AU-2
+  - NIST-800-53-CM-8(3)
+  - NIST-800-53-IA-3
+  - configure_usbguard_auditbackend
+  - low_complexity
+  - low_disruption
+  - low_severity
+  - no_reboot_needed
+  - restrict_strategy
 
 - name: Allow HID devices and hubs
   lineinfile:
@@ -7253,17 +7160,17 @@
   - no_reboot_needed | bool
   - service_auditd_enabled | bool
 
-- name: Enable service auditd
+- name: Enable auditd Service - Enable service auditd
   block:
   - name: Gather the package facts
     package_facts:
       manager: auto
-  - name: Enable service auditd
-    systemd:
+  - name: Enable auditd Service - Enable Service auditd
+    ansible.builtin.systemd:
       name: auditd
-      enabled: 'yes'
+      enabled: true
       state: started
-      masked: 'no'
+      masked: false
     when:
     - '"audit" in ansible_facts.packages'
   when:
