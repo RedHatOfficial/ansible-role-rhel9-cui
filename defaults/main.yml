@@ -20,6 +20,7 @@ var_ssh_client_rekey_limit_time: 1h
 var_rekey_limit_size: 1G
 var_rekey_limit_time: 1h
 var_auditd_flush: incremental_async
+var_auditd_freq: '50'
 var_auditd_name_format: hostname
 DISA_STIG_RHEL_09_211045: true
 DISA_STIG_RHEL_09_211050: true
@@ -87,7 +88,6 @@ DISA_STIG_RHEL_09_653060: true
 DISA_STIG_RHEL_09_653095: true
 DISA_STIG_RHEL_09_653100: true
 DISA_STIG_RHEL_09_653120: true
-DISA_STIG_RHEL_09_671010: true
 DISA_STIG_RHEL_09_672030: true
 DISA_STIG_needed_rules: true
 accounts_password_pam_dcredit: true
@@ -211,6 +211,7 @@ service_firewalld_enabled: true
 service_kdump_disabled: true
 service_systemd_coredump_disabled: true
 service_usbguard_enabled: true
+special_service_block: true
 ssh_client_rekey_limit: true
 sshd_disable_empty_passwords: true
 sshd_disable_gssapi_auth: true
