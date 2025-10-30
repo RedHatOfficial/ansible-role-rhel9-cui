@@ -98,7 +98,6 @@
   register: test_crypto_policy_group
   tags:
   - CCE-83452-3
-  - DISA-STIG-RHEL-09-672035
   - NIST-800-53-AC-17(2)
   - NIST-800-53-AC-17(a)
   - NIST-800-53-CM-6(a)
@@ -114,7 +113,6 @@
   - no_reboot_needed
   - unknown_strategy
   when:
-  - DISA_STIG_RHEL_09_672035 | bool
   - configure_openssl_crypto_policy | bool
   - low_complexity | bool
   - medium_disruption | bool
@@ -130,7 +128,6 @@
   register: test_crypto_policy_include_directive
   tags:
   - CCE-83452-3
-  - DISA-STIG-RHEL-09-672035
   - NIST-800-53-AC-17(2)
   - NIST-800-53-AC-17(a)
   - NIST-800-53-CM-6(a)
@@ -146,7 +143,6 @@
   - no_reboot_needed
   - unknown_strategy
   when:
-  - DISA_STIG_RHEL_09_672035 | bool
   - configure_openssl_crypto_policy | bool
   - low_complexity | bool
   - medium_disruption | bool
@@ -162,7 +158,6 @@
     line: .include = /etc/crypto-policies/back-ends/opensslcnf.config
     path: /etc/pki/tls/openssl.cnf
   when:
-  - DISA_STIG_RHEL_09_672035 | bool
   - configure_openssl_crypto_policy | bool
   - low_complexity | bool
   - medium_disruption | bool
@@ -173,7 +168,6 @@
   - test_crypto_policy_include_directive.matched == 0
   tags:
   - CCE-83452-3
-  - DISA-STIG-RHEL-09-672035
   - NIST-800-53-AC-17(2)
   - NIST-800-53-AC-17(a)
   - NIST-800-53-CM-6(a)
@@ -198,7 +192,6 @@
       .include = /etc/crypto-policies/back-ends/opensslcnf.config'
     path: /etc/pki/tls/openssl.cnf
   when:
-  - DISA_STIG_RHEL_09_672035 | bool
   - configure_openssl_crypto_policy | bool
   - low_complexity | bool
   - medium_disruption | bool
@@ -208,7 +201,6 @@
   - test_crypto_policy_group.matched == 0
   tags:
   - CCE-83452-3
-  - DISA-STIG-RHEL-09-672035
   - NIST-800-53-AC-17(2)
   - NIST-800-53-AC-17(a)
   - NIST-800-53-CM-6(a)
@@ -231,7 +223,6 @@
     regexp: (?i)^\s*CRYPTO_POLICY.*$
   tags:
   - CCE-83445-7
-  - DISA-STIG-RHEL-09-255075
   - NIST-800-53-AC-17(2)
   - NIST-800-53-AC-17(a)
   - NIST-800-53-CM-6(a)
@@ -247,7 +238,6 @@
   - medium_severity
   - reboot_required
   when:
-  - DISA_STIG_RHEL_09_255075 | bool
   - configure_ssh_crypto_policy | bool
   - disable_strategy | bool
   - low_complexity | bool
@@ -452,7 +442,7 @@
   - unknown_strategy | bool
 
 - name: Configure dnf-automatic to Install Available Updates Automatically
-  ini_file:
+  community.general.ini_file:
     dest: /etc/dnf/automatic.conf
     section: commands
     option: apply_updates
@@ -514,7 +504,7 @@
   - no_reboot_needed | bool
 
 - name: Ensure GPG check is globally activated
-  ini_file:
+  community.general.ini_file:
     dest: /etc/dnf/dnf.conf
     section: main
     option: gpgcheck
@@ -594,7 +584,7 @@
         dirname ~ "/" ~ pkg.stat.lnk_target }}'
     when: pkg.stat.lnk_target is defined
   - name: Ensure GPG check Enabled for Local Packages (dnf)
-    ini_file:
+    community.general.ini_file:
       dest: '{{ pkg_config_file_symlink |  default("/etc/dnf/dnf.conf") }}'
       section: main
       option: localpkg_gpgcheck
@@ -669,7 +659,7 @@
   - no_reboot_needed | bool
 
 - name: Set gpgcheck=1 for each dnf repo
-  ini_file:
+  community.general.ini_file:
     path: '{{ item[0] }}'
     section: '{{ item[1] }}'
     option: gpgcheck
@@ -3073,7 +3063,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - '"pam" in ansible_facts.packages'
+  - '"libpwquality" in ansible_facts.packages'
   tags:
   - CCE-83566-0
   - DISA-STIG-RHEL-09-611070
@@ -3105,7 +3095,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - '"pam" in ansible_facts.packages'
+  - '"libpwquality" in ansible_facts.packages'
   tags:
   - CCE-83566-0
   - DISA-STIG-RHEL-09-611070
@@ -3137,7 +3127,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - '"pam" in ansible_facts.packages'
+  - '"libpwquality" in ansible_facts.packages'
   tags:
   - CCE-83566-0
   - DISA-STIG-RHEL-09-611070
@@ -3196,7 +3186,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - '"pam" in ansible_facts.packages'
+  - '"libpwquality" in ansible_facts.packages'
   tags:
   - CCE-83570-2
   - DISA-STIG-RHEL-09-611065
@@ -3228,7 +3218,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - '"pam" in ansible_facts.packages'
+  - '"libpwquality" in ansible_facts.packages'
   tags:
   - CCE-83570-2
   - DISA-STIG-RHEL-09-611065
@@ -3260,7 +3250,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - '"pam" in ansible_facts.packages'
+  - '"libpwquality" in ansible_facts.packages'
   tags:
   - CCE-83570-2
   - DISA-STIG-RHEL-09-611065
@@ -3320,7 +3310,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - '"pam" in ansible_facts.packages'
+  - '"libpwquality" in ansible_facts.packages'
   tags:
   - CCE-83579-3
   - CJIS-5.6.2.1.1
@@ -3353,7 +3343,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - '"pam" in ansible_facts.packages'
+  - '"libpwquality" in ansible_facts.packages'
   tags:
   - CCE-83579-3
   - CJIS-5.6.2.1.1
@@ -3386,7 +3376,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - '"pam" in ansible_facts.packages'
+  - '"libpwquality" in ansible_facts.packages'
   tags:
   - CCE-83579-3
   - CJIS-5.6.2.1.1
@@ -3443,7 +3433,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - '"pam" in ansible_facts.packages'
+  - '"libpwquality" in ansible_facts.packages'
   tags:
   - CCE-83565-2
   - DISA-STIG-RHEL-09-611100
@@ -3472,7 +3462,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - '"pam" in ansible_facts.packages'
+  - '"libpwquality" in ansible_facts.packages'
   tags:
   - CCE-83565-2
   - DISA-STIG-RHEL-09-611100
@@ -3501,7 +3491,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - '"pam" in ansible_facts.packages'
+  - '"libpwquality" in ansible_facts.packages'
   tags:
   - CCE-83565-2
   - DISA-STIG-RHEL-09-611100
@@ -3555,7 +3545,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - '"pam" in ansible_facts.packages'
+  - '"libpwquality" in ansible_facts.packages'
   tags:
   - CCE-83568-6
   - DISA-STIG-RHEL-09-611110
@@ -3585,7 +3575,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - '"pam" in ansible_facts.packages'
+  - '"libpwquality" in ansible_facts.packages'
   tags:
   - CCE-83568-6
   - DISA-STIG-RHEL-09-611110
@@ -3615,7 +3605,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
-  - '"pam" in ansible_facts.packages'
+  - '"libpwquality" in ansible_facts.packages'
   tags:
   - CCE-83568-6
   - DISA-STIG-RHEL-09-611110
@@ -6662,7 +6652,6 @@
     manager: auto
   tags:
   - CCE-83956-3
-  - DISA-STIG-RHEL-09-213105
   - NIST-800-53-CM-6(a)
   - NIST-800-53-SC-39
   - disable_strategy
@@ -6672,7 +6661,6 @@
   - reboot_required
   - sysctl_user_max_user_namespaces
   when:
-  - DISA_STIG_RHEL_09_213105 | bool
   - disable_strategy | bool
   - low_complexity | bool
   - medium_disruption | bool
@@ -6691,7 +6679,6 @@
     file_type: any
   register: find_sysctl_d
   when:
-  - DISA_STIG_RHEL_09_213105 | bool
   - disable_strategy | bool
   - low_complexity | bool
   - medium_disruption | bool
@@ -6701,7 +6688,6 @@
   - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-83956-3
-  - DISA-STIG-RHEL-09-213105
   - NIST-800-53-CM-6(a)
   - NIST-800-53-SC-39
   - disable_strategy
@@ -6718,7 +6704,6 @@
     replace: '#user.max_user_namespaces'
   loop: '{{ find_sysctl_d.files }}'
   when:
-  - DISA_STIG_RHEL_09_213105 | bool
   - disable_strategy | bool
   - low_complexity | bool
   - medium_disruption | bool
@@ -6728,7 +6713,6 @@
   - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-83956-3
-  - DISA-STIG-RHEL-09-213105
   - NIST-800-53-CM-6(a)
   - NIST-800-53-SC-39
   - disable_strategy
@@ -6746,7 +6730,6 @@
     state: present
     reload: true
   when:
-  - DISA_STIG_RHEL_09_213105 | bool
   - disable_strategy | bool
   - low_complexity | bool
   - medium_disruption | bool
@@ -6756,7 +6739,6 @@
   - '"kernel" in ansible_facts.packages'
   tags:
   - CCE-83956-3
-  - DISA-STIG-RHEL-09-213105
   - NIST-800-53-CM-6(a)
   - NIST-800-53-SC-39
   - disable_strategy
@@ -6971,19 +6953,19 @@
   - NIST-800-53-SC-7(21)
   - PCI-DSSv4-1.2
   - PCI-DSSv4-1.2.6
+  - configure_strategy
   - low_complexity
   - low_disruption
   - medium_severity
-  - reboot_required
-  - restrict_strategy
+  - no_reboot_needed
   - selinux_policytype
   when:
   - DISA_STIG_RHEL_09_431015 | bool
+  - configure_strategy | bool
   - low_complexity | bool
   - low_disruption | bool
   - medium_severity | bool
-  - reboot_required | bool
-  - restrict_strategy | bool
+  - no_reboot_needed | bool
   - selinux_policytype | bool
 
 - name: Configure SELinux Policy
@@ -7013,11 +6995,11 @@
       state: present
   when:
   - DISA_STIG_RHEL_09_431015 | bool
+  - configure_strategy | bool
   - low_complexity | bool
   - low_disruption | bool
   - medium_severity | bool
-  - reboot_required | bool
-  - restrict_strategy | bool
+  - no_reboot_needed | bool
   - selinux_policytype | bool
   - '"kernel" in ansible_facts.packages'
   tags:
@@ -7031,11 +7013,11 @@
   - NIST-800-53-SC-7(21)
   - PCI-DSSv4-1.2
   - PCI-DSSv4-1.2.6
+  - configure_strategy
   - low_complexity
   - low_disruption
   - medium_severity
-  - reboot_required
-  - restrict_strategy
+  - no_reboot_needed
   - selinux_policytype
 
 - name: Gather the package facts
@@ -8649,20 +8631,20 @@
   - NIST-800-53-AU-2
   - NIST-800-53-CM-8(3)
   - NIST-800-53-IA-3
+  - configure_strategy
   - configure_usbguard_auditbackend
   - low_complexity
   - low_disruption
   - low_severity
   - no_reboot_needed
-  - restrict_strategy
   when:
   - DISA_STIG_RHEL_09_291025 | bool
+  - configure_strategy | bool
   - configure_usbguard_auditbackend | bool
   - low_complexity | bool
   - low_disruption | bool
   - low_severity | bool
   - no_reboot_needed | bool
-  - restrict_strategy | bool
 
 - name: Log USBGuard daemon audit events using Linux Audit
   block:
@@ -8670,7 +8652,7 @@
     lineinfile:
       path: /etc/usbguard/usbguard-daemon.conf
       create: true
-      regexp: (?i)^\s*AuditBackend=
+      regexp: (?i)^[ \\t]*AuditBackend=
       state: absent
     check_mode: true
     changed_when: false
@@ -8679,24 +8661,24 @@
     lineinfile:
       path: /etc/usbguard/usbguard-daemon.conf
       create: true
-      regexp: (?i)^\s*AuditBackend=
+      regexp: (?i)^[ \\t]*AuditBackend=
       state: absent
     when: dupes.found is defined and dupes.found > 1
   - name: Insert correct line to /etc/usbguard/usbguard-daemon.conf
     lineinfile:
       path: /etc/usbguard/usbguard-daemon.conf
       create: true
-      regexp: (?i)^\s*AuditBackend=
+      regexp: (?i)^[ \\t]*AuditBackend=
       line: AuditBackend=LinuxAudit
       state: present
   when:
   - DISA_STIG_RHEL_09_291025 | bool
+  - configure_strategy | bool
   - configure_usbguard_auditbackend | bool
   - low_complexity | bool
   - low_disruption | bool
   - low_severity | bool
   - no_reboot_needed | bool
-  - restrict_strategy | bool
   - ( ansible_architecture != "s390x" and "kernel" in ansible_facts.packages )
   - '"usbguard" in ansible_facts.packages'
   tags:
@@ -8705,12 +8687,12 @@
   - NIST-800-53-AU-2
   - NIST-800-53-CM-8(3)
   - NIST-800-53-IA-3
+  - configure_strategy
   - configure_usbguard_auditbackend
   - low_complexity
   - low_disruption
   - low_severity
   - no_reboot_needed
-  - restrict_strategy
 
 - name: Gather the package facts
   package_facts:
@@ -11557,6 +11539,11 @@
 
       ## 30-ospp-v42-6-owner-change-success.rules
 
+      ##
+
+      ## original copies may be found in /usr/share/audit/sample-rules/
+
+
 
       ## User add delete modify. This is covered by pam. However, someone could
 
@@ -11841,6 +11828,11 @@
 
       ## 30-ospp-v42-6-owner-change-success.rules
 
+      ##
+
+      ## original copies may be found in /usr/share/audit/sample-rules/
+
+
 
       ## User add delete modify. This is covered by pam. However, someone could
 
@@ -12121,6 +12113,11 @@
 
       ## 30-ospp-v42-6-owner-change-success.rules
 
+      ##
+
+      ## original copies may be found in /usr/share/audit/sample-rules/
+
+
 
       ## User add delete modify. This is covered by pam. However, someone could
 
@@ -12148,19 +12145,11 @@
 
       ## gshadow for writes
 
-      -a always,exit -F arch=b32 -F path=/etc/passwd -F perm=wa -F auid>=1000 -F auid!=unset -F key=user-modify
-
       -a always,exit -F arch=b64 -F path=/etc/passwd -F perm=wa -F auid>=1000 -F auid!=unset -F key=user-modify
-
-      -a always,exit -F arch=b32 -F path=/etc/shadow -F perm=wa -F auid>=1000 -F auid!=unset -F key=user-modify
 
       -a always,exit -F arch=b64 -F path=/etc/shadow -F perm=wa -F auid>=1000 -F auid!=unset -F key=user-modify
 
-      -a always,exit -F arch=b32 -F path=/etc/group -F perm=wa -F auid>=1000 -F auid!=unset -F key=group-modify
-
       -a always,exit -F arch=b64 -F path=/etc/group -F perm=wa -F auid>=1000 -F auid!=unset -F key=group-modify
-
-      -a always,exit -F arch=b32 -F path=/etc/gshadow -F perm=wa -F auid>=1000 -F auid!=unset -F key=group-modify
 
       -a always,exit -F arch=b64 -F path=/etc/gshadow -F perm=wa -F auid>=1000 -F auid!=unset -F key=group-modify
 
@@ -12172,59 +12161,31 @@
 
       ## requirements are only for ones that affect system configuration.
 
-      -a always,exit -F arch=b32 -F path=/usr/sbin/unix_chkpwd -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
-
       -a always,exit -F arch=b64 -F path=/usr/sbin/unix_chkpwd -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
-
-      -a always,exit -F arch=b32 -F path=/usr/sbin/usernetctl -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
 
       -a always,exit -F arch=b64 -F path=/usr/sbin/usernetctl -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
 
-      -a always,exit -F arch=b32 -F path=/usr/sbin/userhelper -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
-
       -a always,exit -F arch=b64 -F path=/usr/sbin/userhelper -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
-
-      -a always,exit -F arch=b32 -F path=/usr/sbin/seunshare -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
 
       -a always,exit -F arch=b64 -F path=/usr/sbin/seunshare -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
 
-      -a always,exit -F arch=b32 -F path=/usr/bin/mount -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
-
       -a always,exit -F arch=b64 -F path=/usr/bin/mount -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
-
-      -a always,exit -F arch=b32 -F path=/usr/bin/newgrp -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
 
       -a always,exit -F arch=b64 -F path=/usr/bin/newgrp -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
 
-      -a always,exit -F arch=b32 -F path=/usr/bin/newuidmap -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
-
       -a always,exit -F arch=b64 -F path=/usr/bin/newuidmap -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
-
-      -a always,exit -F arch=b32 -F path=/usr/bin/gpasswd -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
 
       -a always,exit -F arch=b64 -F path=/usr/bin/gpasswd -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
 
-      -a always,exit -F arch=b32 -F path=/usr/bin/newgidmap -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
-
       -a always,exit -F arch=b64 -F path=/usr/bin/newgidmap -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
-
-      -a always,exit -F arch=b32 -F path=/usr/bin/umount -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
 
       -a always,exit -F arch=b64 -F path=/usr/bin/umount -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
 
-      -a always,exit -F arch=b32 -F path=/usr/bin/passwd -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
-
       -a always,exit -F arch=b64 -F path=/usr/bin/passwd -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
-
-      -a always,exit -F arch=b32 -F path=/usr/bin/crontab -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
 
       -a always,exit -F arch=b64 -F path=/usr/bin/crontab -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
 
-      -a always,exit -F arch=b32 -F path=/usr/bin/at -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
-
       -a always,exit -F arch=b64 -F path=/usr/bin/at -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
-
-      -a always,exit -F arch=b32 -F path=/usr/sbin/grub2-set-bootflag -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
 
       -a always,exit -F arch=b64 -F path=/usr/sbin/grub2-set-bootflag -F perm=x -F auid>=1000 -F auid!=unset -F key=special-config-changes
 
@@ -12233,13 +12194,9 @@
 
       ## Special case for systemd-run. It is not audit aware, specifically watch it
 
-      -a always,exit -F arch=b32 -F path=/usr/bin/systemd-run -F perm=x -F auid!=unset -F key=maybe-escalation
-
       -a always,exit -F arch=b64 -F path=/usr/bin/systemd-run -F perm=x -F auid!=unset -F key=maybe-escalation
 
       ## Special case for pkexec. It is not audit aware, specifically watch it
-
-      -a always,exit -F arch=b32 -F path=/usr/bin/pkexec -F perm=x -F key=maybe-escalation
 
       -a always,exit -F arch=b64 -F path=/usr/bin/pkexec -F perm=x -F key=maybe-escalation
 
@@ -12247,39 +12204,25 @@
 
       ## Watch for configuration changes to privilege escalation.
 
-      -a always,exit -F arch=b32 -F path=/etc/sudoers -F perm=wa -F key=special-config-changes
-
       -a always,exit -F arch=b64 -F path=/etc/sudoers -F perm=wa -F key=special-config-changes
-
-      -a always,exit -F arch=b32 -F dir=/etc/sudoers.d/ -F perm=wa -F key=special-config-changes
 
       -a always,exit -F arch=b64 -F dir=/etc/sudoers.d/ -F perm=wa -F key=special-config-changes
 
 
       ## Audit log access
 
-      -a always,exit -F arch=b32 -F dir=/var/log/audit/ -F perm=r -F auid>=1000 -F auid!=unset -F key=access-audit-trail
-
       -a always,exit -F arch=b64 -F dir=/var/log/audit/ -F perm=r -F auid>=1000 -F auid!=unset -F key=access-audit-trail
 
       ## Attempts to Alter Process and Session Initiation Information
 
-      -a always,exit -F arch=b32 -F path=/var/run/utmp -F perm=wa -F auid>=1000 -F auid!=unset -F key=session
-
       -a always,exit -F arch=b64 -F path=/var/run/utmp -F perm=wa -F auid>=1000 -F auid!=unset -F key=session
 
-      -a always,exit -F arch=b32 -F path=/var/log/btmp -F perm=wa -F auid>=1000 -F auid!=unset -F key=session
-
       -a always,exit -F arch=b64 -F path=/var/log/btmp -F perm=wa -F auid>=1000 -F auid!=unset -F key=session
-
-      -a always,exit -F arch=b32 -F path=/var/log/wtmp -F perm=wa -F auid>=1000 -F auid!=unset -F key=session
 
       -a always,exit -F arch=b64 -F path=/var/log/wtmp -F perm=wa -F auid>=1000 -F auid!=unset -F key=session
 
 
       ## Attempts to modify MAC controls
-
-      -a always,exit -F arch=b32 -F dir=/etc/selinux/ -F perm=wa -F auid>=1000 -F auid!=unset -F key=MAC-policy
 
       -a always,exit -F arch=b64 -F dir=/etc/selinux/ -F perm=wa -F auid>=1000 -F auid!=unset -F key=MAC-policy
 
