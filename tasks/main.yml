@@ -1,5 +1,11 @@
+- name: Gather the package facts
+  ansible.builtin.package_facts:
+    manager: auto
+  tags:
+  - always
+
 - name: Ensure crypto-policies is installed
-  package:
+  ansible.builtin.package:
     name: crypto-policies
     state: present
   tags:
@@ -20,8 +26,591 @@
   - no_reboot_needed | bool
   - package_crypto_policies_installed | bool
 
+- name: Ensure sudo is installed
+  ansible.builtin.package:
+    name: sudo
+    state: present
+  when:
+  - DISA_STIG_RHEL_09_432010 | bool
+  - enable_strategy | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - package_sudo_installed | bool
+  - '"kernel" in ansible_facts.packages'
+  tags:
+  - CCE-83523-1
+  - DISA-STIG-RHEL-09-432010
+  - NIST-800-53-CM-6(a)
+  - PCI-DSSv4-2.2
+  - PCI-DSSv4-2.2.6
+  - enable_strategy
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - package_sudo_installed
+
+- name: Ensure gnutls-utils is installed
+  ansible.builtin.package:
+    name: gnutls-utils
+    state: present
+  tags:
+  - CCE-83494-5
+  - DISA-STIG-RHEL-09-215080
+  - enable_strategy
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - package_gnutls-utils_installed
+  when:
+  - DISA_STIG_RHEL_09_215080 | bool
+  - enable_strategy | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - package_gnutls_utils_installed | bool
+
+- name: Ensure openscap-scanner is installed
+  ansible.builtin.package:
+    name: openscap-scanner
+    state: present
+  tags:
+  - CCE-83502-5
+  - enable_strategy
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - package_openscap-scanner_installed
+  when:
+  - enable_strategy | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - package_openscap_scanner_installed | bool
+
+- name: Ensure scap-security-guide is installed
+  ansible.builtin.package:
+    name: scap-security-guide
+    state: present
+  tags:
+  - CCE-83505-8
+  - enable_strategy
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - package_scap-security-guide_installed
+  when:
+  - enable_strategy | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - package_scap_security_guide_installed | bool
+
+- name: Ensure subscription-manager is installed
+  ansible.builtin.package:
+    name: subscription-manager
+    state: present
+  tags:
+  - CCE-83506-6
+  - DISA-STIG-RHEL-09-215010
+  - enable_strategy
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - package_subscription-manager_installed
+  when:
+  - DISA_STIG_RHEL_09_215010 | bool
+  - enable_strategy | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - package_subscription_manager_installed | bool
+
+- name: Ensure dnf-automatic is installed
+  ansible.builtin.package:
+    name: dnf-automatic
+    state: present
+  when:
+  - enable_strategy | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - package_dnf_automatic_installed | bool
+  - not ( "kernel" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
+    and not "openshift-kubelet" in ansible_facts.packages )
+  tags:
+  - CCE-83454-9
+  - enable_strategy
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - package_dnf-automatic_installed
+
+- name: Ensure firewalld is installed
+  ansible.builtin.package:
+    name: firewalld
+    state: present
+  when:
+  - DISA_STIG_RHEL_09_251010 | bool
+  - enable_strategy | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - package_firewalld_installed | bool
+  - '"kernel" in ansible_facts.packages'
+  tags:
+  - CCE-84021-5
+  - DISA-STIG-RHEL-09-251010
+  - NIST-800-53-CM-6(a)
+  - PCI-DSSv4-1.2
+  - PCI-DSSv4-1.2.1
+  - enable_strategy
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - package_firewalld_installed
+
+- name: Ensure fapolicyd is installed
+  ansible.builtin.package:
+    name: fapolicyd
+    state: present
+  when:
+  - DISA_STIG_RHEL_09_433010 | bool
+  - enable_strategy | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - package_fapolicyd_installed | bool
+  - '"kernel" in ansible_facts.packages'
+  tags:
+  - CCE-84224-5
+  - DISA-STIG-RHEL-09-433010
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-SI-4(22)
+  - enable_strategy
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - package_fapolicyd_installed
+
+- name: Ensure chrony is installed
+  ansible.builtin.package:
+    name: chrony
+    state: present
+  when:
+  - DISA_STIG_RHEL_09_252010 | bool
+  - enable_strategy | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - package_chrony_installed | bool
+  - '"kernel" in ansible_facts.packages'
+  tags:
+  - CCE-84215-3
+  - DISA-STIG-RHEL-09-252010
+  - PCI-DSS-Req-10.4
+  - PCI-DSSv4-10.6
+  - PCI-DSSv4-10.6.1
+  - enable_strategy
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - package_chrony_installed
+
+- name: Ensure openssh-clients is installed
+  ansible.builtin.package:
+    name: openssh-clients
+    state: present
+  when:
+  - DISA_STIG_RHEL_09_255020 | bool
+  - enable_strategy | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - package_openssh_clients_installed | bool
+  - '"kernel" in ansible_facts.packages'
+  tags:
+  - CCE-90836-8
+  - DISA-STIG-RHEL-09-255020
+  - enable_strategy
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - package_openssh-clients_installed
+
+- name: Ensure openssh-server is installed
+  ansible.builtin.package:
+    name: openssh-server
+    state: present
+  when:
+  - DISA_STIG_RHEL_09_255010 | bool
+  - enable_strategy | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - package_openssh_server_installed | bool
+  - '"kernel" in ansible_facts.packages'
+  tags:
+  - CCE-90823-6
+  - DISA-STIG-RHEL-09-255010
+  - NIST-800-53-CM-6(a)
+  - enable_strategy
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - package_openssh-server_installed
+
+- name: Ensure usbguard is installed
+  ansible.builtin.package:
+    name: usbguard
+    state: present
+  when:
+  - DISA_STIG_RHEL_09_291015 | bool
+  - enable_strategy | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - package_usbguard_installed | bool
+  - ( ansible_architecture != "s390x" and "kernel" in ansible_facts.packages )
+  tags:
+  - CCE-84203-9
+  - DISA-STIG-RHEL-09-291015
+  - NIST-800-53-CM-8(3)
+  - NIST-800-53-IA-3
+  - enable_strategy
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - package_usbguard_installed
+
+- name: Ensure audit is installed
+  ansible.builtin.package:
+    name: audit
+    state: present
+  when:
+  - DISA_STIG_RHEL_09_653010 | bool
+  - enable_strategy | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - package_audit_installed | bool
+  - '"kernel" in ansible_facts.packages'
+  tags:
+  - CCE-83649-4
+  - DISA-STIG-RHEL-09-653010
+  - NIST-800-53-AC-7(a)
+  - NIST-800-53-AU-12(2)
+  - NIST-800-53-AU-14
+  - NIST-800-53-AU-2(a)
+  - NIST-800-53-AU-7(1)
+  - NIST-800-53-AU-7(2)
+  - NIST-800-53-CM-6(a)
+  - PCI-DSS-Req-10.1
+  - PCI-DSSv4-10.2
+  - PCI-DSSv4-10.2.1
+  - enable_strategy
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - package_audit_installed
+
+- name: Gather the package facts
+  ansible.builtin.package_facts:
+    manager: auto
+  tags:
+  - always
+
+- name: Disable debug-shell SystemD Service - Disable service debug-shell
+  block:
+  - name: Disable debug-shell SystemD Service - Collect systemd Services Present in the System
+    ansible.builtin.command: systemctl -q list-unit-files --type service
+    register: service_exists
+    changed_when: false
+    failed_when: service_exists.rc not in [0, 1]
+    check_mode: false
+  - name: Disable debug-shell SystemD Service - Ensure debug-shell.service is Masked
+    ansible.builtin.systemd:
+      name: debug-shell.service
+      state: stopped
+      enabled: false
+      masked: true
+    when: service_exists.stdout_lines is search("debug-shell.service", multiline=True)
+  - name: Unit Socket Exists - debug-shell.socket
+    ansible.builtin.command: systemctl -q list-unit-files debug-shell.socket
+    register: socket_file_exists
+    changed_when: false
+    failed_when: socket_file_exists.rc not in [0, 1]
+    check_mode: false
+  - name: Disable debug-shell SystemD Service - Disable Socket debug-shell
+    ansible.builtin.systemd:
+      name: debug-shell.socket
+      enabled: false
+      state: stopped
+      masked: true
+    when: socket_file_exists.stdout_lines is search("debug-shell.socket", multiline=True)
+  tags:
+  - CCE-90724-6
+  - DISA-STIG-RHEL-09-211055
+  - NIST-800-171-3.4.5
+  - NIST-800-53-CM-6
+  - disable_strategy
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - service_debug-shell_disabled
+  - special_service_block
+  when:
+  - DISA_STIG_RHEL_09_211055 | bool
+  - disable_strategy | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - service_debug_shell_disabled | bool
+  - special_service_block | bool
+  - '"kernel" in ansible_facts.packages'
+
+- name: Verify firewalld Enabled - Enable service firewalld
+  block:
+  - name: Verify firewalld Enabled - Enable Service firewalld
+    ansible.builtin.systemd:
+      name: firewalld
+      enabled: true
+      state: started
+      masked: false
+    when:
+    - '"firewalld" in ansible_facts.packages'
+  tags:
+  - CCE-90833-5
+  - DISA-STIG-RHEL-09-251015
+  - NIST-800-171-3.1.3
+  - NIST-800-171-3.4.7
+  - NIST-800-53-AC-4
+  - NIST-800-53-CA-3(5)
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-CM-7(b)
+  - NIST-800-53-SC-7(21)
+  - PCI-DSSv4-1.2
+  - PCI-DSSv4-1.2.1
+  - enable_strategy
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - service_firewalld_enabled
+  - special_service_block
+  when:
+  - DISA_STIG_RHEL_09_251015 | bool
+  - enable_strategy | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - service_firewalld_enabled | bool
+  - special_service_block | bool
+  - '"kernel" in ansible_facts.packages'
+  - '"firewalld" in ansible_facts.packages'
+
+- name: Disable KDump Kernel Crash Analyzer (kdump) - Disable service kdump
+  block:
+  - name: Disable KDump Kernel Crash Analyzer (kdump) - Collect systemd Services Present in the System
+    ansible.builtin.command: systemctl -q list-unit-files --type service
+    register: service_exists
+    changed_when: false
+    failed_when: service_exists.rc not in [0, 1]
+    check_mode: false
+  - name: Disable KDump Kernel Crash Analyzer (kdump) - Ensure kdump.service is Masked
+    ansible.builtin.systemd:
+      name: kdump.service
+      state: stopped
+      enabled: false
+      masked: true
+    when: service_exists.stdout_lines is search("kdump.service", multiline=True)
+  - name: Unit Socket Exists - kdump.socket
+    ansible.builtin.command: systemctl -q list-unit-files kdump.socket
+    register: socket_file_exists
+    changed_when: false
+    failed_when: socket_file_exists.rc not in [0, 1]
+    check_mode: false
+  - name: Disable KDump Kernel Crash Analyzer (kdump) - Disable Socket kdump
+    ansible.builtin.systemd:
+      name: kdump.socket
+      enabled: false
+      state: stopped
+      masked: true
+    when: socket_file_exists.stdout_lines is search("kdump.socket", multiline=True)
+  tags:
+  - CCE-84232-8
+  - DISA-STIG-RHEL-09-213115
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-CM-7(a)
+  - NIST-800-53-CM-7(b)
+  - disable_strategy
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - service_kdump_disabled
+  - special_service_block
+  when:
+  - DISA_STIG_RHEL_09_213115 | bool
+  - disable_strategy | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - service_kdump_disabled | bool
+  - special_service_block | bool
+  - '"kernel" in ansible_facts.packages'
+
+- name: Enable the File Access Policy Service - Enable service fapolicyd
+  block:
+  - name: Enable the File Access Policy Service - Enable Service fapolicyd
+    ansible.builtin.systemd:
+      name: fapolicyd
+      enabled: true
+      state: started
+      masked: false
+    when:
+    - '"fapolicyd" in ansible_facts.packages'
+  tags:
+  - CCE-84227-8
+  - DISA-STIG-RHEL-09-433015
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-SI-4(22)
+  - enable_strategy
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - service_fapolicyd_enabled
+  - special_service_block
+  when:
+  - DISA_STIG_RHEL_09_433015 | bool
+  - enable_strategy | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - service_fapolicyd_enabled | bool
+  - special_service_block | bool
+  - '"kernel" in ansible_facts.packages'
+
+- name: Enable the USBGuard Service - Enable service usbguard
+  block:
+  - name: Enable the USBGuard Service - Enable Service usbguard
+    ansible.builtin.systemd:
+      name: usbguard
+      enabled: true
+      state: started
+      masked: false
+    when:
+    - '"usbguard" in ansible_facts.packages'
+  tags:
+  - CCE-84205-4
+  - DISA-STIG-RHEL-09-291020
+  - NIST-800-53-CM-8(3)(a)
+  - NIST-800-53-IA-3
+  - enable_strategy
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - service_usbguard_enabled
+  - special_service_block
+  when:
+  - DISA_STIG_RHEL_09_291020 | bool
+  - enable_strategy | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - service_usbguard_enabled | bool
+  - special_service_block | bool
+  - ( ansible_architecture != "s390x" and "kernel" in ansible_facts.packages )
+
+- name: Enable auditd Service - Enable service auditd
+  block:
+  - name: Enable auditd Service - Enable Service auditd
+    ansible.builtin.systemd:
+      name: auditd
+      enabled: true
+      state: started
+      masked: false
+    when:
+    - '"audit" in ansible_facts.packages'
+  tags:
+  - CCE-90829-3
+  - CJIS-5.4.1.1
+  - DISA-STIG-RHEL-09-653015
+  - NIST-800-171-3.3.1
+  - NIST-800-171-3.3.2
+  - NIST-800-171-3.3.6
+  - NIST-800-53-AC-2(g)
+  - NIST-800-53-AC-6(9)
+  - NIST-800-53-AU-10
+  - NIST-800-53-AU-12(c)
+  - NIST-800-53-AU-14(1)
+  - NIST-800-53-AU-2(d)
+  - NIST-800-53-AU-3
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-SI-4(23)
+  - PCI-DSS-Req-10.1
+  - PCI-DSSv4-10.2
+  - PCI-DSSv4-10.2.1
+  - enable_strategy
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - service_auditd_enabled
+  - special_service_block
+  when:
+  - DISA_STIG_RHEL_09_653015 | bool
+  - enable_strategy | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - service_auditd_enabled | bool
+  - special_service_block | bool
+  - '"kernel" in ansible_facts.packages'
+  - '"audit" in ansible_facts.packages'
+
+- name: Gather the service facts
+  ansible.builtin.service_facts: null
+  tags:
+  - always
+
 - name: Configure System Cryptography Policy
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/crypto-policies/config
     regexp: ^(?!#)(\S+)$
     line: '{{ var_system_crypto_policy }}'
@@ -29,7 +618,6 @@
   tags:
   - CCE-83450-7
   - DISA-STIG-RHEL-09-215105
-  - DISA-STIG-RHEL-09-671010
   - DISA-STIG-RHEL-09-672030
   - NIST-800-53-AC-17(2)
   - NIST-800-53-AC-17(a)
@@ -48,7 +636,6 @@
   - restrict_strategy
   when:
   - DISA_STIG_RHEL_09_215105 | bool
-  - DISA_STIG_RHEL_09_671010 | bool
   - DISA_STIG_RHEL_09_672030 | bool
   - configure_crypto_policy | bool
   - high_severity | bool
@@ -58,11 +645,10 @@
   - restrict_strategy | bool
 
 - name: Verify that Crypto Policy is Set (runtime)
-  command: /usr/bin/update-crypto-policies --set {{ var_system_crypto_policy }}
+  ansible.builtin.command: /usr/bin/update-crypto-policies --set {{ var_system_crypto_policy }}
   tags:
   - CCE-83450-7
   - DISA-STIG-RHEL-09-215105
-  - DISA-STIG-RHEL-09-671010
   - DISA-STIG-RHEL-09-672030
   - NIST-800-53-AC-17(2)
   - NIST-800-53-AC-17(a)
@@ -81,7 +667,6 @@
   - restrict_strategy
   when:
   - DISA_STIG_RHEL_09_215105 | bool
-  - DISA_STIG_RHEL_09_671010 | bool
   - DISA_STIG_RHEL_09_672030 | bool
   - configure_crypto_policy | bool
   - high_severity | bool
@@ -217,7 +802,7 @@
   - unknown_strategy
 
 - name: Configure SSH to use System Crypto Policy
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: /etc/sysconfig/sshd
     state: absent
     regexp: (?i)^\s*CRYPTO_POLICY.*$
@@ -245,202 +830,6 @@
   - medium_severity | bool
   - reboot_required | bool
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-83523-1
-  - DISA-STIG-RHEL-09-432010
-  - NIST-800-53-CM-6(a)
-  - PCI-DSSv4-2.2
-  - PCI-DSSv4-2.2.6
-  - enable_strategy
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - package_sudo_installed
-  when:
-  - DISA_STIG_RHEL_09_432010 | bool
-  - enable_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - package_sudo_installed | bool
-
-- name: Ensure sudo is installed
-  package:
-    name: sudo
-    state: present
-  when:
-  - DISA_STIG_RHEL_09_432010 | bool
-  - enable_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - package_sudo_installed | bool
-  - '"kernel" in ansible_facts.packages'
-  tags:
-  - CCE-83523-1
-  - DISA-STIG-RHEL-09-432010
-  - NIST-800-53-CM-6(a)
-  - PCI-DSSv4-2.2
-  - PCI-DSSv4-2.2.6
-  - enable_strategy
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - package_sudo_installed
-
-- name: Ensure gnutls-utils is installed
-  package:
-    name: gnutls-utils
-    state: present
-  tags:
-  - CCE-83494-5
-  - DISA-STIG-RHEL-09-215080
-  - enable_strategy
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - package_gnutls-utils_installed
-  when:
-  - DISA_STIG_RHEL_09_215080 | bool
-  - enable_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - package_gnutls_utils_installed | bool
-
-- name: Ensure openscap-scanner is installed
-  package:
-    name: openscap-scanner
-    state: present
-  tags:
-  - CCE-83502-5
-  - enable_strategy
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - package_openscap-scanner_installed
-  when:
-  - enable_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - package_openscap_scanner_installed | bool
-
-- name: Ensure scap-security-guide is installed
-  package:
-    name: scap-security-guide
-    state: present
-  tags:
-  - CCE-83505-8
-  - enable_strategy
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - package_scap-security-guide_installed
-  when:
-  - enable_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - package_scap_security_guide_installed | bool
-
-- name: Ensure subscription-manager is installed
-  package:
-    name: subscription-manager
-    state: present
-  tags:
-  - CCE-83506-6
-  - DISA-STIG-RHEL-09-215010
-  - enable_strategy
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - package_subscription-manager_installed
-  when:
-  - DISA_STIG_RHEL_09_215010 | bool
-  - enable_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - package_subscription_manager_installed | bool
-
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-83454-9
-  - enable_strategy
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - package_dnf-automatic_installed
-  when:
-  - enable_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - package_dnf_automatic_installed | bool
-
-- name: Ensure dnf-automatic is installed
-  package:
-    name: dnf-automatic
-    state: present
-  when:
-  - enable_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - package_dnf_automatic_installed | bool
-  - not ( "kernel" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
-    and not "openshift-kubelet" in ansible_facts.packages )
-  tags:
-  - CCE-83454-9
-  - enable_strategy
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - package_dnf-automatic_installed
-
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-83456-4
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-SI-2(5)
-  - NIST-800-53-SI-2(c)
-  - dnf-automatic_apply_updates
-  - low_complexity
-  - medium_disruption
-  - medium_severity
-  - no_reboot_needed
-  - unknown_strategy
-  when:
-  - low_complexity | bool
-  - medium_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - unknown_strategy | bool
-
 - name: Configure dnf-automatic to Install Available Updates Automatically
   community.general.ini_file:
     dest: /etc/dnf/automatic.conf
@@ -467,41 +856,6 @@
   - medium_severity
   - no_reboot_needed
   - unknown_strategy
-
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-83457-2
-  - CJIS-5.10.4.1
-  - DISA-STIG-RHEL-09-214015
-  - NIST-800-171-3.4.8
-  - NIST-800-53-CM-11(a)
-  - NIST-800-53-CM-11(b)
-  - NIST-800-53-CM-5(3)
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-SA-12
-  - NIST-800-53-SA-12(10)
-  - NIST-800-53-SC-12
-  - NIST-800-53-SC-12(3)
-  - NIST-800-53-SI-7
-  - PCI-DSS-Req-6.2
-  - PCI-DSSv4-6.3
-  - PCI-DSSv4-6.3.3
-  - configure_strategy
-  - ensure_gpgcheck_globally_activated
-  - high_severity
-  - low_complexity
-  - medium_disruption
-  - no_reboot_needed
-  when:
-  - DISA_STIG_RHEL_09_214015 | bool
-  - configure_strategy | bool
-  - ensure_gpgcheck_globally_activated | bool
-  - high_severity | bool
-  - low_complexity | bool
-  - medium_disruption | bool
-  - no_reboot_needed | bool
 
 - name: Ensure GPG check is globally activated
   community.general.ini_file:
@@ -544,38 +898,10 @@
   - medium_disruption
   - no_reboot_needed
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-83463-0
-  - DISA-STIG-RHEL-09-214020
-  - NIST-800-171-3.4.8
-  - NIST-800-53-CM-11(a)
-  - NIST-800-53-CM-11(b)
-  - NIST-800-53-CM-5(3)
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-SA-12
-  - NIST-800-53-SA-12(10)
-  - ensure_gpgcheck_local_packages
-  - high_severity
-  - low_complexity
-  - medium_disruption
-  - no_reboot_needed
-  - unknown_strategy
-  when:
-  - DISA_STIG_RHEL_09_214020 | bool
-  - ensure_gpgcheck_local_packages | bool
-  - high_severity | bool
-  - low_complexity | bool
-  - medium_disruption | bool
-  - no_reboot_needed | bool
-  - unknown_strategy | bool
-
 - name: Ensure GPG check Enabled for Local Packages (dnf)
   block:
   - name: Check stats of dnf
-    stat:
+    ansible.builtin.stat:
       path: /etc/dnf/dnf.conf
     register: pkg
   - name: Check if config file of dnf is a symlink
@@ -618,7 +944,7 @@
   - unknown_strategy
 
 - name: Grep for dnf repo section names
-  shell: 'set -o pipefail
+  ansible.builtin.shell: 'set -o pipefail
 
     grep -HEr ''^\[.+\]'' -r /etc/yum.repos.d/
 
@@ -701,7 +1027,7 @@
   - no_reboot_needed
 
 - name: Read permission of GPG key directory
-  stat:
+  ansible.builtin.stat:
     path: /etc/pki/rpm-gpg/
   register: gpg_key_directory_permission
   check_mode: false
@@ -734,9 +1060,10 @@
   - restrict_strategy | bool
 
 - name: Read signatures in GPG key
-  command: gpg --show-keys --with-fingerprint --with-colons "/etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release"
+  ansible.builtin.command: gpg --show-keys --with-fingerprint --with-colons "/etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release"
   changed_when: false
   register: gpg_fingerprints
+  failed_when: false
   check_mode: false
   tags:
   - CCE-84180-9
@@ -767,7 +1094,7 @@
   - restrict_strategy | bool
 
 - name: Set Fact - Installed GPG Fingerprints
-  set_fact:
+  ansible.builtin.set_fact:
     gpg_installed_fingerprints: '{{ gpg_fingerprints.stdout | regex_findall(''^pub.*
 
       (?:^fpr[:]*)([0-9A-Fa-f]*)'', ''\1'') | list }}'
@@ -800,7 +1127,7 @@
   - restrict_strategy | bool
 
 - name: Set Fact - Valid fingerprints
-  set_fact:
+  ansible.builtin.set_fact:
     gpg_valid_fingerprints:
     - 567E347AD0044ADE55BA8A5F199E2F91FD431D51
     - 7E4624258C406535D56D6F135054E4A45A6340B3
@@ -833,7 +1160,7 @@
   - restrict_strategy | bool
 
 - name: Import RedHat GPG key
-  rpm_key:
+  ansible.builtin.rpm_key:
     state: present
     key: /etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
   when:
@@ -868,34 +1195,10 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-83459-8
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-SI-2(5)
-  - NIST-800-53-SI-2(c)
-  - enable_strategy
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - timer_dnf-automatic_enabled
-  when:
-  - enable_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-
 - name: Enable timer dnf-automatic
   block:
-  - name: Gather the package facts
-    package_facts:
-      manager: auto
   - name: Enable timer dnf-automatic
-    systemd:
+    ansible.builtin.systemd:
       name: dnf-automatic.timer
       enabled: 'yes'
       state: started
@@ -1060,34 +1363,6 @@
   - medium_severity
   - no_reboot_needed
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-83587-6
-  - CJIS-5.5.3
-  - DISA-STIG-RHEL-09-411075
-  - NIST-800-171-3.1.8
-  - NIST-800-53-AC-7(a)
-  - NIST-800-53-CM-6(a)
-  - PCI-DSS-Req-8.1.6
-  - PCI-DSSv4-8.3
-  - PCI-DSSv4-8.3.4
-  - accounts_passwords_pam_faillock_deny
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - DISA_STIG_RHEL_09_411075 | bool
-  - accounts_passwords_pam_faillock_deny | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-
 - name: Lock Accounts After Failed Password Attempts - Check if system relies on authselect tool
   ansible.builtin.stat:
     path: /usr/bin/authselect
@@ -1125,11 +1400,12 @@
       cmd: authselect check
     register: result_authselect_check_cmd
     changed_when: false
+    check_mode: false
     failed_when: false
   - name: Lock Accounts After Failed Password Attempts - Informative message based on the authselect integrity check result
     ansible.builtin.assert:
       that:
-      - result_authselect_check_cmd.rc == 0
+      - ansible_check_mode or result_authselect_check_cmd.rc == 0
       fail_msg:
       - authselect integrity check failed. Remediation aborted!
       - This remediation could not be applied because an authselect profile was not selected or the selected profile is not
@@ -1143,6 +1419,7 @@
       cmd: authselect current | tail -n+3 | awk '{ print $2 }'
     register: result_authselect_features
     changed_when: false
+    check_mode: false
     when:
     - result_authselect_check_cmd is success
   - name: Lock Accounts After Failed Password Attempts - Ensure "with-faillock" feature is enabled using authselect tool
@@ -1340,11 +1617,12 @@
           cmd: authselect check
         register: result_authselect_check_cmd
         changed_when: false
+        check_mode: false
         failed_when: false
       - name: Lock Accounts After Failed Password Attempts - Informative message based on the authselect integrity check result
         ansible.builtin.assert:
           that:
-          - result_authselect_check_cmd.rc == 0
+          - ansible_check_mode or result_authselect_check_cmd.rc == 0
           fail_msg:
           - authselect integrity check failed. Remediation aborted!
           - This remediation could not be applied because an authselect profile was not selected or the selected profile is
@@ -1381,6 +1659,7 @@
           cmd: authselect current | tail -n+3 | awk '{ print $2 }'
         register: result_authselect_features
         changed_when: false
+        check_mode: false
         when:
         - result_authselect_profile is not skipped
         - authselect_current_profile is not match("custom/")
@@ -1390,11 +1669,13 @@
         register: result_authselect_custom_profile_present
         changed_when: false
         when:
+        - result_authselect_profile is not skipped
         - authselect_current_profile is not match("custom/")
       - name: Lock Accounts After Failed Password Attempts - Create an authselect custom profile based on the current profile
         ansible.builtin.command:
           cmd: authselect create-profile hardening -b {{ authselect_current_profile }}
         when:
+        - result_authselect_profile is not skipped
         - result_authselect_check_cmd is success
         - authselect_current_profile is not match("^(custom/|local)")
         - not result_authselect_custom_profile_present.stat.exists
@@ -1402,6 +1683,7 @@
         ansible.builtin.command:
           cmd: authselect create-profile hardening -b sssd
         when:
+        - result_authselect_profile is not skipped
         - result_authselect_check_cmd is success
         - authselect_current_profile is match("local")
         - not result_authselect_custom_profile_present.stat.exists
@@ -1442,12 +1724,18 @@
           profile
         ansible.builtin.set_fact:
           pam_file_path: /etc/authselect/{{ authselect_custom_profile }}/{{ pam_file_path | basename }}
+        when:
+        - authselect_custom_profile is defined
       when:
       - result_authselect_present.stat.exists
     - name: Lock Accounts After Failed Password Attempts - Define a fact for control already filtered in case filters are
         used
       ansible.builtin.set_fact:
         pam_module_control: ''
+    - name: Lock Accounts After Failed Password Attempts - Check if {{ pam_file_path }} file is present
+      ansible.builtin.stat:
+        path: '{{ pam_file_path }}'
+      register: result_pam_file_present
     - name: Lock Accounts After Failed Password Attempts - Ensure the "deny" option from "pam_faillock.so" is not present
         in {{ pam_file_path }}
       ansible.builtin.replace:
@@ -1455,6 +1743,7 @@
         regexp: (.*auth.*pam_faillock.so.*)\bdeny\b=?[0-9a-zA-Z]*(.*)
         replace: \1\2
       register: result_pam_option_removal
+      when: result_pam_file_present.stat.exists
     - name: Lock Accounts After Failed Password Attempts - Ensure authselect changes are applied
       ansible.builtin.command:
         cmd: authselect apply-changes -b
@@ -1483,11 +1772,12 @@
           cmd: authselect check
         register: result_authselect_check_cmd
         changed_when: false
+        check_mode: false
         failed_when: false
       - name: Lock Accounts After Failed Password Attempts - Informative message based on the authselect integrity check result
         ansible.builtin.assert:
           that:
-          - result_authselect_check_cmd.rc == 0
+          - ansible_check_mode or result_authselect_check_cmd.rc == 0
           fail_msg:
           - authselect integrity check failed. Remediation aborted!
           - This remediation could not be applied because an authselect profile was not selected or the selected profile is
@@ -1524,6 +1814,7 @@
           cmd: authselect current | tail -n+3 | awk '{ print $2 }'
         register: result_authselect_features
         changed_when: false
+        check_mode: false
         when:
         - result_authselect_profile is not skipped
         - authselect_current_profile is not match("custom/")
@@ -1533,11 +1824,13 @@
         register: result_authselect_custom_profile_present
         changed_when: false
         when:
+        - result_authselect_profile is not skipped
         - authselect_current_profile is not match("custom/")
       - name: Lock Accounts After Failed Password Attempts - Create an authselect custom profile based on the current profile
         ansible.builtin.command:
           cmd: authselect create-profile hardening -b {{ authselect_current_profile }}
         when:
+        - result_authselect_profile is not skipped
         - result_authselect_check_cmd is success
         - authselect_current_profile is not match("^(custom/|local)")
         - not result_authselect_custom_profile_present.stat.exists
@@ -1545,6 +1838,7 @@
         ansible.builtin.command:
           cmd: authselect create-profile hardening -b sssd
         when:
+        - result_authselect_profile is not skipped
         - result_authselect_check_cmd is success
         - authselect_current_profile is match("local")
         - not result_authselect_custom_profile_present.stat.exists
@@ -1585,12 +1879,18 @@
           profile
         ansible.builtin.set_fact:
           pam_file_path: /etc/authselect/{{ authselect_custom_profile }}/{{ pam_file_path | basename }}
+        when:
+        - authselect_custom_profile is defined
       when:
       - result_authselect_present.stat.exists
     - name: Lock Accounts After Failed Password Attempts - Define a fact for control already filtered in case filters are
         used
       ansible.builtin.set_fact:
         pam_module_control: ''
+    - name: Lock Accounts After Failed Password Attempts - Check if {{ pam_file_path }} file is present
+      ansible.builtin.stat:
+        path: '{{ pam_file_path }}'
+      register: result_pam_file_present
     - name: Lock Accounts After Failed Password Attempts - Ensure the "deny" option from "pam_faillock.so" is not present
         in {{ pam_file_path }}
       ansible.builtin.replace:
@@ -1598,6 +1898,7 @@
         regexp: (.*auth.*pam_faillock.so.*)\bdeny\b=?[0-9a-zA-Z]*(.*)
         replace: \1\2
       register: result_pam_option_removal
+      when: result_pam_file_present.stat.exists
     - name: Lock Accounts After Failed Password Attempts - Ensure authselect changes are applied
       ansible.builtin.command:
         cmd: authselect apply-changes -b
@@ -1723,29 +2024,6 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-83583-5
-  - DISA-STIG-RHEL-09-411085
-  - NIST-800-53-AC-7(a)
-  - NIST-800-53-CM-6(a)
-  - accounts_passwords_pam_faillock_interval
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - DISA_STIG_RHEL_09_411085 | bool
-  - accounts_passwords_pam_faillock_interval | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-
 - name: Set Interval For Counting Failed Password Attempts - Check if system relies on authselect tool
   ansible.builtin.stat:
     path: /usr/bin/authselect
@@ -1778,12 +2056,13 @@
       cmd: authselect check
     register: result_authselect_check_cmd
     changed_when: false
+    check_mode: false
     failed_when: false
   - name: Set Interval For Counting Failed Password Attempts - Informative message based on the authselect integrity check
       result
     ansible.builtin.assert:
       that:
-      - result_authselect_check_cmd.rc == 0
+      - ansible_check_mode or result_authselect_check_cmd.rc == 0
       fail_msg:
       - authselect integrity check failed. Remediation aborted!
       - This remediation could not be applied because an authselect profile was not selected or the selected profile is not
@@ -1797,6 +2076,7 @@
       cmd: authselect current | tail -n+3 | awk '{ print $2 }'
     register: result_authselect_features
     changed_when: false
+    check_mode: false
     when:
     - result_authselect_check_cmd is success
   - name: Set Interval For Counting Failed Password Attempts - Ensure "with-faillock" feature is enabled using authselect
@@ -1977,12 +2257,13 @@
           cmd: authselect check
         register: result_authselect_check_cmd
         changed_when: false
+        check_mode: false
         failed_when: false
       - name: Set Interval For Counting Failed Password Attempts - Informative message based on the authselect integrity check
           result
         ansible.builtin.assert:
           that:
-          - result_authselect_check_cmd.rc == 0
+          - ansible_check_mode or result_authselect_check_cmd.rc == 0
           fail_msg:
           - authselect integrity check failed. Remediation aborted!
           - This remediation could not be applied because an authselect profile was not selected or the selected profile is
@@ -2019,6 +2300,7 @@
           cmd: authselect current | tail -n+3 | awk '{ print $2 }'
         register: result_authselect_features
         changed_when: false
+        check_mode: false
         when:
         - result_authselect_profile is not skipped
         - authselect_current_profile is not match("custom/")
@@ -2029,12 +2311,14 @@
         register: result_authselect_custom_profile_present
         changed_when: false
         when:
+        - result_authselect_profile is not skipped
         - authselect_current_profile is not match("custom/")
       - name: Set Interval For Counting Failed Password Attempts - Create an authselect custom profile based on the current
           profile
         ansible.builtin.command:
           cmd: authselect create-profile hardening -b {{ authselect_current_profile }}
         when:
+        - result_authselect_profile is not skipped
         - result_authselect_check_cmd is success
         - authselect_current_profile is not match("^(custom/|local)")
         - not result_authselect_custom_profile_present.stat.exists
@@ -2042,6 +2326,7 @@
         ansible.builtin.command:
           cmd: authselect create-profile hardening -b sssd
         when:
+        - result_authselect_profile is not skipped
         - result_authselect_check_cmd is success
         - authselect_current_profile is match("local")
         - not result_authselect_custom_profile_present.stat.exists
@@ -2082,12 +2367,18 @@
           authselect profile
         ansible.builtin.set_fact:
           pam_file_path: /etc/authselect/{{ authselect_custom_profile }}/{{ pam_file_path | basename }}
+        when:
+        - authselect_custom_profile is defined
       when:
       - result_authselect_present.stat.exists
     - name: Set Interval For Counting Failed Password Attempts - Define a fact for control already filtered in case filters
         are used
       ansible.builtin.set_fact:
         pam_module_control: ''
+    - name: Set Interval For Counting Failed Password Attempts - Check if {{ pam_file_path }} file is present
+      ansible.builtin.stat:
+        path: '{{ pam_file_path }}'
+      register: result_pam_file_present
     - name: Set Interval For Counting Failed Password Attempts - Ensure the "fail_interval" option from "pam_faillock.so"
         is not present in {{ pam_file_path }}
       ansible.builtin.replace:
@@ -2095,6 +2386,7 @@
         regexp: (.*auth.*pam_faillock.so.*)\bfail_interval\b=?[0-9a-zA-Z]*(.*)
         replace: \1\2
       register: result_pam_option_removal
+      when: result_pam_file_present.stat.exists
     - name: Set Interval For Counting Failed Password Attempts - Ensure authselect changes are applied
       ansible.builtin.command:
         cmd: authselect apply-changes -b
@@ -2124,12 +2416,13 @@
           cmd: authselect check
         register: result_authselect_check_cmd
         changed_when: false
+        check_mode: false
         failed_when: false
       - name: Set Interval For Counting Failed Password Attempts - Informative message based on the authselect integrity check
           result
         ansible.builtin.assert:
           that:
-          - result_authselect_check_cmd.rc == 0
+          - ansible_check_mode or result_authselect_check_cmd.rc == 0
           fail_msg:
           - authselect integrity check failed. Remediation aborted!
           - This remediation could not be applied because an authselect profile was not selected or the selected profile is
@@ -2166,6 +2459,7 @@
           cmd: authselect current | tail -n+3 | awk '{ print $2 }'
         register: result_authselect_features
         changed_when: false
+        check_mode: false
         when:
         - result_authselect_profile is not skipped
         - authselect_current_profile is not match("custom/")
@@ -2176,12 +2470,14 @@
         register: result_authselect_custom_profile_present
         changed_when: false
         when:
+        - result_authselect_profile is not skipped
         - authselect_current_profile is not match("custom/")
       - name: Set Interval For Counting Failed Password Attempts - Create an authselect custom profile based on the current
           profile
         ansible.builtin.command:
           cmd: authselect create-profile hardening -b {{ authselect_current_profile }}
         when:
+        - result_authselect_profile is not skipped
         - result_authselect_check_cmd is success
         - authselect_current_profile is not match("^(custom/|local)")
         - not result_authselect_custom_profile_present.stat.exists
@@ -2189,6 +2485,7 @@
         ansible.builtin.command:
           cmd: authselect create-profile hardening -b sssd
         when:
+        - result_authselect_profile is not skipped
         - result_authselect_check_cmd is success
         - authselect_current_profile is match("local")
         - not result_authselect_custom_profile_present.stat.exists
@@ -2229,12 +2526,18 @@
           authselect profile
         ansible.builtin.set_fact:
           pam_file_path: /etc/authselect/{{ authselect_custom_profile }}/{{ pam_file_path | basename }}
+        when:
+        - authselect_custom_profile is defined
       when:
       - result_authselect_present.stat.exists
     - name: Set Interval For Counting Failed Password Attempts - Define a fact for control already filtered in case filters
         are used
       ansible.builtin.set_fact:
         pam_module_control: ''
+    - name: Set Interval For Counting Failed Password Attempts - Check if {{ pam_file_path }} file is present
+      ansible.builtin.stat:
+        path: '{{ pam_file_path }}'
+      register: result_pam_file_present
     - name: Set Interval For Counting Failed Password Attempts - Ensure the "fail_interval" option from "pam_faillock.so"
         is not present in {{ pam_file_path }}
       ansible.builtin.replace:
@@ -2242,6 +2545,7 @@
         regexp: (.*auth.*pam_faillock.so.*)\bfail_interval\b=?[0-9a-zA-Z]*(.*)
         replace: \1\2
       register: result_pam_option_removal
+      when: result_pam_file_present.stat.exists
     - name: Set Interval For Counting Failed Password Attempts - Ensure authselect changes are applied
       ansible.builtin.command:
         cmd: authselect apply-changes -b
@@ -2357,34 +2661,6 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-83588-4
-  - CJIS-5.5.3
-  - DISA-STIG-RHEL-09-411090
-  - NIST-800-171-3.1.8
-  - NIST-800-53-AC-7(b)
-  - NIST-800-53-CM-6(a)
-  - PCI-DSS-Req-8.1.7
-  - PCI-DSSv4-8.3
-  - PCI-DSSv4-8.3.4
-  - accounts_passwords_pam_faillock_unlock_time
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - DISA_STIG_RHEL_09_411090 | bool
-  - accounts_passwords_pam_faillock_unlock_time | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-
 - name: Set Lockout Time for Failed Password Attempts - Check if system relies on authselect tool
   ansible.builtin.stat:
     path: /usr/bin/authselect
@@ -2422,11 +2698,12 @@
       cmd: authselect check
     register: result_authselect_check_cmd
     changed_when: false
+    check_mode: false
     failed_when: false
   - name: Set Lockout Time for Failed Password Attempts - Informative message based on the authselect integrity check result
     ansible.builtin.assert:
       that:
-      - result_authselect_check_cmd.rc == 0
+      - ansible_check_mode or result_authselect_check_cmd.rc == 0
       fail_msg:
       - authselect integrity check failed. Remediation aborted!
       - This remediation could not be applied because an authselect profile was not selected or the selected profile is not
@@ -2440,6 +2717,7 @@
       cmd: authselect current | tail -n+3 | awk '{ print $2 }'
     register: result_authselect_features
     changed_when: false
+    check_mode: false
     when:
     - result_authselect_check_cmd is success
   - name: Set Lockout Time for Failed Password Attempts - Ensure "with-faillock" feature is enabled using authselect tool
@@ -2637,12 +2915,13 @@
           cmd: authselect check
         register: result_authselect_check_cmd
         changed_when: false
+        check_mode: false
         failed_when: false
       - name: Set Lockout Time for Failed Password Attempts - Informative message based on the authselect integrity check
           result
         ansible.builtin.assert:
           that:
-          - result_authselect_check_cmd.rc == 0
+          - ansible_check_mode or result_authselect_check_cmd.rc == 0
           fail_msg:
           - authselect integrity check failed. Remediation aborted!
           - This remediation could not be applied because an authselect profile was not selected or the selected profile is
@@ -2679,6 +2958,7 @@
           cmd: authselect current | tail -n+3 | awk '{ print $2 }'
         register: result_authselect_features
         changed_when: false
+        check_mode: false
         when:
         - result_authselect_profile is not skipped
         - authselect_current_profile is not match("custom/")
@@ -2688,11 +2968,13 @@
         register: result_authselect_custom_profile_present
         changed_when: false
         when:
+        - result_authselect_profile is not skipped
         - authselect_current_profile is not match("custom/")
       - name: Set Lockout Time for Failed Password Attempts - Create an authselect custom profile based on the current profile
         ansible.builtin.command:
           cmd: authselect create-profile hardening -b {{ authselect_current_profile }}
         when:
+        - result_authselect_profile is not skipped
         - result_authselect_check_cmd is success
         - authselect_current_profile is not match("^(custom/|local)")
         - not result_authselect_custom_profile_present.stat.exists
@@ -2700,6 +2982,7 @@
         ansible.builtin.command:
           cmd: authselect create-profile hardening -b sssd
         when:
+        - result_authselect_profile is not skipped
         - result_authselect_check_cmd is success
         - authselect_current_profile is match("local")
         - not result_authselect_custom_profile_present.stat.exists
@@ -2740,12 +3023,18 @@
           profile
         ansible.builtin.set_fact:
           pam_file_path: /etc/authselect/{{ authselect_custom_profile }}/{{ pam_file_path | basename }}
+        when:
+        - authselect_custom_profile is defined
       when:
       - result_authselect_present.stat.exists
     - name: Set Lockout Time for Failed Password Attempts - Define a fact for control already filtered in case filters are
         used
       ansible.builtin.set_fact:
         pam_module_control: ''
+    - name: Set Lockout Time for Failed Password Attempts - Check if {{ pam_file_path }} file is present
+      ansible.builtin.stat:
+        path: '{{ pam_file_path }}'
+      register: result_pam_file_present
     - name: Set Lockout Time for Failed Password Attempts - Ensure the "unlock_time" option from "pam_faillock.so" is not
         present in {{ pam_file_path }}
       ansible.builtin.replace:
@@ -2753,6 +3042,7 @@
         regexp: (.*auth.*pam_faillock.so.*)\bunlock_time\b=?[0-9a-zA-Z]*(.*)
         replace: \1\2
       register: result_pam_option_removal
+      when: result_pam_file_present.stat.exists
     - name: Set Lockout Time for Failed Password Attempts - Ensure authselect changes are applied
       ansible.builtin.command:
         cmd: authselect apply-changes -b
@@ -2781,12 +3071,13 @@
           cmd: authselect check
         register: result_authselect_check_cmd
         changed_when: false
+        check_mode: false
         failed_when: false
       - name: Set Lockout Time for Failed Password Attempts - Informative message based on the authselect integrity check
           result
         ansible.builtin.assert:
           that:
-          - result_authselect_check_cmd.rc == 0
+          - ansible_check_mode or result_authselect_check_cmd.rc == 0
           fail_msg:
           - authselect integrity check failed. Remediation aborted!
           - This remediation could not be applied because an authselect profile was not selected or the selected profile is
@@ -2823,6 +3114,7 @@
           cmd: authselect current | tail -n+3 | awk '{ print $2 }'
         register: result_authselect_features
         changed_when: false
+        check_mode: false
         when:
         - result_authselect_profile is not skipped
         - authselect_current_profile is not match("custom/")
@@ -2832,11 +3124,13 @@
         register: result_authselect_custom_profile_present
         changed_when: false
         when:
+        - result_authselect_profile is not skipped
         - authselect_current_profile is not match("custom/")
       - name: Set Lockout Time for Failed Password Attempts - Create an authselect custom profile based on the current profile
         ansible.builtin.command:
           cmd: authselect create-profile hardening -b {{ authselect_current_profile }}
         when:
+        - result_authselect_profile is not skipped
         - result_authselect_check_cmd is success
         - authselect_current_profile is not match("^(custom/|local)")
         - not result_authselect_custom_profile_present.stat.exists
@@ -2844,6 +3138,7 @@
         ansible.builtin.command:
           cmd: authselect create-profile hardening -b sssd
         when:
+        - result_authselect_profile is not skipped
         - result_authselect_check_cmd is success
         - authselect_current_profile is match("local")
         - not result_authselect_custom_profile_present.stat.exists
@@ -2884,12 +3179,18 @@
           profile
         ansible.builtin.set_fact:
           pam_file_path: /etc/authselect/{{ authselect_custom_profile }}/{{ pam_file_path | basename }}
+        when:
+        - authselect_custom_profile is defined
       when:
       - result_authselect_present.stat.exists
     - name: Set Lockout Time for Failed Password Attempts - Define a fact for control already filtered in case filters are
         used
       ansible.builtin.set_fact:
         pam_module_control: ''
+    - name: Set Lockout Time for Failed Password Attempts - Check if {{ pam_file_path }} file is present
+      ansible.builtin.stat:
+        path: '{{ pam_file_path }}'
+      register: result_pam_file_present
     - name: Set Lockout Time for Failed Password Attempts - Ensure the "unlock_time" option from "pam_faillock.so" is not
         present in {{ pam_file_path }}
       ansible.builtin.replace:
@@ -2897,6 +3198,7 @@
         regexp: (.*auth.*pam_faillock.so.*)\bunlock_time\b=?[0-9a-zA-Z]*(.*)
         replace: \1\2
       register: result_pam_option_removal
+      when: result_pam_file_present.stat.exists
     - name: Set Lockout Time for Failed Password Attempts - Ensure authselect changes are applied
       ansible.builtin.command:
         cmd: authselect apply-changes -b
@@ -3022,34 +3324,6 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-83566-0
-  - DISA-STIG-RHEL-09-611070
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-IA-5(1)(a)
-  - NIST-800-53-IA-5(4)
-  - NIST-800-53-IA-5(c)
-  - PCI-DSS-Req-8.2.3
-  - PCI-DSSv4-8.3
-  - PCI-DSSv4-8.3.6
-  - accounts_password_pam_dcredit
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - DISA_STIG_RHEL_09_611070 | bool
-  - accounts_password_pam_dcredit | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-
 - name: Ensure PAM Enforces Password Requirements - Minimum Digit Characters - Find pwquality.conf.d files
   ansible.builtin.find:
     paths: /etc/security/pwquality.conf.d/
@@ -3145,34 +3419,6 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-83570-2
-  - DISA-STIG-RHEL-09-611065
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-IA-5(1)(a)
-  - NIST-800-53-IA-5(4)
-  - NIST-800-53-IA-5(c)
-  - PCI-DSS-Req-8.2.3
-  - PCI-DSSv4-8.3
-  - PCI-DSSv4-8.3.6
-  - accounts_password_pam_lcredit
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - DISA_STIG_RHEL_09_611065 | bool
-  - accounts_password_pam_lcredit | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-
 - name: Ensure PAM Enforces Password Requirements - Minimum Lowercase Characters - Find pwquality.conf.d files
   ansible.builtin.find:
     paths: /etc/security/pwquality.conf.d/
@@ -3267,35 +3513,6 @@
   - medium_severity
   - no_reboot_needed
   - restrict_strategy
-
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-83579-3
-  - CJIS-5.6.2.1.1
-  - DISA-STIG-RHEL-09-611090
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-IA-5(1)(a)
-  - NIST-800-53-IA-5(4)
-  - NIST-800-53-IA-5(c)
-  - PCI-DSS-Req-8.2.3
-  - PCI-DSSv4-8.3
-  - PCI-DSSv4-8.3.6
-  - accounts_password_pam_minlen
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - DISA_STIG_RHEL_09_611090 | bool
-  - accounts_password_pam_minlen | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
 
 - name: Ensure PAM Enforces Password Requirements - Minimum Length - Find pwquality.conf.d files
   ansible.builtin.find:
@@ -3395,31 +3612,6 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-83565-2
-  - DISA-STIG-RHEL-09-611100
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-IA-5(1)(a)
-  - NIST-800-53-IA-5(4)
-  - NIST-800-53-IA-5(c)
-  - accounts_password_pam_ocredit
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - DISA_STIG_RHEL_09_611100 | bool
-  - accounts_password_pam_ocredit | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-
 - name: Ensure PAM Enforces Password Requirements - Minimum Special Characters - Find pwquality.conf.d files
   ansible.builtin.find:
     paths: /etc/security/pwquality.conf.d/
@@ -3505,32 +3697,6 @@
   - medium_severity
   - no_reboot_needed
   - restrict_strategy
-
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-83568-6
-  - DISA-STIG-RHEL-09-611110
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-IA-5(1)(a)
-  - NIST-800-53-IA-5(4)
-  - NIST-800-53-IA-5(c)
-  - PCI-DSS-Req-8.2.3
-  - accounts_password_pam_ucredit
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - DISA_STIG_RHEL_09_611110 | bool
-  - accounts_password_pam_ucredit | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
 
 - name: Ensure PAM Enforces Password Requirements - Minimum Uppercase Characters - Find pwquality.conf.d files
   ansible.builtin.find:
@@ -3621,166 +3787,8 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-90724-6
-  - DISA-STIG-RHEL-09-211055
-  - NIST-800-171-3.4.5
-  - NIST-800-53-CM-6
-  - disable_strategy
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - service_debug-shell_disabled
-  when:
-  - DISA_STIG_RHEL_09_211055 | bool
-  - disable_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - service_debug_shell_disabled | bool
-
-- name: Disable debug-shell SystemD Service - Collect systemd Services Present in the System
-  ansible.builtin.command: systemctl -q list-unit-files --type service
-  register: service_exists
-  changed_when: false
-  failed_when: service_exists.rc not in [0, 1]
-  check_mode: false
-  when:
-  - DISA_STIG_RHEL_09_211055 | bool
-  - disable_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - service_debug_shell_disabled | bool
-  - '"kernel" in ansible_facts.packages'
-  tags:
-  - CCE-90724-6
-  - DISA-STIG-RHEL-09-211055
-  - NIST-800-171-3.4.5
-  - NIST-800-53-CM-6
-  - disable_strategy
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - service_debug-shell_disabled
-
-- name: Disable debug-shell SystemD Service - Ensure debug-shell.service is Masked
-  ansible.builtin.systemd:
-    name: debug-shell.service
-    state: stopped
-    enabled: false
-    masked: true
-  when:
-  - DISA_STIG_RHEL_09_211055 | bool
-  - disable_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - service_debug_shell_disabled | bool
-  - '"kernel" in ansible_facts.packages'
-  - service_exists.stdout_lines is search("debug-shell.service", multiline=True)
-  tags:
-  - CCE-90724-6
-  - DISA-STIG-RHEL-09-211055
-  - NIST-800-171-3.4.5
-  - NIST-800-53-CM-6
-  - disable_strategy
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - service_debug-shell_disabled
-
-- name: Unit Socket Exists - debug-shell.socket
-  ansible.builtin.command: systemctl -q list-unit-files debug-shell.socket
-  register: socket_file_exists
-  changed_when: false
-  failed_when: socket_file_exists.rc not in [0, 1]
-  check_mode: false
-  when:
-  - DISA_STIG_RHEL_09_211055 | bool
-  - disable_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - service_debug_shell_disabled | bool
-  - '"kernel" in ansible_facts.packages'
-  tags:
-  - CCE-90724-6
-  - DISA-STIG-RHEL-09-211055
-  - NIST-800-171-3.4.5
-  - NIST-800-53-CM-6
-  - disable_strategy
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - service_debug-shell_disabled
-
-- name: Disable debug-shell SystemD Service - Disable Socket debug-shell
-  ansible.builtin.systemd:
-    name: debug-shell.socket
-    enabled: false
-    state: stopped
-    masked: true
-  when:
-  - DISA_STIG_RHEL_09_211055 | bool
-  - disable_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - service_debug_shell_disabled | bool
-  - '"kernel" in ansible_facts.packages'
-  - socket_file_exists.stdout_lines is search("debug-shell.socket", multiline=True)
-  tags:
-  - CCE-90724-6
-  - DISA-STIG-RHEL-09-211055
-  - NIST-800-171-3.4.5
-  - NIST-800-53-CM-6
-  - disable_strategy
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - service_debug-shell_disabled
-
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-90308-8
-  - DISA-STIG-RHEL-09-211045
-  - NIST-800-171-3.4.5
-  - NIST-800-53-AC-6(1)
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-CM-6(a)
-  - disable_ctrlaltdel_burstaction
-  - disable_strategy
-  - high_severity
-  - low_complexity
-  - low_disruption
-  - no_reboot_needed
-  when:
-  - DISA_STIG_RHEL_09_211045 | bool
-  - disable_ctrlaltdel_burstaction | bool
-  - disable_strategy | bool
-  - high_severity | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - no_reboot_needed | bool
-
 - name: Disable Ctrl-Alt-Del Burst Action
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: /etc/systemd/system.conf
     state: present
     regexp: ^CtrlAltDelBurstAction
@@ -3810,32 +3818,8 @@
   - low_disruption
   - no_reboot_needed
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-86667-3
-  - DISA-STIG-RHEL-09-211050
-  - NIST-800-171-3.4.5
-  - NIST-800-53-AC-6(1)
-  - NIST-800-53-CM-6(a)
-  - disable_ctrlaltdel_reboot
-  - disable_strategy
-  - high_severity
-  - low_complexity
-  - low_disruption
-  - no_reboot_needed
-  when:
-  - DISA_STIG_RHEL_09_211050 | bool
-  - disable_ctrlaltdel_reboot | bool
-  - disable_strategy | bool
-  - high_severity | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - no_reboot_needed | bool
-
 - name: Disable Ctrl-Alt-Del Reboot Activation
-  systemd:
+  ansible.builtin.systemd:
     name: ctrl-alt-del.target
     force: true
     masked: true
@@ -3862,39 +3846,8 @@
   - low_disruption
   - no_reboot_needed
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-90785-7
-  - CJIS-5.5.6
-  - DISA-STIG-RHEL-09-412080
-  - NIST-800-171-3.1.11
-  - NIST-800-53-AC-12
-  - NIST-800-53-AC-17(a)
-  - NIST-800-53-AC-17(a)
-  - NIST-800-53-AC-2(5)
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-SC-10
-  - PCI-DSS-Req-8.1.8
-  - logind_session_timeout
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - reboot_required
-  - restrict_strategy
-  when:
-  - DISA_STIG_RHEL_09_412080 | bool
-  - logind_session_timeout | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - reboot_required | bool
-  - restrict_strategy | bool
-
 - name: Set 'StopIdleSessionSec' to '{{ var_logind_session_timeout }}' in the [Login] section of '/etc/systemd/logind.conf'
-  ini_file:
+  community.general.ini_file:
     path: /etc/systemd/logind.conf
     section: Login
     option: StopIdleSessionSec
@@ -3932,32 +3885,6 @@
   - medium_severity
   - reboot_required
   - restrict_strategy
-
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-83594-2
-  - DISA-STIG-RHEL-09-611200
-  - NIST-800-171-3.1.1
-  - NIST-800-171-3.4.5
-  - NIST-800-53-AC-3
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-IA-2
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - require_singleuser_auth
-  - restrict_strategy
-  when:
-  - DISA_STIG_RHEL_09_611200 | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - require_singleuser_auth | bool
-  - restrict_strategy | bool
 
 - name: Require Authentication for Single User Mode - find files which already override Execstart of rescue.service
   ansible.builtin.find:
@@ -4079,36 +4006,6 @@
   - require_singleuser_auth
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-83611-4
-  - CJIS-5.5.2
-  - DISA-STIG-RHEL-09-611025
-  - NIST-800-171-3.1.1
-  - NIST-800-171-3.1.5
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-IA-5(1)(a)
-  - NIST-800-53-IA-5(c)
-  - PCI-DSS-Req-8.2.3
-  - PCI-DSSv4-8.3
-  - PCI-DSSv4-8.3.1
-  - configure_strategy
-  - high_severity
-  - low_complexity
-  - medium_disruption
-  - no_empty_passwords
-  - no_reboot_needed
-  when:
-  - DISA_STIG_RHEL_09_611025 | bool
-  - configure_strategy | bool
-  - high_severity | bool
-  - low_complexity | bool
-  - medium_disruption | bool
-  - no_empty_passwords | bool
-  - no_reboot_needed | bool
-
 - name: Prevent Login to Accounts With Empty Password - Check if system relies on authselect
   ansible.builtin.stat:
     path: /usr/bin/authselect
@@ -4148,11 +4045,12 @@
       cmd: authselect check
     register: result_authselect_check_cmd
     changed_when: false
+    check_mode: false
     failed_when: false
   - name: Prevent Login to Accounts With Empty Password - Informative message based on the authselect integrity check result
     ansible.builtin.assert:
       that:
-      - result_authselect_check_cmd.rc == 0
+      - ansible_check_mode or result_authselect_check_cmd.rc == 0
       fail_msg:
       - authselect integrity check failed. Remediation aborted!
       - This remediation could not be applied because an authselect profile was not selected or the selected profile is not
@@ -4166,6 +4064,7 @@
       cmd: authselect current | tail -n+3 | awk '{ print $2 }'
     register: result_authselect_features
     changed_when: false
+    check_mode: false
     when:
     - result_authselect_check_cmd is success
   - name: Prevent Login to Accounts With Empty Password - Ensure "without-nullok" feature is enabled using authselect tool
@@ -4246,29 +4145,8 @@
   - no_empty_passwords
   - no_reboot_needed
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-90085-2
-  - DISA-STIG-RHEL-09-432035
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  - use_pam_wheel_for_su
-  when:
-  - DISA_STIG_RHEL_09_432035 | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-  - use_pam_wheel_for_su | bool
-
 - name: Restrict usage of su command only to members of wheel group
-  replace:
+  ansible.builtin.replace:
     path: /etc/pam.d/su
     regexp: ^[\s]*#[\s]*auth[\s]+required[\s]+pam_wheel\.so[\s]+use_uid$
     replace: auth             required        pam_wheel.so use_uid
@@ -4291,27 +4169,8 @@
   - restrict_strategy
   - use_pam_wheel_for_su
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-85986-8
-  - grub2_disable_recovery
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - reboot_required
-  - restrict_strategy
-  when:
-  - grub2_disable_recovery | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - reboot_required | bool
-  - restrict_strategy | bool
-
 - name: Verify GRUB_DISABLE_RECOVERY=true
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/default/grub
     regexp: ^GRUB_DISABLE_RECOVERY=.*
     line: GRUB_DISABLE_RECOVERY=true
@@ -4334,7 +4193,7 @@
   - restrict_strategy
 
 - name: Update grub defaults and the bootloader menu
-  command: /sbin/grubby --update-kernel=ALL
+  ansible.builtin.command: /sbin/grubby --update-kernel=ALL
   when:
   - grub2_disable_recovery | bool
   - low_complexity | bool
@@ -4352,27 +4211,8 @@
   - reboot_required
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-85867-0
-  - grub2_init_on_alloc_argument
-  - low_disruption
-  - medium_complexity
-  - medium_severity
-  - reboot_required
-  - restrict_strategy
-  when:
-  - grub2_init_on_alloc_argument | bool
-  - low_disruption | bool
-  - medium_complexity | bool
-  - medium_severity | bool
-  - reboot_required | bool
-  - restrict_strategy | bool
-
 - name: Update grub defaults and the bootloader menu
-  command: /sbin/grubby --update-kernel=ALL --args="init_on_alloc=1"
+  ansible.builtin.command: /sbin/grubby --update-kernel=ALL --args="init_on_alloc=1"
   when:
   - grub2_init_on_alloc_argument | bool
   - low_disruption | bool
@@ -4390,27 +4230,8 @@
   - reboot_required
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-85879-5
-  - grub2_page_alloc_shuffle_argument
-  - low_disruption
-  - medium_complexity
-  - medium_severity
-  - reboot_required
-  - restrict_strategy
-  when:
-  - grub2_page_alloc_shuffle_argument | bool
-  - low_disruption | bool
-  - medium_complexity | bool
-  - medium_severity | bool
-  - reboot_required | bool
-  - restrict_strategy | bool
-
 - name: Update grub defaults and the bootloader menu
-  command: /sbin/grubby --update-kernel=ALL --args="page_alloc.shuffle=1"
+  ansible.builtin.command: /sbin/grubby --update-kernel=ALL --args="page_alloc.shuffle=1"
   when:
   - grub2_page_alloc_shuffle_argument | bool
   - low_disruption | bool
@@ -4428,26 +4249,8 @@
   - reboot_required
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-86292-0
-  - grub2_systemd_debug-shell_argument_absent
-  - low_disruption
-  - medium_complexity
-  - medium_severity
-  - reboot_required
-  - restrict_strategy
-  when:
-  - low_disruption | bool
-  - medium_complexity | bool
-  - medium_severity | bool
-  - reboot_required | bool
-  - restrict_strategy | bool
-
 - name: Update grub defaults and the bootloader menu
-  command: /sbin/grubby --update-kernel=ALL --remove-args="systemd.debug-shell"
+  ansible.builtin.command: /sbin/grubby --update-kernel=ALL --remove-args="systemd.debug-shell"
   when:
   - low_disruption | bool
   - medium_complexity | bool
@@ -4464,30 +4267,8 @@
   - reboot_required
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-83842-5
-  - DISA-STIG-RHEL-09-212035
-  - NIST-800-53-CM-7(a)
-  - grub2_vsyscall_argument
-  - low_disruption
-  - medium_complexity
-  - medium_severity
-  - reboot_required
-  - restrict_strategy
-  when:
-  - DISA_STIG_RHEL_09_212035 | bool
-  - grub2_vsyscall_argument | bool
-  - low_disruption | bool
-  - medium_complexity | bool
-  - medium_severity | bool
-  - reboot_required | bool
-  - restrict_strategy | bool
-
 - name: Update grub defaults and the bootloader menu
-  command: /sbin/grubby --update-kernel=ALL --args="vsyscall=none"
+  ansible.builtin.command: /sbin/grubby --update-kernel=ALL --args="vsyscall=none"
   when:
   - DISA_STIG_RHEL_09_212035 | bool
   - grub2_vsyscall_argument | bool
@@ -4512,37 +4293,37 @@
 - name: Ensure BLS boot entries options contain audit=1
   block:
   - name: 'Check how many boot entries exist '
-    find:
+    ansible.builtin.find:
       paths: /boot/loader/entries/
       patterns: '*.conf'
     register: n_entries
   - name: Check how many boot entries set audit=1
-    find:
+    ansible.builtin.find:
       paths: /boot/loader/entries/
       contains: ^options .*audit=1.*$
       patterns: '*.conf'
     register: n_entries_options
   - name: Update boot entries options
-    command: grubby --update-kernel=ALL --args="audit=1"
+    ansible.builtin.command: grubby --update-kernel=ALL --args="audit=1"
     when: n_entries is defined and n_entries_options is defined and n_entries.matched != n_entries_options.matched
   - name: Check if /etc/kernel/cmdline exists
-    stat:
+    ansible.builtin.stat:
       path: /etc/kernel/cmdline
     register: cmdline_stat
   - name: Check if /etc/kernel/cmdline contains audit=1
-    find:
+    ansible.builtin.find:
       paths: /etc/kernel/
       patterns: cmdline
       contains: ^.*audit=1.*$
     register: cmdline_find
   - name: Add /etc/kernel/cmdline contains audit=1
-    lineinfile:
+    ansible.builtin.lineinfile:
       create: true
       path: /etc/kernel/cmdline
       line: audit=1
     when: cmdline_stat is defined and not cmdline_stat.stat.exists
   - name: Append /etc/kernel/cmdline contains audit=1
-    lineinfile:
+    ansible.builtin.lineinfile:
       path: /etc/kernel/cmdline
       backrefs: true
       regexp: ^(.*)$
@@ -4569,37 +4350,37 @@
 - name: Ensure BLS boot entries options contain audit_backlog_limit=8192
   block:
   - name: 'Check how many boot entries exist '
-    find:
+    ansible.builtin.find:
       paths: /boot/loader/entries/
       patterns: '*.conf'
     register: n_entries
   - name: Check how many boot entries set audit_backlog_limit=8192
-    find:
+    ansible.builtin.find:
       paths: /boot/loader/entries/
       contains: ^options .*audit_backlog_limit=8192.*$
       patterns: '*.conf'
     register: n_entries_options
   - name: Update boot entries options
-    command: grubby --update-kernel=ALL --args="audit_backlog_limit=8192"
+    ansible.builtin.command: grubby --update-kernel=ALL --args="audit_backlog_limit=8192"
     when: n_entries is defined and n_entries_options is defined and n_entries.matched != n_entries_options.matched
   - name: Check if /etc/kernel/cmdline exists
-    stat:
+    ansible.builtin.stat:
       path: /etc/kernel/cmdline
     register: cmdline_stat
   - name: Check if /etc/kernel/cmdline contains audit_backlog_limit=8192
-    find:
+    ansible.builtin.find:
       paths: /etc/kernel/
       patterns: cmdline
       contains: ^.*audit_backlog_limit=8192.*$
     register: cmdline_find
   - name: Add /etc/kernel/cmdline contains audit_backlog_limit=8192
-    lineinfile:
+    ansible.builtin.lineinfile:
       create: true
       path: /etc/kernel/cmdline
       line: audit_backlog_limit=8192
     when: cmdline_stat is defined and not cmdline_stat.stat.exists
   - name: Append /etc/kernel/cmdline contains audit_backlog_limit=8192
-    lineinfile:
+    ansible.builtin.lineinfile:
       path: /etc/kernel/cmdline
       backrefs: true
       regexp: ^(.*)$
@@ -4626,37 +4407,37 @@
 - name: Ensure BLS boot entries options contain init_on_alloc=1
   block:
   - name: 'Check how many boot entries exist '
-    find:
+    ansible.builtin.find:
       paths: /boot/loader/entries/
       patterns: '*.conf'
     register: n_entries
   - name: Check how many boot entries set init_on_alloc=1
-    find:
+    ansible.builtin.find:
       paths: /boot/loader/entries/
       contains: ^options .*init_on_alloc=1.*$
       patterns: '*.conf'
     register: n_entries_options
   - name: Update boot entries options
-    command: grubby --update-kernel=ALL --args="init_on_alloc=1"
+    ansible.builtin.command: grubby --update-kernel=ALL --args="init_on_alloc=1"
     when: n_entries is defined and n_entries_options is defined and n_entries.matched != n_entries_options.matched
   - name: Check if /etc/kernel/cmdline exists
-    stat:
+    ansible.builtin.stat:
       path: /etc/kernel/cmdline
     register: cmdline_stat
   - name: Check if /etc/kernel/cmdline contains init_on_alloc=1
-    find:
+    ansible.builtin.find:
       paths: /etc/kernel/
       patterns: cmdline
       contains: ^.*init_on_alloc=1.*$
     register: cmdline_find
   - name: Add /etc/kernel/cmdline contains init_on_alloc=1
-    lineinfile:
+    ansible.builtin.lineinfile:
       create: true
       path: /etc/kernel/cmdline
       line: init_on_alloc=1
     when: cmdline_stat is defined and not cmdline_stat.stat.exists
   - name: Append /etc/kernel/cmdline contains init_on_alloc=1
-    lineinfile:
+    ansible.builtin.lineinfile:
       path: /etc/kernel/cmdline
       backrefs: true
       regexp: ^(.*)$
@@ -4683,37 +4464,37 @@
 - name: Ensure BLS boot entries options contain page_alloc.shuffle=1
   block:
   - name: 'Check how many boot entries exist '
-    find:
+    ansible.builtin.find:
       paths: /boot/loader/entries/
       patterns: '*.conf'
     register: n_entries
   - name: Check how many boot entries set page_alloc.shuffle=1
-    find:
+    ansible.builtin.find:
       paths: /boot/loader/entries/
       contains: ^options .*page_alloc.shuffle=1.*$
       patterns: '*.conf'
     register: n_entries_options
   - name: Update boot entries options
-    command: grubby --update-kernel=ALL --args="page_alloc.shuffle=1"
+    ansible.builtin.command: grubby --update-kernel=ALL --args="page_alloc.shuffle=1"
     when: n_entries is defined and n_entries_options is defined and n_entries.matched != n_entries_options.matched
   - name: Check if /etc/kernel/cmdline exists
-    stat:
+    ansible.builtin.stat:
       path: /etc/kernel/cmdline
     register: cmdline_stat
   - name: Check if /etc/kernel/cmdline contains page_alloc.shuffle=1
-    find:
+    ansible.builtin.find:
       paths: /etc/kernel/
       patterns: cmdline
       contains: ^.*page_alloc.shuffle=1.*$
     register: cmdline_find
   - name: Add /etc/kernel/cmdline contains page_alloc.shuffle=1
-    lineinfile:
+    ansible.builtin.lineinfile:
       create: true
       path: /etc/kernel/cmdline
       line: page_alloc.shuffle=1
     when: cmdline_stat is defined and not cmdline_stat.stat.exists
   - name: Append /etc/kernel/cmdline contains page_alloc.shuffle=1
-    lineinfile:
+    ansible.builtin.lineinfile:
       path: /etc/kernel/cmdline
       backrefs: true
       regexp: ^(.*)$
@@ -4740,26 +4521,26 @@
 - name: Ensure BLS boot entries options contain systemd.debug-shell
   block:
   - name: Check how many boot entries set systemd.debug-shell
-    find:
+    ansible.builtin.find:
       paths: /boot/loader/entries/
       contains: ^options .*systemd\.debug-shell.*$
       patterns: '*.conf'
     register: n_entries
   - name: Remove systemd.debug-shell from boot entries
-    command: grubby --update-kernel=ALL --remove-args="systemd.debug-shell"
+    ansible.builtin.command: grubby --update-kernel=ALL --remove-args="systemd.debug-shell"
     when: n_entries is defined and n_entries.matched >= 1
   - name: Check if /etc/kernel/cmdline exists
-    stat:
+    ansible.builtin.stat:
       path: /etc/kernel/cmdline
     register: cmdline_stat
   - name: Check if /etc/kernel/cmdline contains systemd.debug-shell
-    find:
+    ansible.builtin.find:
       paths: /etc/kernel/
       patterns: cmdline
       contains: ^.*systemd\.debug-shell.*$
     register: cmdline_find
   - name: Remove systemd.debug-shell from /etc/kernel/cmdline
-    lineinfile:
+    ansible.builtin.lineinfile:
       path: /etc/kernel/cmdline
       backrefs: true
       regexp: ^(.*)\s*systemd.debug-shell\b\S*(.*)$
@@ -4785,19 +4566,19 @@
 - name: Ensure zIPL bootmap is up to date
   block:
   - name: Obtain stats of /boot/bootmap
-    stat:
+    ansible.builtin.stat:
       path: /boot/bootmap
     register: boot_bootmap
   - name: Obtain stats of /etc/zipl.conf
-    stat:
+    ansible.builtin.stat:
       path: /etc/zipl.conf
     register: zipl_conf
   - name: Obtain stats of /boot/loader/entries
-    stat:
+    ansible.builtin.stat:
       path: /boot/loader/entries
     register: boot_loader_entries
   - name: Update zIPL bootmap
-    command: /usr/sbin/zipl
+    ansible.builtin.command: /usr/sbin/zipl
     changed_when: true
     when:
     - boot_bootmap.stat.mtime is defined
@@ -4822,152 +4603,8 @@
   - no_reboot_needed
   - zipl_bootmap_is_up_to_date
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-84021-5
-  - DISA-STIG-RHEL-09-251010
-  - NIST-800-53-CM-6(a)
-  - PCI-DSSv4-1.2
-  - PCI-DSSv4-1.2.1
-  - enable_strategy
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - package_firewalld_installed
-  when:
-  - DISA_STIG_RHEL_09_251010 | bool
-  - enable_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - package_firewalld_installed | bool
-
-- name: Ensure firewalld is installed
-  package:
-    name: firewalld
-    state: present
-  when:
-  - DISA_STIG_RHEL_09_251010 | bool
-  - enable_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - package_firewalld_installed | bool
-  - '"kernel" in ansible_facts.packages'
-  tags:
-  - CCE-84021-5
-  - DISA-STIG-RHEL-09-251010
-  - NIST-800-53-CM-6(a)
-  - PCI-DSSv4-1.2
-  - PCI-DSSv4-1.2.1
-  - enable_strategy
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - package_firewalld_installed
-
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-90833-5
-  - DISA-STIG-RHEL-09-251015
-  - NIST-800-171-3.1.3
-  - NIST-800-171-3.4.7
-  - NIST-800-53-AC-4
-  - NIST-800-53-CA-3(5)
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-CM-7(b)
-  - NIST-800-53-SC-7(21)
-  - PCI-DSSv4-1.2
-  - PCI-DSSv4-1.2.1
-  - enable_strategy
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - service_firewalld_enabled
-  when:
-  - DISA_STIG_RHEL_09_251015 | bool
-  - enable_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - service_firewalld_enabled | bool
-
-- name: Verify firewalld Enabled - Enable service firewalld
-  block:
-  - name: Gather the package facts
-    package_facts:
-      manager: auto
-  - name: Verify firewalld Enabled - Enable Service firewalld
-    ansible.builtin.systemd:
-      name: firewalld
-      enabled: true
-      state: started
-      masked: false
-    when:
-    - '"firewalld" in ansible_facts.packages'
-  when:
-  - DISA_STIG_RHEL_09_251015 | bool
-  - enable_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - service_firewalld_enabled | bool
-  - '"kernel" in ansible_facts.packages'
-  - '"firewalld" in ansible_facts.packages'
-  tags:
-  - CCE-90833-5
-  - DISA-STIG-RHEL-09-251015
-  - NIST-800-171-3.1.3
-  - NIST-800-171-3.4.7
-  - NIST-800-53-AC-4
-  - NIST-800-53-CA-3(5)
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-CM-7(b)
-  - NIST-800-53-SC-7(21)
-  - PCI-DSSv4-1.2
-  - PCI-DSSv4-1.2.1
-  - enable_strategy
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - service_firewalld_enabled
-
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-84134-6
-  - DISA-STIG-RHEL-09-213050
-  - NIST-800-53-AC-18
-  - disable_strategy
-  - kernel_module_can_disabled
-  - low_complexity
-  - medium_disruption
-  - medium_severity
-  - reboot_required
-  when:
-  - DISA_STIG_RHEL_09_213050 | bool
-  - disable_strategy | bool
-  - kernel_module_can_disabled | bool
-  - low_complexity | bool
-  - medium_disruption | bool
-  - medium_severity | bool
-  - reboot_required | bool
-
 - name: Ensure kernel module 'can' is disabled
-  lineinfile:
+  ansible.builtin.lineinfile:
     create: true
     dest: /etc/modprobe.d/can.conf
     regexp: install\s+can
@@ -4993,7 +4630,7 @@
   - reboot_required
 
 - name: Ensure kernel module 'can' is blacklisted
-  lineinfile:
+  ansible.builtin.lineinfile:
     create: true
     dest: /etc/modprobe.d/can.conf
     regexp: ^blacklist can$
@@ -5018,37 +4655,8 @@
   - medium_severity
   - reboot_required
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-84139-5
-  - CJIS-5.10.1
-  - DISA-STIG-RHEL-09-213060
-  - NIST-800-171-3.4.6
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-CM-7(a)
-  - NIST-800-53-CM-7(b)
-  - PCI-DSS-Req-1.4.2
-  - PCI-DSSv4-1.4
-  - PCI-DSSv4-1.4.2
-  - disable_strategy
-  - kernel_module_sctp_disabled
-  - low_complexity
-  - medium_disruption
-  - medium_severity
-  - reboot_required
-  when:
-  - DISA_STIG_RHEL_09_213060 | bool
-  - disable_strategy | bool
-  - kernel_module_sctp_disabled | bool
-  - low_complexity | bool
-  - medium_disruption | bool
-  - medium_severity | bool
-  - reboot_required | bool
-
 - name: Ensure kernel module 'sctp' is disabled
-  lineinfile:
+  ansible.builtin.lineinfile:
     create: true
     dest: /etc/modprobe.d/sctp.conf
     regexp: install\s+sctp
@@ -5081,7 +4689,7 @@
   - reboot_required
 
 - name: Ensure kernel module 'sctp' is blacklisted
-  lineinfile:
+  ansible.builtin.lineinfile:
     create: true
     dest: /etc/modprobe.d/sctp.conf
     regexp: ^blacklist sctp$
@@ -5113,32 +4721,8 @@
   - medium_severity
   - reboot_required
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-84065-2
-  - DISA-STIG-RHEL-09-213065
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-CM-7(a)
-  - NIST-800-53-CM-7(b)
-  - disable_strategy
-  - kernel_module_tipc_disabled
-  - low_complexity
-  - low_severity
-  - medium_disruption
-  - reboot_required
-  when:
-  - DISA_STIG_RHEL_09_213065 | bool
-  - disable_strategy | bool
-  - kernel_module_tipc_disabled | bool
-  - low_complexity | bool
-  - low_severity | bool
-  - medium_disruption | bool
-  - reboot_required | bool
-
 - name: Ensure kernel module 'tipc' is disabled
-  lineinfile:
+  ansible.builtin.lineinfile:
     create: true
     dest: /etc/modprobe.d/tipc.conf
     regexp: install\s+tipc
@@ -5166,7 +4750,7 @@
   - reboot_required
 
 - name: Ensure kernel module 'tipc' is blacklisted
-  lineinfile:
+  ansible.builtin.lineinfile:
     create: true
     dest: /etc/modprobe.d/tipc.conf
     regexp: ^blacklist tipc$
@@ -5193,37 +4777,8 @@
   - medium_disruption
   - reboot_required
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-84067-8
-  - CJIS-5.13.1.3
-  - DISA-STIG-RHEL-09-291035
-  - NIST-800-171-3.1.16
-  - NIST-800-53-AC-18(3)
-  - NIST-800-53-AC-18(a)
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-CM-7(a)
-  - NIST-800-53-CM-7(b)
-  - NIST-800-53-MP-7
-  - disable_strategy
-  - kernel_module_bluetooth_disabled
-  - low_complexity
-  - medium_disruption
-  - medium_severity
-  - reboot_required
-  when:
-  - DISA_STIG_RHEL_09_291035 | bool
-  - disable_strategy | bool
-  - kernel_module_bluetooth_disabled | bool
-  - low_complexity | bool
-  - medium_disruption | bool
-  - medium_severity | bool
-  - reboot_required | bool
-
 - name: Ensure kernel module 'bluetooth' is disabled
-  lineinfile:
+  ansible.builtin.lineinfile:
     create: true
     dest: /etc/modprobe.d/bluetooth.conf
     regexp: install\s+bluetooth
@@ -5256,7 +4811,7 @@
   - reboot_required
 
 - name: Ensure kernel module 'bluetooth' is blacklisted
-  lineinfile:
+  ansible.builtin.lineinfile:
     create: true
     dest: /etc/modprobe.d/bluetooth.conf
     regexp: ^blacklist bluetooth$
@@ -5287,33 +4842,6 @@
   - medium_disruption
   - medium_severity
   - reboot_required
-
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-83882-1
-  - DISA-STIG-RHEL-09-231160
-  - NIST-800-53-AC-6
-  - NIST-800-53-AC-6(1)
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-CM-7(a)
-  - NIST-800-53-CM-7(b)
-  - NIST-800-53-MP-7
-  - configure_strategy
-  - high_disruption
-  - low_complexity
-  - medium_severity
-  - mount_option_var_log_audit_nodev
-  - no_reboot_needed
-  when:
-  - DISA_STIG_RHEL_09_231160 | bool
-  - configure_strategy | bool
-  - high_disruption | bool
-  - low_complexity | bool
-  - medium_severity | bool
-  - mount_option_var_log_audit_nodev | bool
-  - no_reboot_needed | bool
 
 - name: 'Add nodev Option to /var/log/audit: Check information associated to mountpoint'
   command: findmnt --fstab '/var/log/audit'
@@ -5496,33 +5024,6 @@
   - mount_option_var_log_audit_nodev
   - no_reboot_needed
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-83878-9
-  - DISA-STIG-RHEL-09-231165
-  - NIST-800-53-AC-6
-  - NIST-800-53-AC-6(1)
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-CM-7(a)
-  - NIST-800-53-CM-7(b)
-  - NIST-800-53-MP-7
-  - configure_strategy
-  - high_disruption
-  - low_complexity
-  - medium_severity
-  - mount_option_var_log_audit_noexec
-  - no_reboot_needed
-  when:
-  - DISA_STIG_RHEL_09_231165 | bool
-  - configure_strategy | bool
-  - high_disruption | bool
-  - low_complexity | bool
-  - medium_severity | bool
-  - mount_option_var_log_audit_noexec | bool
-  - no_reboot_needed | bool
-
 - name: 'Add noexec Option to /var/log/audit: Check information associated to mountpoint'
   command: findmnt --fstab '/var/log/audit'
   register: device_name
@@ -5703,33 +5204,6 @@
   - medium_severity
   - mount_option_var_log_audit_noexec
   - no_reboot_needed
-
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-83893-8
-  - DISA-STIG-RHEL-09-231170
-  - NIST-800-53-AC-6
-  - NIST-800-53-AC-6(1)
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-CM-7(a)
-  - NIST-800-53-CM-7(b)
-  - NIST-800-53-MP-7
-  - configure_strategy
-  - high_disruption
-  - low_complexity
-  - medium_severity
-  - mount_option_var_log_audit_nosuid
-  - no_reboot_needed
-  when:
-  - DISA_STIG_RHEL_09_231170 | bool
-  - configure_strategy | bool
-  - high_disruption | bool
-  - low_complexity | bool
-  - medium_severity | bool
-  - mount_option_var_log_audit_nosuid | bool
-  - no_reboot_needed | bool
 
 - name: 'Add nosuid Option to /var/log/audit: Check information associated to mountpoint'
   command: findmnt --fstab '/var/log/audit'
@@ -5912,27 +5386,8 @@
   - mount_option_var_log_audit_nosuid
   - no_reboot_needed
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-86005-6
-  - disable_strategy
-  - low_complexity
-  - medium_disruption
-  - medium_severity
-  - reboot_required
-  - sysctl_kernel_core_pattern_empty_string
-  when:
-  - disable_strategy | bool
-  - low_complexity | bool
-  - medium_disruption | bool
-  - medium_severity | bool
-  - reboot_required | bool
-  - sysctl_kernel_core_pattern_empty_string | bool
-
 - name: List /etc/sysctl.d/*.conf files
-  find:
+  ansible.builtin.find:
     paths:
     - /etc/sysctl.d/
     - /run/sysctl.d/
@@ -5958,7 +5413,7 @@
   - sysctl_kernel_core_pattern_empty_string
 
 - name: Comment out any occurrences of kernel.core_pattern from /etc/sysctl.d/*.conf files
-  replace:
+  ansible.builtin.replace:
     path: '{{ item.path }}'
     regexp: ^[\s]*kernel.core_pattern
     replace: '#kernel.core_pattern'
@@ -5981,7 +5436,7 @@
   - sysctl_kernel_core_pattern_empty_string
 
 - name: Comment out any occurrences of kernel.core_pattern with value from /etc/sysctl.conf files
-  replace:
+  ansible.builtin.replace:
     path: /etc/sysctl.conf
     regexp: ^[\s]*kernel.core_pattern([ \t]*=[ \t]*\S+)
     replace: '#kernel.core_pattern\1'
@@ -6003,7 +5458,7 @@
   - sysctl_kernel_core_pattern_empty_string
 
 - name: Ensure sysctl kernel.core_pattern is set to empty
-  sysctl:
+  ansible.posix.sysctl:
     name: kernel.core_pattern
     value: ' '
     state: present
@@ -6025,27 +5480,8 @@
   - reboot_required
   - sysctl_kernel_core_pattern_empty_string
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-86003-1
-  - disable_strategy
-  - low_complexity
-  - medium_disruption
-  - medium_severity
-  - reboot_required
-  - sysctl_kernel_core_uses_pid
-  when:
-  - disable_strategy | bool
-  - low_complexity | bool
-  - medium_disruption | bool
-  - medium_severity | bool
-  - reboot_required | bool
-  - sysctl_kernel_core_uses_pid | bool
-
 - name: List /etc/sysctl.d/*.conf files
-  find:
+  ansible.builtin.find:
     paths:
     - /etc/sysctl.d/
     - /run/sysctl.d/
@@ -6072,7 +5508,7 @@
   - sysctl_kernel_core_uses_pid
 
 - name: Comment out any occurrences of kernel.core_uses_pid from config files
-  replace:
+  ansible.builtin.replace:
     path: '{{ item.path }}'
     regexp: ^[\s]*kernel.core_uses_pid
     replace: '#kernel.core_uses_pid'
@@ -6095,7 +5531,7 @@
   - sysctl_kernel_core_uses_pid
 
 - name: Ensure sysctl kernel.core_uses_pid is set to 0
-  sysctl:
+  ansible.posix.sysctl:
     name: kernel.core_uses_pid
     value: '0'
     sysctl_file: /etc/sysctl.conf
@@ -6118,32 +5554,8 @@
   - reboot_required
   - sysctl_kernel_core_uses_pid
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-83952-2
-  - DISA-STIG-RHEL-09-213010
-  - NIST-800-171-3.1.5
-  - NIST-800-53-SI-11(a)
-  - NIST-800-53-SI-11(b)
-  - disable_strategy
-  - low_complexity
-  - low_severity
-  - medium_disruption
-  - reboot_required
-  - sysctl_kernel_dmesg_restrict
-  when:
-  - DISA_STIG_RHEL_09_213010 | bool
-  - disable_strategy | bool
-  - low_complexity | bool
-  - low_severity | bool
-  - medium_disruption | bool
-  - reboot_required | bool
-  - sysctl_kernel_dmesg_restrict | bool
-
 - name: List /etc/sysctl.d/*.conf files
-  find:
+  ansible.builtin.find:
     paths:
     - /etc/sysctl.d/
     - /run/sysctl.d/
@@ -6175,7 +5587,7 @@
   - sysctl_kernel_dmesg_restrict
 
 - name: Comment out any occurrences of kernel.dmesg_restrict from config files
-  replace:
+  ansible.builtin.replace:
     path: '{{ item.path }}'
     regexp: ^[\s]*kernel.dmesg_restrict
     replace: '#kernel.dmesg_restrict'
@@ -6203,7 +5615,7 @@
   - sysctl_kernel_dmesg_restrict
 
 - name: Ensure sysctl kernel.dmesg_restrict is set to 1
-  sysctl:
+  ansible.posix.sysctl:
     name: kernel.dmesg_restrict
     value: '1'
     sysctl_file: /etc/sysctl.conf
@@ -6231,30 +5643,8 @@
   - reboot_required
   - sysctl_kernel_dmesg_restrict
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-83954-8
-  - DISA-STIG-RHEL-09-213020
-  - NIST-800-53-CM-6
-  - disable_strategy
-  - low_complexity
-  - medium_disruption
-  - medium_severity
-  - reboot_required
-  - sysctl_kernel_kexec_load_disabled
-  when:
-  - DISA_STIG_RHEL_09_213020 | bool
-  - disable_strategy | bool
-  - low_complexity | bool
-  - medium_disruption | bool
-  - medium_severity | bool
-  - reboot_required | bool
-  - sysctl_kernel_kexec_load_disabled | bool
-
 - name: List /etc/sysctl.d/*.conf files
-  find:
+  ansible.builtin.find:
     paths:
     - /etc/sysctl.d/
     - /run/sysctl.d/
@@ -6284,7 +5674,7 @@
   - sysctl_kernel_kexec_load_disabled
 
 - name: Comment out any occurrences of kernel.kexec_load_disabled from config files
-  replace:
+  ansible.builtin.replace:
     path: '{{ item.path }}'
     regexp: ^[\s]*kernel.kexec_load_disabled
     replace: '#kernel.kexec_load_disabled'
@@ -6310,7 +5700,7 @@
   - sysctl_kernel_kexec_load_disabled
 
 - name: Ensure sysctl kernel.kexec_load_disabled is set to 1
-  sysctl:
+  ansible.posix.sysctl:
     name: kernel.kexec_load_disabled
     value: '1'
     sysctl_file: /etc/sysctl.conf
@@ -6336,30 +5726,8 @@
   - reboot_required
   - sysctl_kernel_kexec_load_disabled
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-83959-7
-  - DISA-STIG-RHEL-09-213015
-  - NIST-800-53-AC-6
-  - disable_strategy
-  - low_complexity
-  - low_severity
-  - medium_disruption
-  - reboot_required
-  - sysctl_kernel_perf_event_paranoid
-  when:
-  - DISA_STIG_RHEL_09_213015 | bool
-  - disable_strategy | bool
-  - low_complexity | bool
-  - low_severity | bool
-  - medium_disruption | bool
-  - reboot_required | bool
-  - sysctl_kernel_perf_event_paranoid | bool
-
 - name: List /etc/sysctl.d/*.conf files
-  find:
+  ansible.builtin.find:
     paths:
     - /etc/sysctl.d/
     - /run/sysctl.d/
@@ -6389,7 +5757,7 @@
   - sysctl_kernel_perf_event_paranoid
 
 - name: Comment out any occurrences of kernel.perf_event_paranoid from config files
-  replace:
+  ansible.builtin.replace:
     path: '{{ item.path }}'
     regexp: ^[\s]*kernel.perf_event_paranoid
     replace: '#kernel.perf_event_paranoid'
@@ -6415,7 +5783,7 @@
   - sysctl_kernel_perf_event_paranoid
 
 - name: Ensure sysctl kernel.perf_event_paranoid is set to 2
-  sysctl:
+  ansible.posix.sysctl:
     name: kernel.perf_event_paranoid
     value: '2'
     sysctl_file: /etc/sysctl.conf
@@ -6441,29 +5809,8 @@
   - reboot_required
   - sysctl_kernel_perf_event_paranoid
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-87712-6
-  - NIST-800-53-AC-6
-  - NIST-800-53-SC-7(10)
-  - disable_strategy
-  - low_complexity
-  - medium_disruption
-  - medium_severity
-  - reboot_required
-  - sysctl_kernel_unprivileged_bpf_disabled_accept_default
-  when:
-  - disable_strategy | bool
-  - low_complexity | bool
-  - medium_disruption | bool
-  - medium_severity | bool
-  - reboot_required | bool
-  - sysctl_kernel_unprivileged_bpf_disabled_accept_default | bool
-
 - name: List /etc/sysctl.d/*.conf files
-  find:
+  ansible.builtin.find:
     paths:
     - /etc/sysctl.d/
     - /run/sysctl.d/
@@ -6492,7 +5839,7 @@
   - sysctl_kernel_unprivileged_bpf_disabled_accept_default
 
 - name: Comment out any occurrences of kernel.unprivileged_bpf_disabled from config files
-  replace:
+  ansible.builtin.replace:
     path: '{{ item.path }}'
     regexp: ^[\s]*kernel.unprivileged_bpf_disabled
     replace: '#kernel.unprivileged_bpf_disabled'
@@ -6517,7 +5864,7 @@
   - sysctl_kernel_unprivileged_bpf_disabled_accept_default
 
 - name: Ensure sysctl kernel.unprivileged_bpf_disabled is set
-  sysctl:
+  ansible.posix.sysctl:
     name: kernel.unprivileged_bpf_disabled
     value: '{{ sysctl_kernel_unprivileged_bpf_disabled_value }}'
     sysctl_file: /etc/sysctl.conf
@@ -6542,30 +5889,8 @@
   - reboot_required
   - sysctl_kernel_unprivileged_bpf_disabled_accept_default
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-83965-4
-  - DISA-STIG-RHEL-09-213080
-  - NIST-800-53-SC-7(10)
-  - disable_strategy
-  - low_complexity
-  - medium_disruption
-  - medium_severity
-  - reboot_required
-  - sysctl_kernel_yama_ptrace_scope
-  when:
-  - DISA_STIG_RHEL_09_213080 | bool
-  - disable_strategy | bool
-  - low_complexity | bool
-  - medium_disruption | bool
-  - medium_severity | bool
-  - reboot_required | bool
-  - sysctl_kernel_yama_ptrace_scope | bool
-
 - name: List /etc/sysctl.d/*.conf files
-  find:
+  ansible.builtin.find:
     paths:
     - /etc/sysctl.d/
     - /run/sysctl.d/
@@ -6595,7 +5920,7 @@
   - sysctl_kernel_yama_ptrace_scope
 
 - name: Comment out any occurrences of kernel.yama.ptrace_scope from config files
-  replace:
+  ansible.builtin.replace:
     path: '{{ item.path }}'
     regexp: ^[\s]*kernel.yama.ptrace_scope
     replace: '#kernel.yama.ptrace_scope'
@@ -6621,7 +5946,7 @@
   - sysctl_kernel_yama_ptrace_scope
 
 - name: Ensure sysctl kernel.yama.ptrace_scope is set to 1
-  sysctl:
+  ansible.posix.sysctl:
     name: kernel.yama.ptrace_scope
     value: '1'
     sysctl_file: /etc/sysctl.conf
@@ -6647,29 +5972,8 @@
   - reboot_required
   - sysctl_kernel_yama_ptrace_scope
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-83956-3
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-SC-39
-  - disable_strategy
-  - low_complexity
-  - medium_disruption
-  - medium_severity
-  - reboot_required
-  - sysctl_user_max_user_namespaces
-  when:
-  - disable_strategy | bool
-  - low_complexity | bool
-  - medium_disruption | bool
-  - medium_severity | bool
-  - reboot_required | bool
-  - sysctl_user_max_user_namespaces | bool
-
 - name: List /etc/sysctl.d/*.conf files
-  find:
+  ansible.builtin.find:
     paths:
     - /etc/sysctl.d/
     - /run/sysctl.d/
@@ -6698,7 +6002,7 @@
   - sysctl_user_max_user_namespaces
 
 - name: Comment out any occurrences of user.max_user_namespaces from config files
-  replace:
+  ansible.builtin.replace:
     path: '{{ item.path }}'
     regexp: ^[\s]*user.max_user_namespaces
     replace: '#user.max_user_namespaces'
@@ -6723,7 +6027,7 @@
   - sysctl_user_max_user_namespaces
 
 - name: Ensure sysctl user.max_user_namespaces is set to 0
-  sysctl:
+  ansible.posix.sysctl:
     name: user.max_user_namespaces
     value: '0'
     sysctl_file: /etc/sysctl.conf
@@ -6747,28 +6051,6 @@
   - medium_severity
   - reboot_required
   - sysctl_user_max_user_namespaces
-
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-83974-6
-  - DISA-STIG-RHEL-09-213100
-  - NIST-800-53-SC-7(10)
-  - disable_strategy
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - service_systemd-coredump_disabled
-  when:
-  - DISA_STIG_RHEL_09_213100 | bool
-  - disable_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - service_systemd_coredump_disabled | bool
 
 - name: Disable acquiring, saving, and processing core dumps - Collect systemd Socket Units Present in the System
   ansible.builtin.command:
@@ -6822,33 +6104,8 @@
   - no_reboot_needed
   - service_systemd-coredump_disabled
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-83972-0
-  - DISA-STIG-RHEL-09-213025
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-SC-30
-  - NIST-800-53-SC-30(2)
-  - NIST-800-53-SC-30(5)
-  - disable_strategy
-  - low_complexity
-  - medium_disruption
-  - medium_severity
-  - reboot_required
-  - sysctl_kernel_kptr_restrict
-  when:
-  - DISA_STIG_RHEL_09_213025 | bool
-  - disable_strategy | bool
-  - low_complexity | bool
-  - medium_disruption | bool
-  - medium_severity | bool
-  - reboot_required | bool
-  - sysctl_kernel_kptr_restrict | bool
-
 - name: List /etc/sysctl.d/*.conf files
-  find:
+  ansible.builtin.find:
     paths:
     - /etc/sysctl.d/
     - /run/sysctl.d/
@@ -6881,7 +6138,7 @@
   - sysctl_kernel_kptr_restrict
 
 - name: Comment out any occurrences of kernel.kptr_restrict from config files
-  replace:
+  ansible.builtin.replace:
     path: '{{ item.path }}'
     regexp: ^[\s]*kernel.kptr_restrict
     replace: '#kernel.kptr_restrict'
@@ -6910,7 +6167,7 @@
   - sysctl_kernel_kptr_restrict
 
 - name: Ensure sysctl kernel.kptr_restrict is set
-  sysctl:
+  ansible.posix.sysctl:
     name: kernel.kptr_restrict
     value: '{{ sysctl_kernel_kptr_restrict_value }}'
     sysctl_file: /etc/sysctl.conf
@@ -6939,39 +6196,10 @@
   - reboot_required
   - sysctl_kernel_kptr_restrict
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-84074-4
-  - DISA-STIG-RHEL-09-431015
-  - NIST-800-171-3.1.2
-  - NIST-800-171-3.7.2
-  - NIST-800-53-AC-3
-  - NIST-800-53-AC-3(3)(a)
-  - NIST-800-53-AU-9
-  - NIST-800-53-SC-7(21)
-  - PCI-DSSv4-1.2
-  - PCI-DSSv4-1.2.6
-  - configure_strategy
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - selinux_policytype
-  when:
-  - DISA_STIG_RHEL_09_431015 | bool
-  - configure_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - selinux_policytype | bool
-
 - name: Configure SELinux Policy
   block:
   - name: Check for duplicate values
-    lineinfile:
+    ansible.builtin.lineinfile:
       path: /etc/selinux/config
       create: true
       regexp: (?i)^SELINUXTYPE=
@@ -6980,14 +6208,14 @@
     changed_when: false
     register: dupes
   - name: Deduplicate values from /etc/selinux/config
-    lineinfile:
+    ansible.builtin.lineinfile:
       path: /etc/selinux/config
       create: true
       regexp: (?i)^SELINUXTYPE=
       state: absent
     when: dupes.found is defined and dupes.found > 1
   - name: Insert correct line to /etc/selinux/config
-    lineinfile:
+    ansible.builtin.lineinfile:
       path: /etc/selinux/config
       create: true
       regexp: (?i)^SELINUXTYPE=
@@ -7020,39 +6248,10 @@
   - no_reboot_needed
   - selinux_policytype
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-84079-3
-  - DISA-STIG-RHEL-09-431010
-  - NIST-800-171-3.1.2
-  - NIST-800-171-3.7.2
-  - NIST-800-53-AC-3
-  - NIST-800-53-AC-3(3)(a)
-  - NIST-800-53-AU-9
-  - NIST-800-53-SC-7(21)
-  - PCI-DSSv4-1.2
-  - PCI-DSSv4-1.2.6
-  - high_severity
-  - low_complexity
-  - low_disruption
-  - no_reboot_needed
-  - restrict_strategy
-  - selinux_state
-  when:
-  - DISA_STIG_RHEL_09_431010 | bool
-  - high_severity | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-  - selinux_state | bool
-
 - name: Ensure SELinux State is Enforcing
   block:
   - name: Check for duplicate values
-    lineinfile:
+    ansible.builtin.lineinfile:
       path: /etc/selinux/config
       create: true
       regexp: (?i)^SELINUX=
@@ -7061,14 +6260,14 @@
     changed_when: false
     register: dupes
   - name: Deduplicate values from /etc/selinux/config
-    lineinfile:
+    ansible.builtin.lineinfile:
       path: /etc/selinux/config
       create: true
       regexp: (?i)^SELINUX=
       state: absent
     when: dupes.found is defined and dupes.found > 1
   - name: Insert correct line to /etc/selinux/config
-    lineinfile:
+    ansible.builtin.lineinfile:
       path: /etc/selinux/config
       create: true
       regexp: (?i)^SELINUX=
@@ -7101,326 +6300,41 @@
   - restrict_strategy
   - selinux_state
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-84232-8
-  - DISA-STIG-RHEL-09-213115
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-CM-7(a)
-  - NIST-800-53-CM-7(b)
-  - disable_strategy
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - service_kdump_disabled
+- name: ' - Mark system to relabel SELinux on next boot'
+  ansible.builtin.file:
+    path: /.autorelabel
+    state: touch
   when:
-  - DISA_STIG_RHEL_09_213115 | bool
-  - disable_strategy | bool
+  - DISA_STIG_RHEL_09_431010 | bool
+  - high_severity | bool
   - low_complexity | bool
   - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - service_kdump_disabled | bool
-
-- name: Disable KDump Kernel Crash Analyzer (kdump) - Collect systemd Services Present in the System
-  ansible.builtin.command: systemctl -q list-unit-files --type service
-  register: service_exists
-  changed_when: false
-  failed_when: service_exists.rc not in [0, 1]
-  check_mode: false
-  when:
-  - DISA_STIG_RHEL_09_213115 | bool
-  - disable_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - service_kdump_disabled | bool
-  - '"kernel" in ansible_facts.packages'
-  tags:
-  - CCE-84232-8
-  - DISA-STIG-RHEL-09-213115
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-CM-7(a)
-  - NIST-800-53-CM-7(b)
-  - disable_strategy
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - service_kdump_disabled
-
-- name: Disable KDump Kernel Crash Analyzer (kdump) - Ensure kdump.service is Masked
-  ansible.builtin.systemd:
-    name: kdump.service
-    state: stopped
-    enabled: false
-    masked: true
-  when:
-  - DISA_STIG_RHEL_09_213115 | bool
-  - disable_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - service_kdump_disabled | bool
-  - '"kernel" in ansible_facts.packages'
-  - service_exists.stdout_lines is search("kdump.service", multiline=True)
-  tags:
-  - CCE-84232-8
-  - DISA-STIG-RHEL-09-213115
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-CM-7(a)
-  - NIST-800-53-CM-7(b)
-  - disable_strategy
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - service_kdump_disabled
-
-- name: Unit Socket Exists - kdump.socket
-  ansible.builtin.command: systemctl -q list-unit-files kdump.socket
-  register: socket_file_exists
-  changed_when: false
-  failed_when: socket_file_exists.rc not in [0, 1]
-  check_mode: false
-  when:
-  - DISA_STIG_RHEL_09_213115 | bool
-  - disable_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - service_kdump_disabled | bool
-  - '"kernel" in ansible_facts.packages'
-  tags:
-  - CCE-84232-8
-  - DISA-STIG-RHEL-09-213115
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-CM-7(a)
-  - NIST-800-53-CM-7(b)
-  - disable_strategy
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - service_kdump_disabled
-
-- name: Disable KDump Kernel Crash Analyzer (kdump) - Disable Socket kdump
-  ansible.builtin.systemd:
-    name: kdump.socket
-    enabled: false
-    state: stopped
-    masked: true
-  when:
-  - DISA_STIG_RHEL_09_213115 | bool
-  - disable_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - service_kdump_disabled | bool
-  - '"kernel" in ansible_facts.packages'
-  - socket_file_exists.stdout_lines is search("kdump.socket", multiline=True)
-  tags:
-  - CCE-84232-8
-  - DISA-STIG-RHEL-09-213115
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-CM-7(a)
-  - NIST-800-53-CM-7(b)
-  - disable_strategy
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - service_kdump_disabled
-
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-84224-5
-  - DISA-STIG-RHEL-09-433010
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-SI-4(22)
-  - enable_strategy
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - package_fapolicyd_installed
-  when:
-  - DISA_STIG_RHEL_09_433010 | bool
-  - enable_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - package_fapolicyd_installed | bool
-
-- name: Ensure fapolicyd is installed
-  package:
-    name: fapolicyd
-    state: present
-  when:
-  - DISA_STIG_RHEL_09_433010 | bool
-  - enable_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - package_fapolicyd_installed | bool
-  - '"kernel" in ansible_facts.packages'
-  tags:
-  - CCE-84224-5
-  - DISA-STIG-RHEL-09-433010
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-SI-4(22)
-  - enable_strategy
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - package_fapolicyd_installed
-
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-84227-8
-  - DISA-STIG-RHEL-09-433015
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-SI-4(22)
-  - enable_strategy
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - service_fapolicyd_enabled
-  when:
-  - DISA_STIG_RHEL_09_433015 | bool
-  - enable_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - service_fapolicyd_enabled | bool
-
-- name: Enable the File Access Policy Service - Enable service fapolicyd
-  block:
-  - name: Gather the package facts
-    package_facts:
-      manager: auto
-  - name: Enable the File Access Policy Service - Enable Service fapolicyd
-    ansible.builtin.systemd:
-      name: fapolicyd
-      enabled: true
-      state: started
-      masked: false
-    when:
-    - '"fapolicyd" in ansible_facts.packages'
-  when:
-  - DISA_STIG_RHEL_09_433015 | bool
-  - enable_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - service_fapolicyd_enabled | bool
-  - '"kernel" in ansible_facts.packages'
-  tags:
-  - CCE-84227-8
-  - DISA-STIG-RHEL-09-433015
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-SI-4(22)
-  - enable_strategy
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - service_fapolicyd_enabled
-
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-84215-3
-  - DISA-STIG-RHEL-09-252010
-  - PCI-DSS-Req-10.4
-  - PCI-DSSv4-10.6
-  - PCI-DSSv4-10.6.1
-  - enable_strategy
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - package_chrony_installed
-  when:
-  - DISA_STIG_RHEL_09_252010 | bool
-  - enable_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - package_chrony_installed | bool
-
-- name: Ensure chrony is installed
-  package:
-    name: chrony
-    state: present
-  when:
-  - DISA_STIG_RHEL_09_252010 | bool
-  - enable_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - package_chrony_installed | bool
-  - '"kernel" in ansible_facts.packages'
-  tags:
-  - CCE-84215-3
-  - DISA-STIG-RHEL-09-252010
-  - PCI-DSS-Req-10.4
-  - PCI-DSSv4-10.6
-  - PCI-DSSv4-10.6.1
-  - enable_strategy
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - package_chrony_installed
-
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-87543-5
-  - DISA-STIG-RHEL-09-252025
-  - NIST-800-53-AU-12(1)
-  - NIST-800-53-AU-8(1)
-  - chronyd_client_only
-  - low_complexity
-  - low_disruption
-  - low_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - DISA_STIG_RHEL_09_252025 | bool
-  - chronyd_client_only | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - low_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
+  - selinux_state | bool
+  - '"kernel" in ansible_facts.packages'
+  tags:
+  - CCE-84079-3
+  - DISA-STIG-RHEL-09-431010
+  - NIST-800-171-3.1.2
+  - NIST-800-171-3.7.2
+  - NIST-800-53-AC-3
+  - NIST-800-53-AC-3(3)(a)
+  - NIST-800-53-AU-9
+  - NIST-800-53-SC-7(21)
+  - PCI-DSSv4-1.2
+  - PCI-DSSv4-1.2.6
+  - high_severity
+  - low_complexity
+  - low_disruption
+  - no_reboot_needed
+  - restrict_strategy
+  - selinux_state
 
 - name: Disable chrony daemon from acting as server
   block:
   - name: Check for duplicate values
-    lineinfile:
+    ansible.builtin.lineinfile:
       path: /etc/chrony.conf
       create: true
       regexp: (?i)^\s*port\s+
@@ -7429,14 +6343,14 @@
     changed_when: false
     register: dupes
   - name: Deduplicate values from /etc/chrony.conf
-    lineinfile:
+    ansible.builtin.lineinfile:
       path: /etc/chrony.conf
       create: true
       regexp: (?i)^\s*port\s+
       state: absent
     when: dupes.found is defined and dupes.found > 1
   - name: Insert correct line to /etc/chrony.conf
-    lineinfile:
+    ansible.builtin.lineinfile:
       path: /etc/chrony.conf
       create: true
       regexp: (?i)^\s*port\s+
@@ -7464,117 +6378,8 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-90836-8
-  - DISA-STIG-RHEL-09-255020
-  - enable_strategy
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - package_openssh-clients_installed
-  when:
-  - DISA_STIG_RHEL_09_255020 | bool
-  - enable_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - package_openssh_clients_installed | bool
-
-- name: Ensure openssh-clients is installed
-  package:
-    name: openssh-clients
-    state: present
-  when:
-  - DISA_STIG_RHEL_09_255020 | bool
-  - enable_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - package_openssh_clients_installed | bool
-  - '"kernel" in ansible_facts.packages'
-  tags:
-  - CCE-90836-8
-  - DISA-STIG-RHEL-09-255020
-  - enable_strategy
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - package_openssh-clients_installed
-
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-90823-6
-  - DISA-STIG-RHEL-09-255010
-  - NIST-800-53-CM-6(a)
-  - enable_strategy
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - package_openssh-server_installed
-  when:
-  - DISA_STIG_RHEL_09_255010 | bool
-  - enable_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - package_openssh_server_installed | bool
-
-- name: Ensure openssh-server is installed
-  package:
-    name: openssh-server
-    state: present
-  when:
-  - DISA_STIG_RHEL_09_255010 | bool
-  - enable_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - package_openssh_server_installed | bool
-  - '"kernel" in ansible_facts.packages'
-  tags:
-  - CCE-90823-6
-  - DISA-STIG-RHEL-09-255010
-  - NIST-800-53-CM-6(a)
-  - enable_strategy
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - package_openssh-server_installed
-
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-87522-9
-  - configure_strategy
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - ssh_client_rekey_limit
-  when:
-  - configure_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - ssh_client_rekey_limit | bool
-
 - name: Ensure RekeyLimit is not configured in /etc/ssh/ssh_config
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/ssh/ssh_config
     create: false
     regexp: ^\s*RekeyLimit.*$
@@ -7597,7 +6402,7 @@
   - ssh_client_rekey_limit
 
 - name: Collect all include config files for ssh client which configure RekeyLimit
-  find:
+  ansible.builtin.find:
     paths: /etc/ssh/ssh_config.d/
     contains: ^[\s]*RekeyLimit.*$
     patterns: '*.config'
@@ -7620,7 +6425,7 @@
   - ssh_client_rekey_limit
 
 - name: Remove all occurences of RekeyLimit configuration from include config files of ssh client
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: '{{ item }}'
     regexp: ^[\s]*RekeyLimit.*$
     state: absent
@@ -7643,7 +6448,7 @@
   - ssh_client_rekey_limit
 
 - name: Ensure that rekey limit is set to {{ var_ssh_client_rekey_limit_size }} {{ var_ssh_client_rekey_limit_time }} in /etc/ssh/ssh_config.d/02-rekey-limit.conf
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/ssh/ssh_config.d/02-rekey-limit.conf
     create: true
     regexp: ^\s*RekeyLimit.*$
@@ -7666,50 +6471,20 @@
   - no_reboot_needed
   - ssh_client_rekey_limit
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-90816-0
-  - CJIS-5.5.6
-  - DISA-STIG-RHEL-09-255080
-  - NIST-800-171-3.1.12
-  - NIST-800-53-AC-17(a)
-  - NIST-800-53-AC-3
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-CM-7(a)
-  - NIST-800-53-CM-7(b)
-  - PCI-DSSv4-8.3
-  - PCI-DSSv4-8.3.1
-  - disable_host_auth
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - DISA_STIG_RHEL_09_255080 | bool
-  - disable_host_auth | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-
 - name: Disable Host-Based Authentication
   block:
   - name: Deduplicate values from /etc/ssh/sshd_config
-    lineinfile:
+    ansible.builtin.lineinfile:
       path: /etc/ssh/sshd_config
       create: false
       regexp: (?i)(?i)^\s*{{ "HostbasedAuthentication"| regex_escape }}\s+
       state: absent
   - name: Check if /etc/ssh/sshd_config.d exists
-    stat:
+    ansible.builtin.stat:
       path: /etc/ssh/sshd_config.d
     register: _etc_ssh_sshd_config_d_exists
   - name: Check if the parameter HostbasedAuthentication is present in /etc/ssh/sshd_config.d
-    find:
+    ansible.builtin.find:
       paths: /etc/ssh/sshd_config.d
       recurse: 'yes'
       follow: 'no'
@@ -7717,7 +6492,7 @@
     register: _etc_ssh_sshd_config_d_has_parameter
     when: _etc_ssh_sshd_config_d_exists.stat.isdir is defined and _etc_ssh_sshd_config_d_exists.stat.isdir
   - name: Remove parameter from files in /etc/ssh/sshd_config.d
-    lineinfile:
+    ansible.builtin.lineinfile:
       path: '{{ item.path }}'
       create: false
       regexp: (?i)(?i)^\s*{{ "HostbasedAuthentication"| regex_escape }}\s+
@@ -7725,7 +6500,7 @@
     with_items: '{{ _etc_ssh_sshd_config_d_has_parameter.files }}'
     when: _etc_ssh_sshd_config_d_has_parameter.matched
   - name: Insert correct line to /etc/ssh/sshd_config.d/01-complianceascode-reinforce-os-defaults.conf
-    lineinfile:
+    ansible.builtin.lineinfile:
       path: /etc/ssh/sshd_config.d/01-complianceascode-reinforce-os-defaults.conf
       create: true
       regexp: (?i)(?i)^\s*{{ "HostbasedAuthentication"| regex_escape }}\s+
@@ -7765,6 +6540,7 @@
   ansible.builtin.file:
     path: /etc/ssh/sshd_config.d/01-complianceascode-reinforce-os-defaults.conf
     mode: '0600'
+    state: touch
   when:
   - DISA_STIG_RHEL_09_255080 | bool
   - disable_host_auth | bool
@@ -7793,51 +6569,20 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-90799-8
-  - CJIS-5.5.6
-  - DISA-STIG-RHEL-09-255040
-  - NIST-800-171-3.1.1
-  - NIST-800-171-3.1.5
-  - NIST-800-53-AC-17(a)
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-CM-7(a)
-  - NIST-800-53-CM-7(b)
-  - PCI-DSS-Req-2.2.4
-  - PCI-DSSv4-2.2
-  - PCI-DSSv4-2.2.6
-  - high_severity
-  - low_complexity
-  - low_disruption
-  - no_reboot_needed
-  - restrict_strategy
-  - sshd_disable_empty_passwords
-  when:
-  - DISA_STIG_RHEL_09_255040 | bool
-  - high_severity | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-  - sshd_disable_empty_passwords | bool
-
 - name: Disable SSH Access via Empty Passwords
   block:
   - name: Deduplicate values from /etc/ssh/sshd_config
-    lineinfile:
+    ansible.builtin.lineinfile:
       path: /etc/ssh/sshd_config
       create: false
       regexp: (?i)(?i)^\s*{{ "PermitEmptyPasswords"| regex_escape }}\s+
       state: absent
   - name: Check if /etc/ssh/sshd_config.d exists
-    stat:
+    ansible.builtin.stat:
       path: /etc/ssh/sshd_config.d
     register: _etc_ssh_sshd_config_d_exists
   - name: Check if the parameter PermitEmptyPasswords is present in /etc/ssh/sshd_config.d
-    find:
+    ansible.builtin.find:
       paths: /etc/ssh/sshd_config.d
       recurse: 'yes'
       follow: 'no'
@@ -7845,7 +6590,7 @@
     register: _etc_ssh_sshd_config_d_has_parameter
     when: _etc_ssh_sshd_config_d_exists.stat.isdir is defined and _etc_ssh_sshd_config_d_exists.stat.isdir
   - name: Remove parameter from files in /etc/ssh/sshd_config.d
-    lineinfile:
+    ansible.builtin.lineinfile:
       path: '{{ item.path }}'
       create: false
       regexp: (?i)(?i)^\s*{{ "PermitEmptyPasswords"| regex_escape }}\s+
@@ -7853,7 +6598,7 @@
     with_items: '{{ _etc_ssh_sshd_config_d_has_parameter.files }}'
     when: _etc_ssh_sshd_config_d_has_parameter.matched
   - name: Insert correct line to /etc/ssh/sshd_config.d/01-complianceascode-reinforce-os-defaults.conf
-    lineinfile:
+    ansible.builtin.lineinfile:
       path: /etc/ssh/sshd_config.d/01-complianceascode-reinforce-os-defaults.conf
       create: true
       regexp: (?i)(?i)^\s*{{ "PermitEmptyPasswords"| regex_escape }}\s+
@@ -7894,6 +6639,7 @@
   ansible.builtin.file:
     path: /etc/ssh/sshd_config.d/01-complianceascode-reinforce-os-defaults.conf
     mode: '0600'
+    state: touch
   when:
   - DISA_STIG_RHEL_09_255040 | bool
   - high_severity | bool
@@ -7923,46 +6669,20 @@
   - restrict_strategy
   - sshd_disable_empty_passwords
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-90808-7
-  - DISA-STIG-RHEL-09-255135
-  - NIST-800-171-3.1.12
-  - NIST-800-53-AC-17(a)
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-CM-7(a)
-  - NIST-800-53-CM-7(b)
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  - sshd_disable_gssapi_auth
-  when:
-  - DISA_STIG_RHEL_09_255135 | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-  - sshd_disable_gssapi_auth | bool
-
 - name: Disable GSSAPI Authentication
   block:
   - name: Deduplicate values from /etc/ssh/sshd_config
-    lineinfile:
+    ansible.builtin.lineinfile:
       path: /etc/ssh/sshd_config
       create: false
       regexp: (?i)(?i)^\s*{{ "GSSAPIAuthentication"| regex_escape }}\s+
       state: absent
   - name: Check if /etc/ssh/sshd_config.d exists
-    stat:
+    ansible.builtin.stat:
       path: /etc/ssh/sshd_config.d
     register: _etc_ssh_sshd_config_d_exists
   - name: Check if the parameter GSSAPIAuthentication is present in /etc/ssh/sshd_config.d
-    find:
+    ansible.builtin.find:
       paths: /etc/ssh/sshd_config.d
       recurse: 'yes'
       follow: 'no'
@@ -7970,7 +6690,7 @@
     register: _etc_ssh_sshd_config_d_has_parameter
     when: _etc_ssh_sshd_config_d_exists.stat.isdir is defined and _etc_ssh_sshd_config_d_exists.stat.isdir
   - name: Remove parameter from files in /etc/ssh/sshd_config.d
-    lineinfile:
+    ansible.builtin.lineinfile:
       path: '{{ item.path }}'
       create: false
       regexp: (?i)(?i)^\s*{{ "GSSAPIAuthentication"| regex_escape }}\s+
@@ -7978,7 +6698,7 @@
     with_items: '{{ _etc_ssh_sshd_config_d_has_parameter.files }}'
     when: _etc_ssh_sshd_config_d_has_parameter.matched
   - name: Insert correct line to /etc/ssh/sshd_config.d/01-complianceascode-reinforce-os-defaults.conf
-    lineinfile:
+    ansible.builtin.lineinfile:
       path: /etc/ssh/sshd_config.d/01-complianceascode-reinforce-os-defaults.conf
       create: true
       regexp: (?i)(?i)^\s*{{ "GSSAPIAuthentication"| regex_escape }}\s+
@@ -8014,6 +6734,7 @@
   ansible.builtin.file:
     path: /etc/ssh/sshd_config.d/01-complianceascode-reinforce-os-defaults.conf
     mode: '0600'
+    state: touch
   when:
   - DISA_STIG_RHEL_09_255135 | bool
   - low_complexity | bool
@@ -8038,46 +6759,20 @@
   - restrict_strategy
   - sshd_disable_gssapi_auth
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-90802-0
-  - DISA-STIG-RHEL-09-255140
-  - NIST-800-171-3.1.12
-  - NIST-800-53-AC-17(a)
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-CM-7(a)
-  - NIST-800-53-CM-7(b)
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  - sshd_disable_kerb_auth
-  when:
-  - DISA_STIG_RHEL_09_255140 | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-  - sshd_disable_kerb_auth | bool
-
 - name: Disable Kerberos Authentication
   block:
   - name: Deduplicate values from /etc/ssh/sshd_config
-    lineinfile:
+    ansible.builtin.lineinfile:
       path: /etc/ssh/sshd_config
       create: false
       regexp: (?i)(?i)^\s*{{ "KerberosAuthentication"| regex_escape }}\s+
       state: absent
   - name: Check if /etc/ssh/sshd_config.d exists
-    stat:
+    ansible.builtin.stat:
       path: /etc/ssh/sshd_config.d
     register: _etc_ssh_sshd_config_d_exists
   - name: Check if the parameter KerberosAuthentication is present in /etc/ssh/sshd_config.d
-    find:
+    ansible.builtin.find:
       paths: /etc/ssh/sshd_config.d
       recurse: 'yes'
       follow: 'no'
@@ -8085,7 +6780,7 @@
     register: _etc_ssh_sshd_config_d_has_parameter
     when: _etc_ssh_sshd_config_d_exists.stat.isdir is defined and _etc_ssh_sshd_config_d_exists.stat.isdir
   - name: Remove parameter from files in /etc/ssh/sshd_config.d
-    lineinfile:
+    ansible.builtin.lineinfile:
       path: '{{ item.path }}'
       create: false
       regexp: (?i)(?i)^\s*{{ "KerberosAuthentication"| regex_escape }}\s+
@@ -8093,7 +6788,7 @@
     with_items: '{{ _etc_ssh_sshd_config_d_has_parameter.files }}'
     when: _etc_ssh_sshd_config_d_has_parameter.matched
   - name: Insert correct line to /etc/ssh/sshd_config.d/01-complianceascode-reinforce-os-defaults.conf
-    lineinfile:
+    ansible.builtin.lineinfile:
       path: /etc/ssh/sshd_config.d/01-complianceascode-reinforce-os-defaults.conf
       create: true
       regexp: (?i)(?i)^\s*{{ "KerberosAuthentication"| regex_escape }}\s+
@@ -8129,6 +6824,7 @@
   ansible.builtin.file:
     path: /etc/ssh/sshd_config.d/01-complianceascode-reinforce-os-defaults.conf
     mode: '0600'
+    state: touch
   when:
   - DISA_STIG_RHEL_09_255140 | bool
   - low_complexity | bool
@@ -8153,54 +6849,20 @@
   - restrict_strategy
   - sshd_disable_kerb_auth
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-90800-4
-  - CJIS-5.5.6
-  - DISA-STIG-RHEL-09-255045
-  - NIST-800-171-3.1.1
-  - NIST-800-171-3.1.5
-  - NIST-800-53-AC-17(a)
-  - NIST-800-53-AC-6(2)
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-CM-7(a)
-  - NIST-800-53-CM-7(b)
-  - NIST-800-53-IA-2
-  - NIST-800-53-IA-2(5)
-  - PCI-DSS-Req-2.2.4
-  - PCI-DSSv4-2.2
-  - PCI-DSSv4-2.2.6
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  - sshd_disable_root_login
-  when:
-  - DISA_STIG_RHEL_09_255045 | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-  - sshd_disable_root_login | bool
-
 - name: Disable SSH Root Login
   block:
   - name: Deduplicate values from /etc/ssh/sshd_config
-    lineinfile:
+    ansible.builtin.lineinfile:
       path: /etc/ssh/sshd_config
       create: false
       regexp: (?i)(?i)^\s*{{ "PermitRootLogin"| regex_escape }}\s+
       state: absent
   - name: Check if /etc/ssh/sshd_config.d exists
-    stat:
+    ansible.builtin.stat:
       path: /etc/ssh/sshd_config.d
     register: _etc_ssh_sshd_config_d_exists
   - name: Check if the parameter PermitRootLogin is present in /etc/ssh/sshd_config.d
-    find:
+    ansible.builtin.find:
       paths: /etc/ssh/sshd_config.d
       recurse: 'yes'
       follow: 'no'
@@ -8208,7 +6870,7 @@
     register: _etc_ssh_sshd_config_d_has_parameter
     when: _etc_ssh_sshd_config_d_exists.stat.isdir is defined and _etc_ssh_sshd_config_d_exists.stat.isdir
   - name: Remove parameter from files in /etc/ssh/sshd_config.d
-    lineinfile:
+    ansible.builtin.lineinfile:
       path: '{{ item.path }}'
       create: false
       regexp: (?i)(?i)^\s*{{ "PermitRootLogin"| regex_escape }}\s+
@@ -8216,7 +6878,7 @@
     with_items: '{{ _etc_ssh_sshd_config_d_has_parameter.files }}'
     when: _etc_ssh_sshd_config_d_has_parameter.matched
   - name: Insert correct line to /etc/ssh/sshd_config.d/00-complianceascode-hardening.conf
-    lineinfile:
+    ansible.builtin.lineinfile:
       path: /etc/ssh/sshd_config.d/00-complianceascode-hardening.conf
       create: true
       regexp: (?i)(?i)^\s*{{ "PermitRootLogin"| regex_escape }}\s+
@@ -8260,6 +6922,7 @@
   ansible.builtin.file:
     path: /etc/ssh/sshd_config.d/00-complianceascode-hardening.conf
     mode: '0600'
+    state: touch
   when:
   - DISA_STIG_RHEL_09_255045 | bool
   - low_complexity | bool
@@ -8292,48 +6955,20 @@
   - restrict_strategy
   - sshd_disable_root_login
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-90807-9
-  - CJIS-5.5.6
-  - DISA-STIG-RHEL-09-255025
-  - NIST-800-171-3.1.9
-  - NIST-800-53-AC-17(a)
-  - NIST-800-53-AC-8(a)
-  - NIST-800-53-AC-8(c)
-  - NIST-800-53-CM-6(a)
-  - PCI-DSS-Req-2.2.4
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  - sshd_enable_warning_banner
-  when:
-  - DISA_STIG_RHEL_09_255025 | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-  - sshd_enable_warning_banner | bool
-
 - name: Enable SSH Warning Banner
   block:
   - name: Deduplicate values from /etc/ssh/sshd_config
-    lineinfile:
+    ansible.builtin.lineinfile:
       path: /etc/ssh/sshd_config
       create: false
       regexp: (?i)(?i)^\s*{{ "Banner"| regex_escape }}\s+
       state: absent
   - name: Check if /etc/ssh/sshd_config.d exists
-    stat:
+    ansible.builtin.stat:
       path: /etc/ssh/sshd_config.d
     register: _etc_ssh_sshd_config_d_exists
   - name: Check if the parameter Banner is present in /etc/ssh/sshd_config.d
-    find:
+    ansible.builtin.find:
       paths: /etc/ssh/sshd_config.d
       recurse: 'yes'
       follow: 'no'
@@ -8341,7 +6976,7 @@
     register: _etc_ssh_sshd_config_d_has_parameter
     when: _etc_ssh_sshd_config_d_exists.stat.isdir is defined and _etc_ssh_sshd_config_d_exists.stat.isdir
   - name: Remove parameter from files in /etc/ssh/sshd_config.d
-    lineinfile:
+    ansible.builtin.lineinfile:
       path: '{{ item.path }}'
       create: false
       regexp: (?i)(?i)^\s*{{ "Banner"| regex_escape }}\s+
@@ -8349,7 +6984,7 @@
     with_items: '{{ _etc_ssh_sshd_config_d_has_parameter.files }}'
     when: _etc_ssh_sshd_config_d_has_parameter.matched
   - name: Insert correct line to /etc/ssh/sshd_config.d/00-complianceascode-hardening.conf
-    lineinfile:
+    ansible.builtin.lineinfile:
       path: /etc/ssh/sshd_config.d/00-complianceascode-hardening.conf
       create: true
       regexp: (?i)(?i)^\s*{{ "Banner"| regex_escape }}\s+
@@ -8387,6 +7022,7 @@
   ansible.builtin.file:
     path: /etc/ssh/sshd_config.d/00-complianceascode-hardening.conf
     mode: '0600'
+    state: touch
   when:
   - DISA_STIG_RHEL_09_255025 | bool
   - low_complexity | bool
@@ -8413,41 +7049,20 @@
   - restrict_strategy
   - sshd_enable_warning_banner
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-90815-2
-  - DISA-STIG-RHEL-09-255090
-  - configure_strategy
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - sshd_rekey_limit
-  when:
-  - DISA_STIG_RHEL_09_255090 | bool
-  - configure_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - sshd_rekey_limit | bool
-
 - name: Force frequent session key renegotiation
   block:
   - name: Deduplicate values from /etc/ssh/sshd_config
-    lineinfile:
+    ansible.builtin.lineinfile:
       path: /etc/ssh/sshd_config
       create: false
       regexp: (?i)(?i)^\s*{{ "RekeyLimit"| regex_escape }}\s+
       state: absent
   - name: Check if /etc/ssh/sshd_config.d exists
-    stat:
+    ansible.builtin.stat:
       path: /etc/ssh/sshd_config.d
     register: _etc_ssh_sshd_config_d_exists
   - name: Check if the parameter RekeyLimit is present in /etc/ssh/sshd_config.d
-    find:
+    ansible.builtin.find:
       paths: /etc/ssh/sshd_config.d
       recurse: 'yes'
       follow: 'no'
@@ -8455,7 +7070,7 @@
     register: _etc_ssh_sshd_config_d_has_parameter
     when: _etc_ssh_sshd_config_d_exists.stat.isdir is defined and _etc_ssh_sshd_config_d_exists.stat.isdir
   - name: Remove parameter from files in /etc/ssh/sshd_config.d
-    lineinfile:
+    ansible.builtin.lineinfile:
       path: '{{ item.path }}'
       create: false
       regexp: (?i)(?i)^\s*{{ "RekeyLimit"| regex_escape }}\s+
@@ -8463,7 +7078,7 @@
     with_items: '{{ _etc_ssh_sshd_config_d_has_parameter.files }}'
     when: _etc_ssh_sshd_config_d_has_parameter.matched
   - name: Insert correct line to /etc/ssh/sshd_config.d/00-complianceascode-hardening.conf
-    lineinfile:
+    ansible.builtin.lineinfile:
       path: /etc/ssh/sshd_config.d/00-complianceascode-hardening.conf
       create: true
       regexp: (?i)(?i)^\s*{{ "RekeyLimit"| regex_escape }}\s+
@@ -8494,6 +7109,7 @@
   ansible.builtin.file:
     path: /etc/ssh/sshd_config.d/00-complianceascode-hardening.conf
     mode: '0600'
+    state: touch
   when:
   - DISA_STIG_RHEL_09_255090 | bool
   - configure_strategy | bool
@@ -8513,143 +7129,10 @@
   - no_reboot_needed
   - sshd_rekey_limit
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-84203-9
-  - DISA-STIG-RHEL-09-291015
-  - NIST-800-53-CM-8(3)
-  - NIST-800-53-IA-3
-  - enable_strategy
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - package_usbguard_installed
-  when:
-  - DISA_STIG_RHEL_09_291015 | bool
-  - enable_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - package_usbguard_installed | bool
-
-- name: Ensure usbguard is installed
-  package:
-    name: usbguard
-    state: present
-  when:
-  - DISA_STIG_RHEL_09_291015 | bool
-  - enable_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - package_usbguard_installed | bool
-  - ( ansible_architecture != "s390x" and "kernel" in ansible_facts.packages )
-  tags:
-  - CCE-84203-9
-  - DISA-STIG-RHEL-09-291015
-  - NIST-800-53-CM-8(3)
-  - NIST-800-53-IA-3
-  - enable_strategy
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - package_usbguard_installed
-
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-84205-4
-  - DISA-STIG-RHEL-09-291015
-  - DISA-STIG-RHEL-09-291020
-  - NIST-800-53-CM-8(3)(a)
-  - NIST-800-53-IA-3
-  - enable_strategy
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - service_usbguard_enabled
-  when:
-  - DISA_STIG_RHEL_09_291015 | bool
-  - DISA_STIG_RHEL_09_291020 | bool
-  - enable_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - service_usbguard_enabled | bool
-
-- name: Enable the USBGuard Service - Enable service usbguard
-  block:
-  - name: Gather the package facts
-    package_facts:
-      manager: auto
-  - name: Enable the USBGuard Service - Enable Service usbguard
-    ansible.builtin.systemd:
-      name: usbguard
-      enabled: true
-      state: started
-      masked: false
-    when:
-    - '"usbguard" in ansible_facts.packages'
-  when:
-  - DISA_STIG_RHEL_09_291015 | bool
-  - DISA_STIG_RHEL_09_291020 | bool
-  - enable_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - service_usbguard_enabled | bool
-  - ( ansible_architecture != "s390x" and "kernel" in ansible_facts.packages )
-  tags:
-  - CCE-84205-4
-  - DISA-STIG-RHEL-09-291015
-  - DISA-STIG-RHEL-09-291020
-  - NIST-800-53-CM-8(3)(a)
-  - NIST-800-53-IA-3
-  - enable_strategy
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - service_usbguard_enabled
-
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-84206-2
-  - DISA-STIG-RHEL-09-291025
-  - NIST-800-53-AU-2
-  - NIST-800-53-CM-8(3)
-  - NIST-800-53-IA-3
-  - configure_strategy
-  - configure_usbguard_auditbackend
-  - low_complexity
-  - low_disruption
-  - low_severity
-  - no_reboot_needed
-  when:
-  - DISA_STIG_RHEL_09_291025 | bool
-  - configure_strategy | bool
-  - configure_usbguard_auditbackend | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - low_severity | bool
-  - no_reboot_needed | bool
-
 - name: Log USBGuard daemon audit events using Linux Audit
   block:
   - name: Check for duplicate values
-    lineinfile:
+    ansible.builtin.lineinfile:
       path: /etc/usbguard/usbguard-daemon.conf
       create: true
       regexp: (?i)^[ \\t]*AuditBackend=
@@ -8658,14 +7141,14 @@
     changed_when: false
     register: dupes
   - name: Deduplicate values from /etc/usbguard/usbguard-daemon.conf
-    lineinfile:
+    ansible.builtin.lineinfile:
       path: /etc/usbguard/usbguard-daemon.conf
       create: true
       regexp: (?i)^[ \\t]*AuditBackend=
       state: absent
     when: dupes.found is defined and dupes.found > 1
   - name: Insert correct line to /etc/usbguard/usbguard-daemon.conf
-    lineinfile:
+    ansible.builtin.lineinfile:
       path: /etc/usbguard/usbguard-daemon.conf
       create: true
       regexp: (?i)^[ \\t]*AuditBackend=
@@ -8694,29 +7177,8 @@
   - low_severity
   - no_reboot_needed
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-84210-4
-  - NIST-800-53-CM-8(3)
-  - NIST-800-53-IA-3
-  - configure_strategy
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - usbguard_allow_hid_and_hub
-  when:
-  - configure_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - usbguard_allow_hid_and_hub | bool
-
 - name: Allow HID devices and hubs
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/usbguard/rules.conf
     create: true
     regexp: ''
@@ -8741,189 +7203,8 @@
   - no_reboot_needed
   - usbguard_allow_hid_and_hub
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-83649-4
-  - DISA-STIG-RHEL-09-653010
-  - NIST-800-53-AC-7(a)
-  - NIST-800-53-AU-12(2)
-  - NIST-800-53-AU-14
-  - NIST-800-53-AU-2(a)
-  - NIST-800-53-AU-7(1)
-  - NIST-800-53-AU-7(2)
-  - NIST-800-53-CM-6(a)
-  - PCI-DSS-Req-10.1
-  - PCI-DSSv4-10.2
-  - PCI-DSSv4-10.2.1
-  - enable_strategy
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - package_audit_installed
-  when:
-  - DISA_STIG_RHEL_09_653010 | bool
-  - enable_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - package_audit_installed | bool
-
-- name: Ensure audit is installed
-  package:
-    name: audit
-    state: present
-  when:
-  - DISA_STIG_RHEL_09_653010 | bool
-  - enable_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - package_audit_installed | bool
-  - '"kernel" in ansible_facts.packages'
-  tags:
-  - CCE-83649-4
-  - DISA-STIG-RHEL-09-653010
-  - NIST-800-53-AC-7(a)
-  - NIST-800-53-AU-12(2)
-  - NIST-800-53-AU-14
-  - NIST-800-53-AU-2(a)
-  - NIST-800-53-AU-7(1)
-  - NIST-800-53-AU-7(2)
-  - NIST-800-53-CM-6(a)
-  - PCI-DSS-Req-10.1
-  - PCI-DSSv4-10.2
-  - PCI-DSSv4-10.2.1
-  - enable_strategy
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - package_audit_installed
-
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-90829-3
-  - CJIS-5.4.1.1
-  - DISA-STIG-RHEL-09-653015
-  - NIST-800-171-3.3.1
-  - NIST-800-171-3.3.2
-  - NIST-800-171-3.3.6
-  - NIST-800-53-AC-2(g)
-  - NIST-800-53-AC-6(9)
-  - NIST-800-53-AU-10
-  - NIST-800-53-AU-12(c)
-  - NIST-800-53-AU-14(1)
-  - NIST-800-53-AU-2(d)
-  - NIST-800-53-AU-3
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-SI-4(23)
-  - PCI-DSS-Req-10.1
-  - PCI-DSSv4-10.2
-  - PCI-DSSv4-10.2.1
-  - enable_strategy
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - service_auditd_enabled
-  when:
-  - DISA_STIG_RHEL_09_653015 | bool
-  - enable_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - service_auditd_enabled | bool
-
-- name: Enable auditd Service - Enable service auditd
-  block:
-  - name: Gather the package facts
-    package_facts:
-      manager: auto
-  - name: Enable auditd Service - Enable Service auditd
-    ansible.builtin.systemd:
-      name: auditd
-      enabled: true
-      state: started
-      masked: false
-    when:
-    - '"audit" in ansible_facts.packages'
-  when:
-  - DISA_STIG_RHEL_09_653015 | bool
-  - enable_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - service_auditd_enabled | bool
-  - '"kernel" in ansible_facts.packages'
-  - '"audit" in ansible_facts.packages'
-  tags:
-  - CCE-90829-3
-  - CJIS-5.4.1.1
-  - DISA-STIG-RHEL-09-653015
-  - NIST-800-171-3.3.1
-  - NIST-800-171-3.3.2
-  - NIST-800-171-3.3.6
-  - NIST-800-53-AC-2(g)
-  - NIST-800-53-AC-6(9)
-  - NIST-800-53-AU-10
-  - NIST-800-53-AU-12(c)
-  - NIST-800-53-AU-14(1)
-  - NIST-800-53-AU-2(d)
-  - NIST-800-53-AU-3
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-SI-4(23)
-  - PCI-DSS-Req-10.1
-  - PCI-DSSv4-10.2
-  - PCI-DSSv4-10.2.1
-  - enable_strategy
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - service_auditd_enabled
-
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-83651-0
-  - CJIS-5.4.1.1
-  - DISA-STIG-RHEL-09-212055
-  - NIST-800-171-3.3.1
-  - NIST-800-53-AC-17(1)
-  - NIST-800-53-AU-10
-  - NIST-800-53-AU-14(1)
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-IR-5(1)
-  - PCI-DSS-Req-10.3
-  - PCI-DSSv4-10.7
-  - PCI-DSSv4-10.7.2
-  - grub2_audit_argument
-  - low_disruption
-  - low_severity
-  - medium_complexity
-  - reboot_required
-  - restrict_strategy
-  when:
-  - DISA_STIG_RHEL_09_212055 | bool
-  - grub2_audit_argument | bool
-  - low_disruption | bool
-  - low_severity | bool
-  - medium_complexity | bool
-  - reboot_required | bool
-  - restrict_strategy | bool
-
 - name: Update grub defaults and the bootloader menu
-  command: /sbin/grubby --update-kernel=ALL --args="audit=1"
+  ansible.builtin.command: /sbin/grubby --update-kernel=ALL --args="audit=1"
   when:
   - DISA_STIG_RHEL_09_212055 | bool
   - grub2_audit_argument | bool
@@ -8954,32 +7235,8 @@
   - reboot_required
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-83652-8
-  - DISA-STIG-RHEL-09-653120
-  - NIST-800-53-CM-6(a)
-  - PCI-DSSv4-10.7
-  - PCI-DSSv4-10.7.2
-  - grub2_audit_backlog_limit_argument
-  - low_disruption
-  - low_severity
-  - medium_complexity
-  - reboot_required
-  - restrict_strategy
-  when:
-  - DISA_STIG_RHEL_09_653120 | bool
-  - grub2_audit_backlog_limit_argument | bool
-  - low_disruption | bool
-  - low_severity | bool
-  - medium_complexity | bool
-  - reboot_required | bool
-  - restrict_strategy | bool
-
 - name: Update grub defaults and the bootloader menu
-  command: /sbin/grubby --update-kernel=ALL --args="audit_backlog_limit=8192"
+  ansible.builtin.command: /sbin/grubby --update-kernel=ALL --args="audit_backlog_limit=8192"
   when:
   - DISA_STIG_RHEL_09_653120 | bool
   - grub2_audit_backlog_limit_argument | bool
@@ -9002,31 +7259,9 @@
   - medium_complexity
   - reboot_required
   - restrict_strategy
-
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-83685-8
-  - NIST-800-171-3.3.1
-  - NIST-800-53-AU-11
-  - NIST-800-53-CM-6(a)
-  - auditd_data_retention_flush
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - auditd_data_retention_flush | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
 
 - name: Configure auditd Flush Priority
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: /etc/audit/auditd.conf
     regexp: ^\s*flush\s*=\s*.*$
     line: flush = {{ var_auditd_flush }}
@@ -9053,32 +7288,10 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-83704-7
-  - DISA-STIG-RHEL-09-653095
-  - NIST-800-53-CM-6
-  - auditd_freq
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - DISA_STIG_RHEL_09_653095 | bool
-  - auditd_freq | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-
 - name: Set number of records to cause an explicit flush to audit logs
   block:
   - name: Check for duplicate values
-    lineinfile:
+    ansible.builtin.lineinfile:
       path: /etc/audit/auditd.conf
       create: true
       regexp: (?i)(?i)^\s*freq\s*=\s*
@@ -9087,18 +7300,18 @@
     changed_when: false
     register: dupes
   - name: Deduplicate values from /etc/audit/auditd.conf
-    lineinfile:
+    ansible.builtin.lineinfile:
       path: /etc/audit/auditd.conf
       create: true
       regexp: (?i)(?i)^\s*freq\s*=\s*
       state: absent
     when: dupes.found is defined and dupes.found > 1
   - name: Insert correct line to /etc/audit/auditd.conf
-    lineinfile:
+    ansible.builtin.lineinfile:
       path: /etc/audit/auditd.conf
       create: true
       regexp: (?i)(?i)^\s*freq\s*=\s*
-      line: freq = 50
+      line: freq = {{ var_auditd_freq }}
       state: present
   when:
   - DISA_STIG_RHEL_09_653095 | bool
@@ -9121,33 +7334,10 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-83696-5
-  - DISA-STIG-RHEL-09-653100
-  - NIST-800-53-AU-3
-  - NIST-800-53-CM-6
-  - auditd_log_format
-  - low_complexity
-  - low_disruption
-  - low_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - DISA_STIG_RHEL_09_653100 | bool
-  - auditd_log_format | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - low_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-
 - name: Resolve information before writing to audit logs
   block:
   - name: Check for duplicate values
-    lineinfile:
+    ansible.builtin.lineinfile:
       path: /etc/audit/auditd.conf
       create: true
       regexp: (?i)(?i)^\s*log_format\s*=\s*
@@ -9156,14 +7346,14 @@
     changed_when: false
     register: dupes
   - name: Deduplicate values from /etc/audit/auditd.conf
-    lineinfile:
+    ansible.builtin.lineinfile:
       path: /etc/audit/auditd.conf
       create: true
       regexp: (?i)(?i)^\s*log_format\s*=\s*
       state: absent
     when: dupes.found is defined and dupes.found > 1
   - name: Insert correct line to /etc/audit/auditd.conf
-    lineinfile:
+    ansible.builtin.lineinfile:
       path: /etc/audit/auditd.conf
       create: true
       regexp: (?i)(?i)^\s*log_format\s*=\s*
@@ -9190,31 +7380,6 @@
   - low_severity
   - no_reboot_needed
   - restrict_strategy
-
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-83686-6
-  - DISA-STIG-RHEL-09-653060
-  - NIST-800-53-AU-3
-  - NIST-800-53-CM-6
-  - PCI-DSSv4-10.2
-  - PCI-DSSv4-10.2.2
-  - auditd_name_format
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - DISA_STIG_RHEL_09_653060 | bool
-  - auditd_name_format | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
 
 - name: Set type of computer node name logging in audit logs - Define Value to Be Used in the Remediation
   ansible.builtin.set_fact: auditd_name_format_split="{{ var_auditd_name_format.split('|')[0] }}"
@@ -9245,7 +7410,7 @@
 - name: Set type of computer node name logging in audit logs
   block:
   - name: Check for duplicate values
-    lineinfile:
+    ansible.builtin.lineinfile:
       path: /etc/audit/auditd.conf
       create: true
       regexp: (?i)(?i)^\s*name_format\s*=\s*
@@ -9254,14 +7419,14 @@
     changed_when: false
     register: dupes
   - name: Deduplicate values from /etc/audit/auditd.conf
-    lineinfile:
+    ansible.builtin.lineinfile:
       path: /etc/audit/auditd.conf
       create: true
       regexp: (?i)(?i)^\s*name_format\s*=\s*
       state: absent
     when: dupes.found is defined and dupes.found > 1
   - name: Insert correct line to /etc/audit/auditd.conf
-    lineinfile:
+    ansible.builtin.lineinfile:
       path: /etc/audit/auditd.conf
       create: true
       regexp: (?i)(?i)^\s*name_format\s*=\s*
@@ -9291,28 +7456,8 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-83672-6
-  - NIST-800-53-AU-2(a)
-  - audit_access_failed
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - audit_access_failed | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-3-access-failed.rules according to policy
-  copy:
+  ansible.builtin.copy:
     dest: /etc/audit/rules.d/30-ospp-v42-3-access-failed.rules
     content: '## Unsuccessful file access (any other opens) This has to go last.
 
@@ -9351,6 +7496,7 @@
   ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-3-access-failed.rules
     mode: g-rwx,o-rwx
+    state: touch
   when:
   - audit_access_failed | bool
   - low_complexity | bool
@@ -9370,28 +7516,8 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-85922-3
-  - NIST-800-53-AU-2(a)
-  - audit_access_failed_aarch64
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - audit_access_failed_aarch64 | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-3-access-failed.rules according to policy
-  copy:
+  ansible.builtin.copy:
     dest: /etc/audit/rules.d/30-ospp-v42-3-access-failed.rules
     content: '## Unsuccessful file access (any other opens) This has to go last.
 
@@ -9429,6 +7555,7 @@
   ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-3-access-failed.rules
     mode: g-rwx,o-rwx
+    state: touch
   when:
   - audit_access_failed_aarch64 | bool
   - low_complexity | bool
@@ -9448,28 +7575,8 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-86001-5
-  - NIST-800-53-AU-2(a)
-  - audit_access_failed_ppc64le
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - audit_access_failed_ppc64le | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-3-access-failed.rules according to policy
-  copy:
+  ansible.builtin.copy:
     dest: /etc/audit/rules.d/30-ospp-v42-3-access-failed.rules
     content: '## Unsuccessful file access (any other opens) This has to go last.
 
@@ -9503,6 +7610,7 @@
   ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-3-access-failed.rules
     mode: g-rwx,o-rwx
+    state: touch
   when:
   - audit_access_failed_ppc64le | bool
   - low_complexity | bool
@@ -9522,28 +7630,8 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-83653-6
-  - NIST-800-53-AU-2(a)
-  - audit_access_success
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - audit_access_success | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-3-access-success.rules according to policy
-  copy:
+  ansible.builtin.copy:
     dest: /etc/audit/rules.d/30-ospp-v42-3-access-success.rules
     content: '## Successful file access (any other opens) This has to go last.
 
@@ -9578,6 +7666,7 @@
   ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-3-access-success.rules
     mode: g-rwx,o-rwx
+    state: touch
   when:
   - audit_access_success | bool
   - low_complexity | bool
@@ -9597,28 +7686,8 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-85924-9
-  - NIST-800-53-AU-2(a)
-  - audit_access_success_aarch64
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - audit_access_success_aarch64 | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-3-access-success.rules according to policy
-  copy:
+  ansible.builtin.copy:
     dest: /etc/audit/rules.d/30-ospp-v42-3-access-success.rules
     content: '## Successful file access (any other opens) This has to go last.
 
@@ -9653,6 +7722,7 @@
   ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-3-access-success.rules
     mode: g-rwx,o-rwx
+    state: touch
   when:
   - audit_access_success_aarch64 | bool
   - low_complexity | bool
@@ -9672,28 +7742,8 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-85999-1
-  - NIST-800-53-AU-2(a)
-  - audit_access_success_ppc64le
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - audit_access_success_ppc64le | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-3-access-success.rules according to policy
-  copy:
+  ansible.builtin.copy:
     dest: /etc/audit/rules.d/30-ospp-v42-3-access-success.rules
     content: '## Successful file access (any other opens) This has to go last.
 
@@ -9726,6 +7776,7 @@
   ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-3-access-success.rules
     mode: g-rwx,o-rwx
+    state: touch
   when:
   - audit_access_success_ppc64le | bool
   - low_complexity | bool
@@ -9745,28 +7796,8 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-83670-0
-  - NIST-800-53-AU-2(a)
-  - audit_basic_configuration
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - audit_basic_configuration | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-
 - name: Put contents into /etc/audit/rules.d/10-base-config.rules according to policy
-  copy:
+  ansible.builtin.copy:
     dest: /etc/audit/rules.d/10-base-config.rules
     content: '## First rule - delete all
 
@@ -9814,6 +7845,7 @@
   ansible.builtin.file:
     path: /etc/audit/rules.d/10-base-config.rules
     mode: g-rwx,o-rwx
+    state: touch
   when:
   - audit_basic_configuration | bool
   - low_complexity | bool
@@ -9832,28 +7864,8 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-83669-2
-  - NIST-800-53-AU-2(a)
-  - audit_create_failed
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - audit_create_failed | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-1-create-failed.rules according to policy
-  copy:
+  ansible.builtin.copy:
     dest: /etc/audit/rules.d/30-ospp-v42-1-create-failed.rules
     content: '## Unsuccessful file creation (open with O_CREAT)
 
@@ -9906,6 +7918,7 @@
   ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-1-create-failed.rules
     mode: g-rwx,o-rwx
+    state: touch
   when:
   - audit_create_failed | bool
   - low_complexity | bool
@@ -9925,28 +7938,8 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-85898-5
-  - NIST-800-53-AU-2(a)
-  - audit_create_failed_aarch64
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - audit_create_failed_aarch64 | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-1-create-failed.rules according to policy
-  copy:
+  ansible.builtin.copy:
     dest: /etc/audit/rules.d/30-ospp-v42-1-create-failed.rules
     content: '## Unsuccessful file creation (open with O_CREAT)
 
@@ -9991,6 +7984,7 @@
   ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-1-create-failed.rules
     mode: g-rwx,o-rwx
+    state: touch
   when:
   - audit_create_failed_aarch64 | bool
   - low_complexity | bool
@@ -10010,28 +8004,8 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-85997-5
-  - NIST-800-53-AU-2(a)
-  - audit_create_failed_ppc64le
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - audit_create_failed_ppc64le | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-1-create-failed.rules according to policy
-  copy:
+  ansible.builtin.copy:
     dest: /etc/audit/rules.d/30-ospp-v42-1-create-failed.rules
     content: '## Unsuccessful file creation (open with O_CREAT)
 
@@ -10072,6 +8046,7 @@
   ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-1-create-failed.rules
     mode: g-rwx,o-rwx
+    state: touch
   when:
   - audit_create_failed_ppc64le | bool
   - low_complexity | bool
@@ -10091,28 +8066,8 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-83668-4
-  - NIST-800-53-AU-2(a)
-  - audit_create_success
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - audit_create_success | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-1-create-success.rules according to policy
-  copy:
+  ansible.builtin.copy:
     dest: /etc/audit/rules.d/30-ospp-v42-1-create-success.rules
     content: '## Successful file creation (open with O_CREAT)
 
@@ -10153,6 +8108,7 @@
   ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-1-create-success.rules
     mode: g-rwx,o-rwx
+    state: touch
   when:
   - audit_create_success | bool
   - low_complexity | bool
@@ -10172,28 +8128,8 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-85905-8
-  - NIST-800-53-AU-2(a)
-  - audit_create_success_aarch64
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - audit_create_success_aarch64 | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-1-create-success.rules according to policy
-  copy:
+  ansible.builtin.copy:
     dest: /etc/audit/rules.d/30-ospp-v42-1-create-success.rules
     content: '## Successful file creation (open with O_CREAT)
 
@@ -10230,6 +8166,7 @@
   ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-1-create-success.rules
     mode: g-rwx,o-rwx
+    state: touch
   when:
   - audit_create_success_aarch64 | bool
   - low_complexity | bool
@@ -10249,28 +8186,8 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-85985-0
-  - NIST-800-53-AU-2(a)
-  - audit_create_success_ppc64le
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - audit_create_success_ppc64le | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-1-create-success.rules according to policy
-  copy:
+  ansible.builtin.copy:
     dest: /etc/audit/rules.d/30-ospp-v42-1-create-success.rules
     content: '## Successful file creation (open with O_CREAT)
 
@@ -10305,6 +8222,7 @@
   ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-1-create-success.rules
     mode: g-rwx,o-rwx
+    state: touch
   when:
   - audit_create_success_ppc64le | bool
   - low_complexity | bool
@@ -10324,28 +8242,8 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-83667-6
-  - NIST-800-53-AU-2(a)
-  - audit_delete_failed
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - audit_delete_failed | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-4-delete-failed.rules according to policy
-  copy:
+  ansible.builtin.copy:
     dest: /etc/audit/rules.d/30-ospp-v42-4-delete-failed.rules
     content: '## Unsuccessful file delete
 
@@ -10382,6 +8280,7 @@
   ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-4-delete-failed.rules
     mode: g-rwx,o-rwx
+    state: touch
   when:
   - audit_delete_failed | bool
   - low_complexity | bool
@@ -10401,28 +8300,8 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-85937-1
-  - NIST-800-53-AU-2(a)
-  - audit_delete_failed_aarch64
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - audit_delete_failed_aarch64 | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-4-delete-failed.rules according to policy
-  copy:
+  ansible.builtin.copy:
     dest: /etc/audit/rules.d/30-ospp-v42-4-delete-failed.rules
     content: '## Unsuccessful file delete
 
@@ -10459,6 +8338,7 @@
   ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-4-delete-failed.rules
     mode: g-rwx,o-rwx
+    state: touch
   when:
   - audit_delete_failed_aarch64 | bool
   - low_complexity | bool
@@ -10478,28 +8358,8 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-90787-3
-  - NIST-800-53-AU-2(a)
-  - audit_delete_failed_ppc64le
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - audit_delete_failed_ppc64le | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-4-delete-failed.rules according to policy
-  copy:
+  ansible.builtin.copy:
     dest: /etc/audit/rules.d/30-ospp-v42-4-delete-failed.rules
     content: '## Unsuccessful file delete
 
@@ -10532,6 +8392,7 @@
   ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-4-delete-failed.rules
     mode: g-rwx,o-rwx
+    state: touch
   when:
   - audit_delete_failed_ppc64le | bool
   - low_complexity | bool
@@ -10551,28 +8412,8 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-83680-9
-  - NIST-800-53-AU-2(a)
-  - audit_delete_success
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - audit_delete_success | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-4-delete-success.rules according to policy
-  copy:
+  ansible.builtin.copy:
     dest: /etc/audit/rules.d/30-ospp-v42-4-delete-success.rules
     content: '## Successful file delete
 
@@ -10605,6 +8446,7 @@
   ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-4-delete-success.rules
     mode: g-rwx,o-rwx
+    state: touch
   when:
   - audit_delete_success | bool
   - low_complexity | bool
@@ -10624,28 +8466,8 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-85939-7
-  - NIST-800-53-AU-2(a)
-  - audit_delete_success_aarch64
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - audit_delete_success_aarch64 | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-4-delete-success.rules according to policy
-  copy:
+  ansible.builtin.copy:
     dest: /etc/audit/rules.d/30-ospp-v42-4-delete-success.rules
     content: '## Successful file delete
 
@@ -10678,6 +8500,7 @@
   ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-4-delete-success.rules
     mode: g-rwx,o-rwx
+    state: touch
   when:
   - audit_delete_success_aarch64 | bool
   - low_complexity | bool
@@ -10697,28 +8520,8 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-90789-9
-  - NIST-800-53-AU-2(a)
-  - audit_delete_success_ppc64le
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - audit_delete_success_ppc64le | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-4-delete-success.rules according to policy
-  copy:
+  ansible.builtin.copy:
     dest: /etc/audit/rules.d/30-ospp-v42-4-delete-success.rules
     content: '## Successful file delete
 
@@ -10749,6 +8552,7 @@
   ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-4-delete-success.rules
     mode: g-rwx,o-rwx
+    state: touch
   when:
   - audit_delete_success_ppc64le | bool
   - low_complexity | bool
@@ -10768,28 +8572,8 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-83673-4
-  - NIST-800-53-AU-2(a)
-  - audit_immutable_login_uids
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - audit_immutable_login_uids | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-
 - name: Put contents into /etc/audit/rules.d/11-loginuid.rules according to policy
-  copy:
+  ansible.builtin.copy:
     dest: /etc/audit/rules.d/11-loginuid.rules
     content: '## Make the loginuid immutable. This prevents tampering with the auid.
 
@@ -10820,6 +8604,7 @@
   ansible.builtin.file:
     path: /etc/audit/rules.d/11-loginuid.rules
     mode: g-rwx,o-rwx
+    state: touch
   when:
   - audit_immutable_login_uids | bool
   - low_complexity | bool
@@ -10838,28 +8623,8 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-83671-8
-  - NIST-800-53-AU-2(a)
-  - audit_modify_failed
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - audit_modify_failed | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-2-modify-failed.rules according to policy
-  copy:
+  ansible.builtin.copy:
     dest: /etc/audit/rules.d/30-ospp-v42-2-modify-failed.rules
     content: '## Unsuccessful file modifications (open for write or truncate)
 
@@ -10912,6 +8677,7 @@
   ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-2-modify-failed.rules
     mode: g-rwx,o-rwx
+    state: touch
   when:
   - audit_modify_failed | bool
   - low_complexity | bool
@@ -10931,28 +8697,8 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-85907-4
-  - NIST-800-53-AU-2(a)
-  - audit_modify_failed_aarch64
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - audit_modify_failed_aarch64 | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-2-modify-failed.rules according to policy
-  copy:
+  ansible.builtin.copy:
     dest: /etc/audit/rules.d/30-ospp-v42-2-modify-failed.rules
     content: '## Unsuccessful file modifications (open for write or truncate)
 
@@ -11001,6 +8747,7 @@
   ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-2-modify-failed.rules
     mode: g-rwx,o-rwx
+    state: touch
   when:
   - audit_modify_failed_aarch64 | bool
   - low_complexity | bool
@@ -11020,28 +8767,8 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-90790-7
-  - NIST-800-53-AU-2(a)
-  - audit_modify_failed_ppc64le
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - audit_modify_failed_ppc64le | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-2-modify-failed.rules according to policy
-  copy:
+  ansible.builtin.copy:
     dest: /etc/audit/rules.d/30-ospp-v42-2-modify-failed.rules
     content: '## Unsuccessful file modifications (open for write or truncate)
 
@@ -11082,6 +8809,7 @@
   ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-2-modify-failed.rules
     mode: g-rwx,o-rwx
+    state: touch
   when:
   - audit_modify_failed_ppc64le | bool
   - low_complexity | bool
@@ -11101,28 +8829,8 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-83681-7
-  - NIST-800-53-AU-2(a)
-  - audit_modify_success
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - audit_modify_success | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-2-modify-success.rules according to policy
-  copy:
+  ansible.builtin.copy:
     dest: /etc/audit/rules.d/30-ospp-v42-2-modify-success.rules
     content: '## Successful file modifications (open for write or truncate)
 
@@ -11163,6 +8871,7 @@
   ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-2-modify-success.rules
     mode: g-rwx,o-rwx
+    state: touch
   when:
   - audit_modify_success | bool
   - low_complexity | bool
@@ -11182,28 +8891,8 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-85909-0
-  - NIST-800-53-AU-2(a)
-  - audit_modify_success_aarch64
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - audit_modify_success_aarch64 | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-2-modify-success.rules according to policy
-  copy:
+  ansible.builtin.copy:
     dest: /etc/audit/rules.d/30-ospp-v42-2-modify-success.rules
     content: '## Successful file modifications (open for write or truncate)
 
@@ -11242,6 +8931,7 @@
   ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-2-modify-success.rules
     mode: g-rwx,o-rwx
+    state: touch
   when:
   - audit_modify_success_aarch64 | bool
   - low_complexity | bool
@@ -11261,28 +8951,8 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-90791-5
-  - NIST-800-53-AU-2(a)
-  - audit_modify_success_ppc64le
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - audit_modify_success_ppc64le | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-2-modify-success.rules according to policy
-  copy:
+  ansible.builtin.copy:
     dest: /etc/audit/rules.d/30-ospp-v42-2-modify-success.rules
     content: '## Successful file modifications (open for write or truncate)
 
@@ -11317,6 +8987,7 @@
   ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-2-modify-success.rules
     mode: g-rwx,o-rwx
+    state: touch
   when:
   - audit_modify_success_ppc64le | bool
   - low_complexity | bool
@@ -11336,28 +9007,8 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-90814-5
-  - NIST-800-53-AU-2(a)
-  - audit_module_load
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - audit_module_load | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-
 - name: Put contents into /etc/audit/rules.d/43-module-load.rules according to policy
-  copy:
+  ansible.builtin.copy:
     dest: /etc/audit/rules.d/43-module-load.rules
     content: '## These rules watch for kernel module insertion. By monitoring
 
@@ -11396,6 +9047,7 @@
   ansible.builtin.file:
     path: /etc/audit/rules.d/43-module-load.rules
     mode: g-rwx,o-rwx
+    state: touch
   when:
   - audit_module_load | bool
   - low_complexity | bool
@@ -11415,28 +9067,8 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-90788-1
-  - NIST-800-53-AU-2(a)
-  - audit_module_load_ppc64le
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - audit_module_load_ppc64le | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-
 - name: Put contents into /etc/audit/rules.d/43-module-load.rules according to policy
-  copy:
+  ansible.builtin.copy:
     dest: /etc/audit/rules.d/43-module-load.rules
     content: '## These rules watch for kernel module insertion. By monitoring
 
@@ -11471,6 +9103,7 @@
   ansible.builtin.file:
     path: /etc/audit/rules.d/43-module-load.rules
     mode: g-rwx,o-rwx
+    state: touch
   when:
   - audit_module_load_ppc64le | bool
   - low_complexity | bool
@@ -11490,28 +9123,8 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-83655-1
-  - NIST-800-53-AU-2(a)
-  - audit_ospp_general
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - audit_ospp_general | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42.rules according to policy
-  copy:
+  ansible.builtin.copy:
     dest: /etc/audit/rules.d/30-ospp-v42.rules
     content: '## The purpose of these rules is to meet the requirements for Operating
 
@@ -11760,6 +9373,7 @@
   ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42.rules
     mode: g-rwx,o-rwx
+    state: touch
   when:
   - audit_ospp_general | bool
   - low_complexity | bool
@@ -11779,28 +9393,8 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-85893-6
-  - NIST-800-53-AU-2(a)
-  - audit_ospp_general_aarch64
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - audit_ospp_general_aarch64 | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42.rules according to policy
-  copy:
+  ansible.builtin.copy:
     dest: /etc/audit/rules.d/30-ospp-v42.rules
     content: '## The purpose of these rules is to meet the requirements for Operating
 
@@ -12045,6 +9639,7 @@
   ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42.rules
     mode: g-rwx,o-rwx
+    state: touch
   when:
   - audit_ospp_general_aarch64 | bool
   - low_complexity | bool
@@ -12064,28 +9659,8 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-90786-5
-  - NIST-800-53-AU-2(a)
-  - audit_ospp_general_ppc64le
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - audit_ospp_general_ppc64le | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42.rules according to policy
-  copy:
+  ansible.builtin.copy:
     dest: /etc/audit/rules.d/30-ospp-v42.rules
     content: '## The purpose of these rules is to meet the requirements for Operating
 
@@ -12270,6 +9845,7 @@
   ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42.rules
     mode: g-rwx,o-rwx
+    state: touch
   when:
   - audit_ospp_general_ppc64le | bool
   - low_complexity | bool
@@ -12289,28 +9865,8 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-83675-9
-  - NIST-800-53-AU-2(a)
-  - audit_owner_change_failed
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - audit_owner_change_failed | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-6-owner-change-failed.rules according to policy
-  copy:
+  ansible.builtin.copy:
     dest: /etc/audit/rules.d/30-ospp-v42-6-owner-change-failed.rules
     content: '## Unsuccessful ownership change
 
@@ -12347,6 +9903,7 @@
   ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-6-owner-change-failed.rules
     mode: g-rwx,o-rwx
+    state: touch
   when:
   - audit_owner_change_failed | bool
   - low_complexity | bool
@@ -12366,28 +9923,8 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-85942-1
-  - NIST-800-53-AU-2(a)
-  - audit_owner_change_failed_aarch64
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - audit_owner_change_failed_aarch64 | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-6-owner-change-failed.rules according to policy
-  copy:
+  ansible.builtin.copy:
     dest: /etc/audit/rules.d/30-ospp-v42-6-owner-change-failed.rules
     content: '## Unsuccessful ownership change
 
@@ -12424,6 +9961,7 @@
   ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-6-owner-change-failed.rules
     mode: g-rwx,o-rwx
+    state: touch
   when:
   - audit_owner_change_failed_aarch64 | bool
   - low_complexity | bool
@@ -12443,28 +9981,8 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-85988-4
-  - NIST-800-53-AU-2(a)
-  - audit_owner_change_failed_ppc64le
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - audit_owner_change_failed_ppc64le | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-6-owner-change-failed.rules according to policy
-  copy:
+  ansible.builtin.copy:
     dest: /etc/audit/rules.d/30-ospp-v42-6-owner-change-failed.rules
     content: '## Unsuccessful ownership change
 
@@ -12497,6 +10015,7 @@
   ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-6-owner-change-failed.rules
     mode: g-rwx,o-rwx
+    state: touch
   when:
   - audit_owner_change_failed_ppc64le | bool
   - low_complexity | bool
@@ -12516,28 +10035,8 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-83658-5
-  - NIST-800-53-AU-2(a)
-  - audit_owner_change_success
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - audit_owner_change_success | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-6-owner-change-success.rules according to policy
-  copy:
+  ansible.builtin.copy:
     dest: /etc/audit/rules.d/30-ospp-v42-6-owner-change-success.rules
     content: '## Successful ownership change
 
@@ -12570,6 +10069,7 @@
   ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-6-owner-change-success.rules
     mode: g-rwx,o-rwx
+    state: touch
   when:
   - audit_owner_change_success | bool
   - low_complexity | bool
@@ -12589,28 +10089,8 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-85948-8
-  - NIST-800-53-AU-2(a)
-  - audit_owner_change_success_aarch64
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - audit_owner_change_success_aarch64 | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-6-owner-change-success.rules according to policy
-  copy:
+  ansible.builtin.copy:
     dest: /etc/audit/rules.d/30-ospp-v42-6-owner-change-success.rules
     content: '## Successful ownership change
 
@@ -12643,6 +10123,7 @@
   ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-6-owner-change-success.rules
     mode: g-rwx,o-rwx
+    state: touch
   when:
   - audit_owner_change_success_aarch64 | bool
   - low_complexity | bool
@@ -12662,28 +10143,8 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-85998-3
-  - NIST-800-53-AU-2(a)
-  - audit_owner_change_success_ppc64le
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - audit_owner_change_success_ppc64le | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-6-owner-change-success.rules according to policy
-  copy:
+  ansible.builtin.copy:
     dest: /etc/audit/rules.d/30-ospp-v42-6-owner-change-success.rules
     content: '## Successful ownership change
 
@@ -12714,6 +10175,7 @@
   ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-6-owner-change-success.rules
     mode: g-rwx,o-rwx
+    state: touch
   when:
   - audit_owner_change_success_ppc64le | bool
   - low_complexity | bool
@@ -12733,28 +10195,8 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-83676-7
-  - NIST-800-53-AU-2(a)
-  - audit_perm_change_failed
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - audit_perm_change_failed | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-5-perm-change-failed.rules according to policy
-  copy:
+  ansible.builtin.copy:
     dest: /etc/audit/rules.d/30-ospp-v42-5-perm-change-failed.rules
     content: '## Unsuccessful permission change
 
@@ -12795,6 +10237,7 @@
   ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-5-perm-change-failed.rules
     mode: g-rwx,o-rwx
+    state: touch
   when:
   - audit_perm_change_failed | bool
   - low_complexity | bool
@@ -12814,28 +10257,8 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-85950-4
-  - NIST-800-53-AU-2(a)
-  - audit_perm_change_failed_aarch64
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - audit_perm_change_failed_aarch64 | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-5-perm-change-failed.rules according to policy
-  copy:
+  ansible.builtin.copy:
     dest: /etc/audit/rules.d/30-ospp-v42-5-perm-change-failed.rules
     content: '## Unsuccessful permission change
 
@@ -12876,6 +10299,7 @@
   ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-5-perm-change-failed.rules
     mode: g-rwx,o-rwx
+    state: touch
   when:
   - audit_perm_change_failed_aarch64 | bool
   - low_complexity | bool
@@ -12895,28 +10319,8 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-86000-7
-  - NIST-800-53-AU-2(a)
-  - audit_perm_change_failed_ppc64le
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - audit_perm_change_failed_ppc64le | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-5-perm-change-failed.rules according to policy
-  copy:
+  ansible.builtin.copy:
     dest: /etc/audit/rules.d/30-ospp-v42-5-perm-change-failed.rules
     content: '## Unsuccessful permission change
 
@@ -12951,6 +10355,7 @@
   ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-5-perm-change-failed.rules
     mode: g-rwx,o-rwx
+    state: touch
   when:
   - audit_perm_change_failed_ppc64le | bool
   - low_complexity | bool
@@ -12970,28 +10375,8 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-83678-3
-  - NIST-800-53-AU-2(a)
-  - audit_perm_change_success
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - audit_perm_change_success | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-5-perm-change-success.rules according to policy
-  copy:
+  ansible.builtin.copy:
     dest: /etc/audit/rules.d/30-ospp-v42-5-perm-change-success.rules
     content: '## Successful permission change
 
@@ -13026,6 +10411,7 @@
   ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-5-perm-change-success.rules
     mode: g-rwx,o-rwx
+    state: touch
   when:
   - audit_perm_change_success | bool
   - low_complexity | bool
@@ -13045,28 +10431,8 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-85952-0
-  - NIST-800-53-AU-2(a)
-  - audit_perm_change_success_aarch64
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - audit_perm_change_success_aarch64 | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-5-perm-change-success.rules according to policy
-  copy:
+  ansible.builtin.copy:
     dest: /etc/audit/rules.d/30-ospp-v42-5-perm-change-success.rules
     content: '## Successful permission change
 
@@ -13101,6 +10467,7 @@
   ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-5-perm-change-success.rules
     mode: g-rwx,o-rwx
+    state: touch
   when:
   - audit_perm_change_success_aarch64 | bool
   - low_complexity | bool
@@ -13120,28 +10487,8 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-86002-3
-  - NIST-800-53-AU-2(a)
-  - audit_perm_change_success_ppc64le
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  when:
-  - audit_perm_change_success_ppc64le | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-
 - name: Put contents into /etc/audit/rules.d/30-ospp-v42-5-perm-change-success.rules according to policy
-  copy:
+  ansible.builtin.copy:
     dest: /etc/audit/rules.d/30-ospp-v42-5-perm-change-success.rules
     content: '## Successful permission change
 
@@ -13173,6 +10520,7 @@
   ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-5-perm-change-success.rules
     mode: g-rwx,o-rwx
+    state: touch
   when:
   - audit_perm_change_success_ppc64le | bool
   - low_complexity | bool
