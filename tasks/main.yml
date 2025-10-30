@@ -1,272 +1,10 @@
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-86547-7
-  - DISA-STIG-RHEL-09-671010
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-IA-7
-  - NIST-800-53-SC-12
-  - NIST-800-53-SC-12(2)
-  - NIST-800-53-SC-12(3)
-  - NIST-800-53-SC-13
-  - enable_dracut_fips_module
-  - high_severity
-  - medium_complexity
-  - medium_disruption
-  - reboot_required
-  - restrict_strategy
-  when:
-  - DISA_STIG_RHEL_09_671010 | bool
-  - enable_dracut_fips_module | bool
-  - high_severity | bool
-  - medium_complexity | bool
-  - medium_disruption | bool
-  - reboot_required | bool
-  - restrict_strategy | bool
-
-- name: Check to see the current status of FIPS mode
-  command: /usr/bin/fips-mode-setup --check
-  register: is_fips_enabled
-  changed_when: false
-  failed_when: false
-  when:
-  - DISA_STIG_RHEL_09_671010 | bool
-  - enable_dracut_fips_module | bool
-  - high_severity | bool
-  - medium_complexity | bool
-  - medium_disruption | bool
-  - reboot_required | bool
-  - restrict_strategy | bool
-  - ( not ( lookup("env", "container") == "bwrap-osbuild" ) and "kernel" in ansible_facts.packages )
-  tags:
-  - CCE-86547-7
-  - DISA-STIG-RHEL-09-671010
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-IA-7
-  - NIST-800-53-SC-12
-  - NIST-800-53-SC-12(2)
-  - NIST-800-53-SC-12(3)
-  - NIST-800-53-SC-13
-  - enable_dracut_fips_module
-  - high_severity
-  - medium_complexity
-  - medium_disruption
-  - reboot_required
-  - restrict_strategy
-
-- name: Enable FIPS mode
-  command: /usr/bin/fips-mode-setup --enable
-  when:
-  - DISA_STIG_RHEL_09_671010 | bool
-  - enable_dracut_fips_module | bool
-  - high_severity | bool
-  - medium_complexity | bool
-  - medium_disruption | bool
-  - reboot_required | bool
-  - restrict_strategy | bool
-  - ( not ( lookup("env", "container") == "bwrap-osbuild" ) and "kernel" in ansible_facts.packages )
-  - is_fips_enabled.stdout.find('FIPS mode is enabled.') == -1
-  tags:
-  - CCE-86547-7
-  - DISA-STIG-RHEL-09-671010
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-IA-7
-  - NIST-800-53-SC-12
-  - NIST-800-53-SC-12(2)
-  - NIST-800-53-SC-12(3)
-  - NIST-800-53-SC-13
-  - enable_dracut_fips_module
-  - high_severity
-  - medium_complexity
-  - medium_disruption
-  - reboot_required
-  - restrict_strategy
-
-- name: Enable Dracut FIPS Module
-  lineinfile:
-    path: /etc/dracut.conf.d/40-fips.conf
-    line: add_dracutmodules+=" fips "
-  when:
-  - DISA_STIG_RHEL_09_671010 | bool
-  - enable_dracut_fips_module | bool
-  - high_severity | bool
-  - medium_complexity | bool
-  - medium_disruption | bool
-  - reboot_required | bool
-  - restrict_strategy | bool
-  - ( not ( lookup("env", "container") == "bwrap-osbuild" ) and "kernel" in ansible_facts.packages )
-  tags:
-  - CCE-86547-7
-  - DISA-STIG-RHEL-09-671010
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-IA-7
-  - NIST-800-53-SC-12
-  - NIST-800-53-SC-12(2)
-  - NIST-800-53-SC-12(3)
-  - NIST-800-53-SC-13
-  - enable_dracut_fips_module
-  - high_severity
-  - medium_complexity
-  - medium_disruption
-  - reboot_required
-  - restrict_strategy
-
-- name: Gather the package facts
-  package_facts:
-    manager: auto
-  tags:
-  - CCE-88742-2
-  - DISA-STIG-RHEL-09-671010
-  - NIST-800-53-CM-3(6)
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-IA-7
-  - NIST-800-53-SC-12
-  - NIST-800-53-SC-12(2)
-  - NIST-800-53-SC-12(3)
-  - NIST-800-53-SC-13
-  - enable_fips_mode
-  - high_severity
-  - medium_complexity
-  - medium_disruption
-  - reboot_required
-  - restrict_strategy
-  when:
-  - DISA_STIG_RHEL_09_671010 | bool
-  - enable_fips_mode | bool
-  - high_severity | bool
-  - medium_complexity | bool
-  - medium_disruption | bool
-  - reboot_required | bool
-  - restrict_strategy | bool
-
-- name: Enable FIPS Mode - Check to See the Current Status of FIPS Mode
-  ansible.builtin.command: /usr/bin/fips-mode-setup --check
-  register: is_fips_enabled
-  failed_when: false
-  changed_when: false
-  when:
-  - DISA_STIG_RHEL_09_671010 | bool
-  - enable_fips_mode | bool
-  - high_severity | bool
-  - medium_complexity | bool
-  - medium_disruption | bool
-  - reboot_required | bool
-  - restrict_strategy | bool
-  - ( not ( lookup("env", "container") == "bwrap-osbuild" ) and "kernel" in ansible_facts.packages )
-  tags:
-  - CCE-88742-2
-  - DISA-STIG-RHEL-09-671010
-  - NIST-800-53-CM-3(6)
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-IA-7
-  - NIST-800-53-SC-12
-  - NIST-800-53-SC-12(2)
-  - NIST-800-53-SC-12(3)
-  - NIST-800-53-SC-13
-  - enable_fips_mode
-  - high_severity
-  - medium_complexity
-  - medium_disruption
-  - reboot_required
-  - restrict_strategy
-
-- name: Enable FIPS Mode - Enable FIPS Mode
-  ansible.builtin.command: /usr/bin/fips-mode-setup --enable
-  when:
-  - DISA_STIG_RHEL_09_671010 | bool
-  - enable_fips_mode | bool
-  - high_severity | bool
-  - medium_complexity | bool
-  - medium_disruption | bool
-  - reboot_required | bool
-  - restrict_strategy | bool
-  - ( not ( lookup("env", "container") == "bwrap-osbuild" ) and "kernel" in ansible_facts.packages )
-  - is_fips_enabled.stdout.find('FIPS mode is enabled.') == -1
-  tags:
-  - CCE-88742-2
-  - DISA-STIG-RHEL-09-671010
-  - NIST-800-53-CM-3(6)
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-IA-7
-  - NIST-800-53-SC-12
-  - NIST-800-53-SC-12(2)
-  - NIST-800-53-SC-12(3)
-  - NIST-800-53-SC-13
-  - enable_fips_mode
-  - high_severity
-  - medium_complexity
-  - medium_disruption
-  - reboot_required
-  - restrict_strategy
-
-- name: Enable FIPS Mode - Configure Crypto Policy
-  ansible.builtin.lineinfile:
-    path: /etc/crypto-policies/config
-    regexp: ^(?!#)(\S+)$
-    line: '{{ var_system_crypto_policy }}'
-    create: true
-  when:
-  - DISA_STIG_RHEL_09_671010 | bool
-  - enable_fips_mode | bool
-  - high_severity | bool
-  - medium_complexity | bool
-  - medium_disruption | bool
-  - reboot_required | bool
-  - restrict_strategy | bool
-  - ( not ( lookup("env", "container") == "bwrap-osbuild" ) and "kernel" in ansible_facts.packages )
-  tags:
-  - CCE-88742-2
-  - DISA-STIG-RHEL-09-671010
-  - NIST-800-53-CM-3(6)
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-IA-7
-  - NIST-800-53-SC-12
-  - NIST-800-53-SC-12(2)
-  - NIST-800-53-SC-12(3)
-  - NIST-800-53-SC-13
-  - enable_fips_mode
-  - high_severity
-  - medium_complexity
-  - medium_disruption
-  - reboot_required
-  - restrict_strategy
-
-- name: Enable FIPS Mode - Verify that Crypto Policy is Set (runtime)
-  ansible.builtin.command: /usr/bin/update-crypto-policies --set {{ var_system_crypto_policy }}
-  when:
-  - DISA_STIG_RHEL_09_671010 | bool
-  - enable_fips_mode | bool
-  - high_severity | bool
-  - medium_complexity | bool
-  - medium_disruption | bool
-  - reboot_required | bool
-  - restrict_strategy | bool
-  - ( not ( lookup("env", "container") == "bwrap-osbuild" ) and "kernel" in ansible_facts.packages )
-  tags:
-  - CCE-88742-2
-  - DISA-STIG-RHEL-09-671010
-  - NIST-800-53-CM-3(6)
-  - NIST-800-53-CM-6(a)
-  - NIST-800-53-IA-7
-  - NIST-800-53-SC-12
-  - NIST-800-53-SC-12(2)
-  - NIST-800-53-SC-12(3)
-  - NIST-800-53-SC-13
-  - enable_fips_mode
-  - high_severity
-  - medium_complexity
-  - medium_disruption
-  - reboot_required
-  - restrict_strategy
-
 - name: Ensure crypto-policies is installed
   package:
     name: crypto-policies
     state: present
   tags:
   - CCE-83442-4
-  - DISA-STIG-RHEL-09-672010
+  - DISA-STIG-RHEL-09-215100
   - enable_strategy
   - low_complexity
   - low_disruption
@@ -274,7 +12,7 @@
   - no_reboot_needed
   - package_crypto-policies_installed
   when:
-  - DISA_STIG_RHEL_09_672010 | bool
+  - DISA_STIG_RHEL_09_215100 | bool
   - enable_strategy | bool
   - low_complexity | bool
   - low_disruption | bool
@@ -290,9 +28,9 @@
     create: true
   tags:
   - CCE-83450-7
+  - DISA-STIG-RHEL-09-215105
   - DISA-STIG-RHEL-09-671010
   - DISA-STIG-RHEL-09-672030
-  - DISA-STIG-RHEL-09-672045
   - NIST-800-53-AC-17(2)
   - NIST-800-53-AC-17(a)
   - NIST-800-53-CM-6(a)
@@ -309,9 +47,9 @@
   - no_reboot_needed
   - restrict_strategy
   when:
+  - DISA_STIG_RHEL_09_215105 | bool
   - DISA_STIG_RHEL_09_671010 | bool
   - DISA_STIG_RHEL_09_672030 | bool
-  - DISA_STIG_RHEL_09_672045 | bool
   - configure_crypto_policy | bool
   - high_severity | bool
   - low_complexity | bool
@@ -323,9 +61,9 @@
   command: /usr/bin/update-crypto-policies --set {{ var_system_crypto_policy }}
   tags:
   - CCE-83450-7
+  - DISA-STIG-RHEL-09-215105
   - DISA-STIG-RHEL-09-671010
   - DISA-STIG-RHEL-09-672030
-  - DISA-STIG-RHEL-09-672045
   - NIST-800-53-AC-17(2)
   - NIST-800-53-AC-17(a)
   - NIST-800-53-CM-6(a)
@@ -342,9 +80,9 @@
   - no_reboot_needed
   - restrict_strategy
   when:
+  - DISA_STIG_RHEL_09_215105 | bool
   - DISA_STIG_RHEL_09_671010 | bool
   - DISA_STIG_RHEL_09_672030 | bool
-  - DISA_STIG_RHEL_09_672045 | bool
   - configure_crypto_policy | bool
   - high_severity | bool
   - low_complexity | bool
@@ -493,6 +231,7 @@
     regexp: (?i)^\s*CRYPTO_POLICY.*$
   tags:
   - CCE-83445-7
+  - DISA-STIG-RHEL-09-255075
   - NIST-800-53-AC-17(2)
   - NIST-800-53-AC-17(a)
   - NIST-800-53-CM-6(a)
@@ -508,6 +247,7 @@
   - medium_severity
   - reboot_required
   when:
+  - DISA_STIG_RHEL_09_255075 | bool
   - configure_ssh_crypto_policy | bool
   - disable_strategy | bool
   - low_complexity | bool
@@ -649,10 +389,9 @@
   - no_reboot_needed | bool
   - package_subscription_manager_installed | bool
 
-- name: Ensure dnf-automatic is installed
-  package:
-    name: dnf-automatic
-    state: present
+- name: Gather the package facts
+  package_facts:
+    manager: auto
   tags:
   - CCE-83454-9
   - enable_strategy
@@ -669,13 +408,31 @@
   - no_reboot_needed | bool
   - package_dnf_automatic_installed | bool
 
-- name: Configure dnf-automatic to Install Available Updates Automatically
-  ini_file:
-    dest: /etc/dnf/automatic.conf
-    section: commands
-    option: apply_updates
-    value: 'yes'
-    create: true
+- name: Ensure dnf-automatic is installed
+  package:
+    name: dnf-automatic
+    state: present
+  when:
+  - enable_strategy | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - package_dnf_automatic_installed | bool
+  - not ( "kernel" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
+    and not "openshift-kubelet" in ansible_facts.packages )
+  tags:
+  - CCE-83454-9
+  - enable_strategy
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - package_dnf-automatic_installed
+
+- name: Gather the package facts
+  package_facts:
+    manager: auto
   tags:
   - CCE-83456-4
   - NIST-800-53-CM-6(a)
@@ -693,6 +450,33 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - unknown_strategy | bool
+
+- name: Configure dnf-automatic to Install Available Updates Automatically
+  ini_file:
+    dest: /etc/dnf/automatic.conf
+    section: commands
+    option: apply_updates
+    value: 'yes'
+    create: true
+  when:
+  - low_complexity | bool
+  - medium_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - unknown_strategy | bool
+  - not ( "kernel" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
+    and not "openshift-kubelet" in ansible_facts.packages )
+  tags:
+  - CCE-83456-4
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-SI-2(5)
+  - NIST-800-53-SI-2(c)
+  - dnf-automatic_apply_updates
+  - low_complexity
+  - medium_disruption
+  - medium_severity
+  - no_reboot_needed
+  - unknown_strategy
 
 - name: Gather the package facts
   package_facts:
@@ -1094,18 +878,9 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Enable timer dnf-automatic
-  block:
-  - name: Gather the package facts
-    package_facts:
-      manager: auto
-  - name: Enable timer dnf-automatic
-    systemd:
-      name: dnf-automatic.timer
-      enabled: 'yes'
-      state: started
-    when:
-    - '"dnf-automatic" in ansible_facts.packages'
+- name: Gather the package facts
+  package_facts:
+    manager: auto
   tags:
   - CCE-83459-8
   - NIST-800-53-CM-6(a)
@@ -1123,6 +898,38 @@
   - low_disruption | bool
   - medium_severity | bool
   - no_reboot_needed | bool
+
+- name: Enable timer dnf-automatic
+  block:
+  - name: Gather the package facts
+    package_facts:
+      manager: auto
+  - name: Enable timer dnf-automatic
+    systemd:
+      name: dnf-automatic.timer
+      enabled: 'yes'
+      state: started
+    when:
+    - '"dnf-automatic" in ansible_facts.packages'
+  when:
+  - enable_strategy | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - not ( "kernel" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
+    and not "openshift-kubelet" in ansible_facts.packages )
+  tags:
+  - CCE-83459-8
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-SI-2(5)
+  - NIST-800-53-SI-2(c)
+  - enable_strategy
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - timer_dnf-automatic_enabled
 
 - name: Enable authselect - Check Current authselect Profile
   ansible.builtin.command:
@@ -1599,7 +1406,14 @@
           cmd: authselect create-profile hardening -b {{ authselect_current_profile }}
         when:
         - result_authselect_check_cmd is success
-        - authselect_current_profile is not match("custom/")
+        - authselect_current_profile is not match("^(custom/|local)")
+        - not result_authselect_custom_profile_present.stat.exists
+      - name: Lock Accounts After Failed Password Attempts - Create an authselect custom profile based on sssd profile
+        ansible.builtin.command:
+          cmd: authselect create-profile hardening -b sssd
+        when:
+        - result_authselect_check_cmd is success
+        - authselect_current_profile is match("local")
         - not result_authselect_custom_profile_present.stat.exists
       - name: Lock Accounts After Failed Password Attempts - Ensure authselect changes are applied
         ansible.builtin.command:
@@ -1735,7 +1549,14 @@
           cmd: authselect create-profile hardening -b {{ authselect_current_profile }}
         when:
         - result_authselect_check_cmd is success
-        - authselect_current_profile is not match("custom/")
+        - authselect_current_profile is not match("^(custom/|local)")
+        - not result_authselect_custom_profile_present.stat.exists
+      - name: Lock Accounts After Failed Password Attempts - Create an authselect custom profile based on sssd profile
+        ansible.builtin.command:
+          cmd: authselect create-profile hardening -b sssd
+        when:
+        - result_authselect_check_cmd is success
+        - authselect_current_profile is match("local")
         - not result_authselect_custom_profile_present.stat.exists
       - name: Lock Accounts After Failed Password Attempts - Ensure authselect changes are applied
         ansible.builtin.command:
@@ -2225,7 +2046,14 @@
           cmd: authselect create-profile hardening -b {{ authselect_current_profile }}
         when:
         - result_authselect_check_cmd is success
-        - authselect_current_profile is not match("custom/")
+        - authselect_current_profile is not match("^(custom/|local)")
+        - not result_authselect_custom_profile_present.stat.exists
+      - name: Set Interval For Counting Failed Password Attempts - Create an authselect custom profile based on sssd profile
+        ansible.builtin.command:
+          cmd: authselect create-profile hardening -b sssd
+        when:
+        - result_authselect_check_cmd is success
+        - authselect_current_profile is match("local")
         - not result_authselect_custom_profile_present.stat.exists
       - name: Set Interval For Counting Failed Password Attempts - Ensure authselect changes are applied
         ansible.builtin.command:
@@ -2365,7 +2193,14 @@
           cmd: authselect create-profile hardening -b {{ authselect_current_profile }}
         when:
         - result_authselect_check_cmd is success
-        - authselect_current_profile is not match("custom/")
+        - authselect_current_profile is not match("^(custom/|local)")
+        - not result_authselect_custom_profile_present.stat.exists
+      - name: Set Interval For Counting Failed Password Attempts - Create an authselect custom profile based on sssd profile
+        ansible.builtin.command:
+          cmd: authselect create-profile hardening -b sssd
+        when:
+        - result_authselect_check_cmd is success
+        - authselect_current_profile is match("local")
         - not result_authselect_custom_profile_present.stat.exists
       - name: Set Interval For Counting Failed Password Attempts - Ensure authselect changes are applied
         ansible.builtin.command:
@@ -2869,7 +2704,14 @@
           cmd: authselect create-profile hardening -b {{ authselect_current_profile }}
         when:
         - result_authselect_check_cmd is success
-        - authselect_current_profile is not match("custom/")
+        - authselect_current_profile is not match("^(custom/|local)")
+        - not result_authselect_custom_profile_present.stat.exists
+      - name: Set Lockout Time for Failed Password Attempts - Create an authselect custom profile based on sssd profile
+        ansible.builtin.command:
+          cmd: authselect create-profile hardening -b sssd
+        when:
+        - result_authselect_check_cmd is success
+        - authselect_current_profile is match("local")
         - not result_authselect_custom_profile_present.stat.exists
       - name: Set Lockout Time for Failed Password Attempts - Ensure authselect changes are applied
         ansible.builtin.command:
@@ -3006,7 +2848,14 @@
           cmd: authselect create-profile hardening -b {{ authselect_current_profile }}
         when:
         - result_authselect_check_cmd is success
-        - authselect_current_profile is not match("custom/")
+        - authselect_current_profile is not match("^(custom/|local)")
+        - not result_authselect_custom_profile_present.stat.exists
+      - name: Set Lockout Time for Failed Password Attempts - Create an authselect custom profile based on sssd profile
+        ansible.builtin.command:
+          cmd: authselect create-profile hardening -b sssd
+        when:
+        - result_authselect_check_cmd is success
+        - authselect_current_profile is match("local")
         - not result_authselect_custom_profile_present.stat.exists
       - name: Set Lockout Time for Failed Password Attempts - Ensure authselect changes are applied
         ansible.builtin.command:
@@ -3211,6 +3060,69 @@
   - no_reboot_needed | bool
   - restrict_strategy | bool
 
+- name: Ensure PAM Enforces Password Requirements - Minimum Digit Characters - Find pwquality.conf.d files
+  ansible.builtin.find:
+    paths: /etc/security/pwquality.conf.d/
+    patterns: '*.conf'
+  register: pwquality_conf_d_files
+  when:
+  - DISA_STIG_RHEL_09_611070 | bool
+  - accounts_password_pam_dcredit | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+  - '"pam" in ansible_facts.packages'
+  tags:
+  - CCE-83566-0
+  - DISA-STIG-RHEL-09-611070
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-IA-5(1)(a)
+  - NIST-800-53-IA-5(4)
+  - NIST-800-53-IA-5(c)
+  - PCI-DSS-Req-8.2.3
+  - PCI-DSSv4-8.3
+  - PCI-DSSv4-8.3.6
+  - accounts_password_pam_dcredit
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+
+- name: Ensure PAM Enforces Password Requirements - Minimum Digit Characters - Ensure dcredit is not set in pwquality.conf.d
+  ansible.builtin.lineinfile:
+    path: '{{ item.path }}'
+    regexp: ^\s*\bdcredit\b.*
+    state: absent
+  with_items: '{{ pwquality_conf_d_files.files }}'
+  when:
+  - DISA_STIG_RHEL_09_611070 | bool
+  - accounts_password_pam_dcredit | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+  - '"pam" in ansible_facts.packages'
+  tags:
+  - CCE-83566-0
+  - DISA-STIG-RHEL-09-611070
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-IA-5(1)(a)
+  - NIST-800-53-IA-5(4)
+  - NIST-800-53-IA-5(c)
+  - PCI-DSS-Req-8.2.3
+  - PCI-DSSv4-8.3
+  - PCI-DSSv4-8.3.6
+  - accounts_password_pam_dcredit
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+
 - name: Ensure PAM Enforces Password Requirements - Minimum Digit Characters - Ensure PAM variable dcredit is set accordingly
   ansible.builtin.lineinfile:
     create: true
@@ -3270,6 +3182,69 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
+
+- name: Ensure PAM Enforces Password Requirements - Minimum Lowercase Characters - Find pwquality.conf.d files
+  ansible.builtin.find:
+    paths: /etc/security/pwquality.conf.d/
+    patterns: '*.conf'
+  register: pwquality_conf_d_files
+  when:
+  - DISA_STIG_RHEL_09_611065 | bool
+  - accounts_password_pam_lcredit | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+  - '"pam" in ansible_facts.packages'
+  tags:
+  - CCE-83570-2
+  - DISA-STIG-RHEL-09-611065
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-IA-5(1)(a)
+  - NIST-800-53-IA-5(4)
+  - NIST-800-53-IA-5(c)
+  - PCI-DSS-Req-8.2.3
+  - PCI-DSSv4-8.3
+  - PCI-DSSv4-8.3.6
+  - accounts_password_pam_lcredit
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+
+- name: Ensure PAM Enforces Password Requirements - Minimum Lowercase Characters - Ensure lcredit is not set in pwquality.conf.d
+  ansible.builtin.lineinfile:
+    path: '{{ item.path }}'
+    regexp: ^\s*\blcredit\b.*
+    state: absent
+  with_items: '{{ pwquality_conf_d_files.files }}'
+  when:
+  - DISA_STIG_RHEL_09_611065 | bool
+  - accounts_password_pam_lcredit | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+  - '"pam" in ansible_facts.packages'
+  tags:
+  - CCE-83570-2
+  - DISA-STIG-RHEL-09-611065
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-IA-5(1)(a)
+  - NIST-800-53-IA-5(4)
+  - NIST-800-53-IA-5(c)
+  - PCI-DSS-Req-8.2.3
+  - PCI-DSSv4-8.3
+  - PCI-DSSv4-8.3.6
+  - accounts_password_pam_lcredit
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
 
 - name: Ensure PAM Enforces Password Requirements - Minimum Lowercase Characters - Ensure PAM variable lcredit is set accordingly
   ansible.builtin.lineinfile:
@@ -3332,6 +3307,71 @@
   - no_reboot_needed | bool
   - restrict_strategy | bool
 
+- name: Ensure PAM Enforces Password Requirements - Minimum Length - Find pwquality.conf.d files
+  ansible.builtin.find:
+    paths: /etc/security/pwquality.conf.d/
+    patterns: '*.conf'
+  register: pwquality_conf_d_files
+  when:
+  - DISA_STIG_RHEL_09_611090 | bool
+  - accounts_password_pam_minlen | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+  - '"pam" in ansible_facts.packages'
+  tags:
+  - CCE-83579-3
+  - CJIS-5.6.2.1.1
+  - DISA-STIG-RHEL-09-611090
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-IA-5(1)(a)
+  - NIST-800-53-IA-5(4)
+  - NIST-800-53-IA-5(c)
+  - PCI-DSS-Req-8.2.3
+  - PCI-DSSv4-8.3
+  - PCI-DSSv4-8.3.6
+  - accounts_password_pam_minlen
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+
+- name: Ensure PAM Enforces Password Requirements - Minimum Length - Ensure minlen is not set in pwquality.conf.d
+  ansible.builtin.lineinfile:
+    path: '{{ item.path }}'
+    regexp: ^\s*\bminlen\b.*
+    state: absent
+  with_items: '{{ pwquality_conf_d_files.files }}'
+  when:
+  - DISA_STIG_RHEL_09_611090 | bool
+  - accounts_password_pam_minlen | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+  - '"pam" in ansible_facts.packages'
+  tags:
+  - CCE-83579-3
+  - CJIS-5.6.2.1.1
+  - DISA-STIG-RHEL-09-611090
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-IA-5(1)(a)
+  - NIST-800-53-IA-5(4)
+  - NIST-800-53-IA-5(c)
+  - PCI-DSS-Req-8.2.3
+  - PCI-DSSv4-8.3
+  - PCI-DSSv4-8.3.6
+  - accounts_password_pam_minlen
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+
 - name: Ensure PAM Enforces Password Requirements - Minimum Length - Ensure PAM variable minlen is set accordingly
   ansible.builtin.lineinfile:
     create: true
@@ -3390,6 +3430,63 @@
   - no_reboot_needed | bool
   - restrict_strategy | bool
 
+- name: Ensure PAM Enforces Password Requirements - Minimum Special Characters - Find pwquality.conf.d files
+  ansible.builtin.find:
+    paths: /etc/security/pwquality.conf.d/
+    patterns: '*.conf'
+  register: pwquality_conf_d_files
+  when:
+  - DISA_STIG_RHEL_09_611100 | bool
+  - accounts_password_pam_ocredit | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+  - '"pam" in ansible_facts.packages'
+  tags:
+  - CCE-83565-2
+  - DISA-STIG-RHEL-09-611100
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-IA-5(1)(a)
+  - NIST-800-53-IA-5(4)
+  - NIST-800-53-IA-5(c)
+  - accounts_password_pam_ocredit
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+
+- name: Ensure PAM Enforces Password Requirements - Minimum Special Characters - Ensure ocredit is not set in pwquality.conf.d
+  ansible.builtin.lineinfile:
+    path: '{{ item.path }}'
+    regexp: ^\s*\bocredit\b.*
+    state: absent
+  with_items: '{{ pwquality_conf_d_files.files }}'
+  when:
+  - DISA_STIG_RHEL_09_611100 | bool
+  - accounts_password_pam_ocredit | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+  - '"pam" in ansible_facts.packages'
+  tags:
+  - CCE-83565-2
+  - DISA-STIG-RHEL-09-611100
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-IA-5(1)(a)
+  - NIST-800-53-IA-5(4)
+  - NIST-800-53-IA-5(c)
+  - accounts_password_pam_ocredit
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+
 - name: Ensure PAM Enforces Password Requirements - Minimum Special Characters - Ensure PAM variable ocredit is set accordingly
   ansible.builtin.lineinfile:
     create: true
@@ -3444,6 +3541,65 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - restrict_strategy | bool
+
+- name: Ensure PAM Enforces Password Requirements - Minimum Uppercase Characters - Find pwquality.conf.d files
+  ansible.builtin.find:
+    paths: /etc/security/pwquality.conf.d/
+    patterns: '*.conf'
+  register: pwquality_conf_d_files
+  when:
+  - DISA_STIG_RHEL_09_611110 | bool
+  - accounts_password_pam_ucredit | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+  - '"pam" in ansible_facts.packages'
+  tags:
+  - CCE-83568-6
+  - DISA-STIG-RHEL-09-611110
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-IA-5(1)(a)
+  - NIST-800-53-IA-5(4)
+  - NIST-800-53-IA-5(c)
+  - PCI-DSS-Req-8.2.3
+  - accounts_password_pam_ucredit
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+
+- name: Ensure PAM Enforces Password Requirements - Minimum Uppercase Characters - Ensure ucredit is not set in pwquality.conf.d
+  ansible.builtin.lineinfile:
+    path: '{{ item.path }}'
+    regexp: ^\s*\bucredit\b.*
+    state: absent
+  with_items: '{{ pwquality_conf_d_files.files }}'
+  when:
+  - DISA_STIG_RHEL_09_611110 | bool
+  - accounts_password_pam_ucredit | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+  - '"pam" in ansible_facts.packages'
+  tags:
+  - CCE-83568-6
+  - DISA-STIG-RHEL-09-611110
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-IA-5(1)(a)
+  - NIST-800-53-IA-5(4)
+  - NIST-800-53-IA-5(c)
+  - PCI-DSS-Req-8.2.3
+  - accounts_password_pam_ucredit
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
 
 - name: Ensure PAM Enforces Password Requirements - Minimum Uppercase Characters - Ensure PAM variable ucredit is set accordingly
   ansible.builtin.lineinfile:
@@ -3813,12 +3969,102 @@
   - require_singleuser_auth | bool
   - restrict_strategy | bool
 
+- name: Require Authentication for Single User Mode - find files which already override Execstart of rescue.service
+  ansible.builtin.find:
+    paths: /etc/systemd/system/rescue.service.d
+    patterns: '*.conf'
+    contains: ^\s*ExecStart=.*$
+  register: rescue_service_overrides_found
+  when:
+  - DISA_STIG_RHEL_09_611200 | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - require_singleuser_auth | bool
+  - restrict_strategy | bool
+  - '"kernel" in ansible_facts.packages'
+  tags:
+  - CCE-83594-2
+  - DISA-STIG-RHEL-09-611200
+  - NIST-800-171-3.1.1
+  - NIST-800-171-3.4.5
+  - NIST-800-53-AC-3
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-IA-2
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - require_singleuser_auth
+  - restrict_strategy
+
+- name: Require Authentication for Single User Mode - set files containing ExecStart overrides as target
+  ansible.builtin.set_fact:
+    rescue_service_remediation_target_file: '{{ rescue_service_overrides_found.files | map(attribute=''path'') | list }}'
+  when:
+  - DISA_STIG_RHEL_09_611200 | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - require_singleuser_auth | bool
+  - restrict_strategy | bool
+  - '"kernel" in ansible_facts.packages'
+  - rescue_service_overrides_found.matched is defined and rescue_service_overrides_found.matched > 0
+  tags:
+  - CCE-83594-2
+  - DISA-STIG-RHEL-09-611200
+  - NIST-800-171-3.1.1
+  - NIST-800-171-3.4.5
+  - NIST-800-53-AC-3
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-IA-2
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - require_singleuser_auth
+  - restrict_strategy
+
+- name: Require Authentication for Single User Mode - set default target for rescue.service override
+  ansible.builtin.set_fact:
+    rescue_service_remediation_target_file:
+    - /etc/systemd/system/rescue.service.d/10-oscap.conf
+  when:
+  - DISA_STIG_RHEL_09_611200 | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - require_singleuser_auth | bool
+  - restrict_strategy | bool
+  - '"kernel" in ansible_facts.packages'
+  - rescue_service_overrides_found.matched is defined and rescue_service_overrides_found.matched == 0
+  tags:
+  - CCE-83594-2
+  - DISA-STIG-RHEL-09-611200
+  - NIST-800-171-3.1.1
+  - NIST-800-171-3.4.5
+  - NIST-800-53-AC-3
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-IA-2
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - require_singleuser_auth
+  - restrict_strategy
+
 - name: Require Authentication for Single User Mode - Require emergency user mode password
   community.general.ini_file:
-    path: /etc/systemd/system/rescue.service.d/10-oscap.conf
+    path: '{{ item }}'
     section: Service
     option: ExecStart
-    value: -/usr/lib/systemd/systemd-sulogin-shell rescue
+    values:
+    - ''
+    - -/usr/lib/systemd/systemd-sulogin-shell rescue
+  loop: '{{ rescue_service_remediation_target_file }}'
   when:
   - DISA_STIG_RHEL_09_611200 | bool
   - low_complexity | bool
@@ -4087,7 +4333,7 @@
   - medium_severity | bool
   - reboot_required | bool
   - restrict_strategy | bool
-  - '"grub2-common" in ansible_facts.packages'
+  - ( "grub2-common" in ansible_facts.packages and "kernel" in ansible_facts.packages )
   tags:
   - CCE-85986-8
   - grub2_disable_recovery
@@ -4106,7 +4352,7 @@
   - medium_severity | bool
   - reboot_required | bool
   - restrict_strategy | bool
-  - '"grub2-common" in ansible_facts.packages'
+  - ( "grub2-common" in ansible_facts.packages and "kernel" in ansible_facts.packages )
   tags:
   - CCE-85986-8
   - grub2_disable_recovery
@@ -4144,8 +4390,7 @@
   - medium_severity | bool
   - reboot_required | bool
   - restrict_strategy | bool
-  - '"grub2-common" in ansible_facts.packages'
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - ( "grub2-common" in ansible_facts.packages and "kernel" in ansible_facts.packages )
   tags:
   - CCE-85867-0
   - grub2_init_on_alloc_argument
@@ -4183,8 +4428,7 @@
   - medium_severity | bool
   - reboot_required | bool
   - restrict_strategy | bool
-  - '"grub2-common" in ansible_facts.packages'
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - ( "grub2-common" in ansible_facts.packages and "kernel" in ansible_facts.packages )
   tags:
   - CCE-85879-5
   - grub2_page_alloc_shuffle_argument
@@ -4220,8 +4464,7 @@
   - medium_severity | bool
   - reboot_required | bool
   - restrict_strategy | bool
-  - '"grub2-common" in ansible_facts.packages'
-  - ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"]
+  - ( "grub2-common" in ansible_facts.packages and "kernel" in ansible_facts.packages )
   tags:
   - CCE-86292-0
   - grub2_systemd_debug-shell_argument_absent
@@ -4263,9 +4506,8 @@
   - medium_severity | bool
   - reboot_required | bool
   - restrict_strategy | bool
-  - '"grub2-common" in ansible_facts.packages'
-  - ( ansible_virtualization_type not in ["docker", "lxc", "openvz", "podman", "container"] and ansible_architecture == "x86_64"
-    )
+  - ( "grub2-common" in ansible_facts.packages and "kernel" in ansible_facts.packages )
+  - ansible_architecture == "x86_64"
   tags:
   - CCE-83842-5
   - DISA-STIG-RHEL-09-212035
@@ -5097,7 +5339,8 @@
   - mount_option_var_log_audit_nodev | bool
   - no_reboot_needed | bool
   - ( not ( "kernel" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
-    ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz", "podman", "container"] ) )
+    and not "openshift-kubelet" in ansible_facts.packages ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz",
+    "podman", "container"] ) )
   - '"/var/log/audit" in ansible_mounts | map(attribute="mount") | list'
   tags:
   - CCE-83882-1
@@ -5130,7 +5373,8 @@
   - mount_option_var_log_audit_nodev | bool
   - no_reboot_needed | bool
   - ( not ( "kernel" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
-    ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz", "podman", "container"] ) )
+    and not "openshift-kubelet" in ansible_facts.packages ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz",
+    "podman", "container"] ) )
   - '"/var/log/audit" in ansible_mounts | map(attribute="mount") | list'
   - device_name.stdout is defined and device_name.stdout_lines is defined
   - (device_name.stdout | length > 0)
@@ -5171,7 +5415,8 @@
   - mount_option_var_log_audit_nodev | bool
   - no_reboot_needed | bool
   - ( not ( "kernel" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
-    ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz", "podman", "container"] ) )
+    and not "openshift-kubelet" in ansible_facts.packages ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz",
+    "podman", "container"] ) )
   - '"/var/log/audit" in ansible_mounts | map(attribute="mount") | list'
   - ("--fstab" | length == 0)
   - device_name.stdout is defined and device_name.stdout_lines is defined
@@ -5204,7 +5449,8 @@
   - mount_option_var_log_audit_nodev | bool
   - no_reboot_needed | bool
   - ( not ( "kernel" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
-    ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz", "podman", "container"] ) )
+    and not "openshift-kubelet" in ansible_facts.packages ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz",
+    "podman", "container"] ) )
   - '"/var/log/audit" in ansible_mounts | map(attribute="mount") | list'
   - mount_info is defined and "nodev" not in mount_info.options
   tags:
@@ -5239,7 +5485,8 @@
   - mount_option_var_log_audit_nodev | bool
   - no_reboot_needed | bool
   - ( not ( "kernel" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
-    ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz", "podman", "container"] ) )
+    and not "openshift-kubelet" in ansible_facts.packages ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz",
+    "podman", "container"] ) )
   - '"/var/log/audit" in ansible_mounts | map(attribute="mount") | list'
   - mount_info is defined
   - (device_name.stdout is defined and (device_name.stdout | length > 0)) or ("--fstab" | length == 0)
@@ -5300,7 +5547,8 @@
   - mount_option_var_log_audit_noexec | bool
   - no_reboot_needed | bool
   - ( not ( "kernel" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
-    ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz", "podman", "container"] ) )
+    and not "openshift-kubelet" in ansible_facts.packages ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz",
+    "podman", "container"] ) )
   - '"/var/log/audit" in ansible_mounts | map(attribute="mount") | list'
   tags:
   - CCE-83878-9
@@ -5333,7 +5581,8 @@
   - mount_option_var_log_audit_noexec | bool
   - no_reboot_needed | bool
   - ( not ( "kernel" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
-    ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz", "podman", "container"] ) )
+    and not "openshift-kubelet" in ansible_facts.packages ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz",
+    "podman", "container"] ) )
   - '"/var/log/audit" in ansible_mounts | map(attribute="mount") | list'
   - device_name.stdout is defined and device_name.stdout_lines is defined
   - (device_name.stdout | length > 0)
@@ -5374,7 +5623,8 @@
   - mount_option_var_log_audit_noexec | bool
   - no_reboot_needed | bool
   - ( not ( "kernel" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
-    ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz", "podman", "container"] ) )
+    and not "openshift-kubelet" in ansible_facts.packages ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz",
+    "podman", "container"] ) )
   - '"/var/log/audit" in ansible_mounts | map(attribute="mount") | list'
   - ("--fstab" | length == 0)
   - device_name.stdout is defined and device_name.stdout_lines is defined
@@ -5407,7 +5657,8 @@
   - mount_option_var_log_audit_noexec | bool
   - no_reboot_needed | bool
   - ( not ( "kernel" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
-    ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz", "podman", "container"] ) )
+    and not "openshift-kubelet" in ansible_facts.packages ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz",
+    "podman", "container"] ) )
   - '"/var/log/audit" in ansible_mounts | map(attribute="mount") | list'
   - mount_info is defined and "noexec" not in mount_info.options
   tags:
@@ -5442,7 +5693,8 @@
   - mount_option_var_log_audit_noexec | bool
   - no_reboot_needed | bool
   - ( not ( "kernel" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
-    ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz", "podman", "container"] ) )
+    and not "openshift-kubelet" in ansible_facts.packages ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz",
+    "podman", "container"] ) )
   - '"/var/log/audit" in ansible_mounts | map(attribute="mount") | list'
   - mount_info is defined
   - (device_name.stdout is defined and (device_name.stdout | length > 0)) or ("--fstab" | length == 0)
@@ -5503,7 +5755,8 @@
   - mount_option_var_log_audit_nosuid | bool
   - no_reboot_needed | bool
   - ( not ( "kernel" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
-    ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz", "podman", "container"] ) )
+    and not "openshift-kubelet" in ansible_facts.packages ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz",
+    "podman", "container"] ) )
   - '"/var/log/audit" in ansible_mounts | map(attribute="mount") | list'
   tags:
   - CCE-83893-8
@@ -5536,7 +5789,8 @@
   - mount_option_var_log_audit_nosuid | bool
   - no_reboot_needed | bool
   - ( not ( "kernel" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
-    ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz", "podman", "container"] ) )
+    and not "openshift-kubelet" in ansible_facts.packages ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz",
+    "podman", "container"] ) )
   - '"/var/log/audit" in ansible_mounts | map(attribute="mount") | list'
   - device_name.stdout is defined and device_name.stdout_lines is defined
   - (device_name.stdout | length > 0)
@@ -5577,7 +5831,8 @@
   - mount_option_var_log_audit_nosuid | bool
   - no_reboot_needed | bool
   - ( not ( "kernel" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
-    ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz", "podman", "container"] ) )
+    and not "openshift-kubelet" in ansible_facts.packages ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz",
+    "podman", "container"] ) )
   - '"/var/log/audit" in ansible_mounts | map(attribute="mount") | list'
   - ("--fstab" | length == 0)
   - device_name.stdout is defined and device_name.stdout_lines is defined
@@ -5610,7 +5865,8 @@
   - mount_option_var_log_audit_nosuid | bool
   - no_reboot_needed | bool
   - ( not ( "kernel" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
-    ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz", "podman", "container"] ) )
+    and not "openshift-kubelet" in ansible_facts.packages ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz",
+    "podman", "container"] ) )
   - '"/var/log/audit" in ansible_mounts | map(attribute="mount") | list'
   - mount_info is defined and "nosuid" not in mount_info.options
   tags:
@@ -5645,7 +5901,8 @@
   - mount_option_var_log_audit_nosuid | bool
   - no_reboot_needed | bool
   - ( not ( "kernel" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
-    ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz", "podman", "container"] ) )
+    and not "openshift-kubelet" in ansible_facts.packages ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz",
+    "podman", "container"] ) )
   - '"/var/log/audit" in ansible_mounts | map(attribute="mount") | list'
   - mount_info is defined
   - (device_name.stdout is defined and (device_name.stdout | length > 0)) or ("--fstab" | length == 0)
@@ -7212,6 +7469,7 @@
   - no_reboot_needed | bool
   - restrict_strategy | bool
   - '"kernel" in ansible_facts.packages'
+  - '"chrony" in ansible_facts.packages'
   tags:
   - CCE-87543-5
   - DISA-STIG-RHEL-09-252025
@@ -7521,6 +7779,38 @@
   - no_reboot_needed
   - restrict_strategy
 
+- name: Disable Host-Based Authentication - set file mode for /etc/ssh/sshd_config.d/01-complianceascode-reinforce-os-defaults.conf
+  ansible.builtin.file:
+    path: /etc/ssh/sshd_config.d/01-complianceascode-reinforce-os-defaults.conf
+    mode: '0600'
+  when:
+  - DISA_STIG_RHEL_09_255080 | bool
+  - disable_host_auth | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+  - '"kernel" in ansible_facts.packages'
+  tags:
+  - CCE-90816-0
+  - CJIS-5.5.6
+  - DISA-STIG-RHEL-09-255080
+  - NIST-800-171-3.1.12
+  - NIST-800-53-AC-17(a)
+  - NIST-800-53-AC-3
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-CM-7(a)
+  - NIST-800-53-CM-7(b)
+  - PCI-DSSv4-8.3
+  - PCI-DSSv4-8.3.1
+  - disable_host_auth
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+
 - name: Gather the package facts
   package_facts:
     manager: auto
@@ -7589,6 +7879,39 @@
       state: present
       insertbefore: BOF
       validate: /usr/sbin/sshd -t -f %s
+  when:
+  - DISA_STIG_RHEL_09_255040 | bool
+  - high_severity | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+  - sshd_disable_empty_passwords | bool
+  - '"kernel" in ansible_facts.packages'
+  tags:
+  - CCE-90799-8
+  - CJIS-5.5.6
+  - DISA-STIG-RHEL-09-255040
+  - NIST-800-171-3.1.1
+  - NIST-800-171-3.1.5
+  - NIST-800-53-AC-17(a)
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-CM-7(a)
+  - NIST-800-53-CM-7(b)
+  - PCI-DSS-Req-2.2.4
+  - PCI-DSSv4-2.2
+  - PCI-DSSv4-2.2.6
+  - high_severity
+  - low_complexity
+  - low_disruption
+  - no_reboot_needed
+  - restrict_strategy
+  - sshd_disable_empty_passwords
+
+- name: Disable SSH Access via Empty Passwords - set file mode for /etc/ssh/sshd_config.d/01-complianceascode-reinforce-os-defaults.conf
+  ansible.builtin.file:
+    path: /etc/ssh/sshd_config.d/01-complianceascode-reinforce-os-defaults.conf
+    mode: '0600'
   when:
   - DISA_STIG_RHEL_09_255040 | bool
   - high_severity | bool
@@ -7705,6 +8028,34 @@
   - restrict_strategy
   - sshd_disable_gssapi_auth
 
+- name: Disable GSSAPI Authentication - set file mode for /etc/ssh/sshd_config.d/01-complianceascode-reinforce-os-defaults.conf
+  ansible.builtin.file:
+    path: /etc/ssh/sshd_config.d/01-complianceascode-reinforce-os-defaults.conf
+    mode: '0600'
+  when:
+  - DISA_STIG_RHEL_09_255135 | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+  - sshd_disable_gssapi_auth | bool
+  - '"kernel" in ansible_facts.packages'
+  tags:
+  - CCE-90808-7
+  - DISA-STIG-RHEL-09-255135
+  - NIST-800-171-3.1.12
+  - NIST-800-53-AC-17(a)
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-CM-7(a)
+  - NIST-800-53-CM-7(b)
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  - sshd_disable_gssapi_auth
+
 - name: Gather the package facts
   package_facts:
     manager: auto
@@ -7768,6 +8119,34 @@
       state: present
       insertbefore: BOF
       validate: /usr/sbin/sshd -t -f %s
+  when:
+  - DISA_STIG_RHEL_09_255140 | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+  - sshd_disable_kerb_auth | bool
+  - '"kernel" in ansible_facts.packages'
+  tags:
+  - CCE-90802-0
+  - DISA-STIG-RHEL-09-255140
+  - NIST-800-171-3.1.12
+  - NIST-800-53-AC-17(a)
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-CM-7(a)
+  - NIST-800-53-CM-7(b)
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  - sshd_disable_kerb_auth
+
+- name: Disable Kerberos Authentication - set file mode for /etc/ssh/sshd_config.d/01-complianceascode-reinforce-os-defaults.conf
+  ansible.builtin.file:
+    path: /etc/ssh/sshd_config.d/01-complianceascode-reinforce-os-defaults.conf
+    mode: '0600'
   when:
   - DISA_STIG_RHEL_09_255140 | bool
   - low_complexity | bool
@@ -7895,6 +8274,42 @@
   - restrict_strategy
   - sshd_disable_root_login
 
+- name: Disable SSH Root Login - set file mode for /etc/ssh/sshd_config.d/00-complianceascode-hardening.conf
+  ansible.builtin.file:
+    path: /etc/ssh/sshd_config.d/00-complianceascode-hardening.conf
+    mode: '0600'
+  when:
+  - DISA_STIG_RHEL_09_255045 | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+  - sshd_disable_root_login | bool
+  - '"kernel" in ansible_facts.packages'
+  tags:
+  - CCE-90800-4
+  - CJIS-5.5.6
+  - DISA-STIG-RHEL-09-255045
+  - NIST-800-171-3.1.1
+  - NIST-800-171-3.1.5
+  - NIST-800-53-AC-17(a)
+  - NIST-800-53-AC-6(2)
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-CM-7(a)
+  - NIST-800-53-CM-7(b)
+  - NIST-800-53-IA-2
+  - NIST-800-53-IA-2(5)
+  - PCI-DSS-Req-2.2.4
+  - PCI-DSSv4-2.2
+  - PCI-DSSv4-2.2.6
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  - sshd_disable_root_login
+
 - name: Gather the package facts
   package_facts:
     manager: auto
@@ -7960,6 +8375,36 @@
       state: present
       insertbefore: BOF
       validate: /usr/sbin/sshd -t -f %s
+  when:
+  - DISA_STIG_RHEL_09_255025 | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+  - sshd_enable_warning_banner | bool
+  - '"kernel" in ansible_facts.packages'
+  tags:
+  - CCE-90807-9
+  - CJIS-5.5.6
+  - DISA-STIG-RHEL-09-255025
+  - NIST-800-171-3.1.9
+  - NIST-800-53-AC-17(a)
+  - NIST-800-53-AC-8(a)
+  - NIST-800-53-AC-8(c)
+  - NIST-800-53-CM-6(a)
+  - PCI-DSS-Req-2.2.4
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  - sshd_enable_warning_banner
+
+- name: Enable SSH Warning Banner - set file mode for /etc/ssh/sshd_config.d/00-complianceascode-hardening.conf
+  ansible.builtin.file:
+    path: /etc/ssh/sshd_config.d/00-complianceascode-hardening.conf
+    mode: '0600'
   when:
   - DISA_STIG_RHEL_09_255025 | bool
   - low_complexity | bool
@@ -8063,6 +8508,29 @@
   - no_reboot_needed
   - sshd_rekey_limit
 
+- name: Force frequent session key renegotiation - set file mode for /etc/ssh/sshd_config.d/00-complianceascode-hardening.conf
+  ansible.builtin.file:
+    path: /etc/ssh/sshd_config.d/00-complianceascode-hardening.conf
+    mode: '0600'
+  when:
+  - DISA_STIG_RHEL_09_255090 | bool
+  - configure_strategy | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - sshd_rekey_limit | bool
+  - '"kernel" in ansible_facts.packages'
+  tags:
+  - CCE-90815-2
+  - DISA-STIG-RHEL-09-255090
+  - configure_strategy
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - sshd_rekey_limit
+
 - name: Gather the package facts
   package_facts:
     manager: auto
@@ -8116,6 +8584,7 @@
     manager: auto
   tags:
   - CCE-84205-4
+  - DISA-STIG-RHEL-09-291015
   - DISA-STIG-RHEL-09-291020
   - NIST-800-53-CM-8(3)(a)
   - NIST-800-53-IA-3
@@ -8126,6 +8595,7 @@
   - no_reboot_needed
   - service_usbguard_enabled
   when:
+  - DISA_STIG_RHEL_09_291015 | bool
   - DISA_STIG_RHEL_09_291020 | bool
   - enable_strategy | bool
   - low_complexity | bool
@@ -8148,6 +8618,7 @@
     when:
     - '"usbguard" in ansible_facts.packages'
   when:
+  - DISA_STIG_RHEL_09_291015 | bool
   - DISA_STIG_RHEL_09_291020 | bool
   - enable_strategy | bool
   - low_complexity | bool
@@ -8158,6 +8629,7 @@
   - ( ansible_architecture != "s390x" and "kernel" in ansible_facts.packages )
   tags:
   - CCE-84205-4
+  - DISA-STIG-RHEL-09-291015
   - DISA-STIG-RHEL-09-291020
   - NIST-800-53-CM-8(3)(a)
   - NIST-800-53-IA-3
@@ -8893,10 +9365,10 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Remove any permissions from other group
-  file:
+- name: Configure auditing of unsuccessful file accesses - Remove any permissions from group and other
+  ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-3-access-failed.rules
-    mode: o-rwx
+    mode: g-rwx,o-rwx
   when:
   - audit_access_failed | bool
   - low_complexity | bool
@@ -8971,10 +9443,10 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Remove any permissions from other group
-  file:
+- name: Configure auditing of unsuccessful file accesses (AArch64) - Remove any permissions from group and other
+  ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-3-access-failed.rules
-    mode: o-rwx
+    mode: g-rwx,o-rwx
   when:
   - audit_access_failed_aarch64 | bool
   - low_complexity | bool
@@ -9045,10 +9517,10 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Remove any permissions from other group
-  file:
+- name: Configure auditing of unsuccessful file accesses (ppc64le) - Remove any permissions from group and other
+  ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-3-access-failed.rules
-    mode: o-rwx
+    mode: g-rwx,o-rwx
   when:
   - audit_access_failed_ppc64le | bool
   - low_complexity | bool
@@ -9120,10 +9592,10 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Remove any permissions from other group
-  file:
+- name: Configure auditing of successful file accesses - Remove any permissions from group and other
+  ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-3-access-success.rules
-    mode: o-rwx
+    mode: g-rwx,o-rwx
   when:
   - audit_access_success | bool
   - low_complexity | bool
@@ -9195,10 +9667,10 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Remove any permissions from other group
-  file:
+- name: Configure auditing of successful file accesses (AArch64) - Remove any permissions from group and other
+  ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-3-access-success.rules
-    mode: o-rwx
+    mode: g-rwx,o-rwx
   when:
   - audit_access_success_aarch64 | bool
   - low_complexity | bool
@@ -9268,10 +9740,10 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Remove any permissions from other group
-  file:
+- name: Configure auditing of successful file accesses (ppc64le) - Remove any permissions from group and other
+  ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-3-access-success.rules
-    mode: o-rwx
+    mode: g-rwx,o-rwx
   when:
   - audit_access_success_ppc64le | bool
   - low_complexity | bool
@@ -9356,10 +9828,10 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Remove any permissions from other group
-  file:
+- name: Configure basic parameters of Audit system - Remove any permissions from group and other
+  ansible.builtin.file:
     path: /etc/audit/rules.d/10-base-config.rules
-    mode: o-rwx
+    mode: g-rwx,o-rwx
   when:
   - audit_basic_configuration | bool
   - low_complexity | bool
@@ -9448,10 +9920,10 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Remove any permissions from other group
-  file:
+- name: Configure auditing of unsuccessful file creations - Remove any permissions from group and other
+  ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-1-create-failed.rules
-    mode: o-rwx
+    mode: g-rwx,o-rwx
   when:
   - audit_create_failed | bool
   - low_complexity | bool
@@ -9533,10 +10005,10 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Remove any permissions from other group
-  file:
+- name: Configure auditing of unsuccessful file creations (AArch64) - Remove any permissions from group and other
+  ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-1-create-failed.rules
-    mode: o-rwx
+    mode: g-rwx,o-rwx
   when:
   - audit_create_failed_aarch64 | bool
   - low_complexity | bool
@@ -9614,10 +10086,10 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Remove any permissions from other group
-  file:
+- name: Configure auditing of unsuccessful file creations (ppc64le) - Remove any permissions from group and other
+  ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-1-create-failed.rules
-    mode: o-rwx
+    mode: g-rwx,o-rwx
   when:
   - audit_create_failed_ppc64le | bool
   - low_complexity | bool
@@ -9695,10 +10167,10 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Remove any permissions from other group
-  file:
+- name: Configure auditing of successful file creations - Remove any permissions from group and other
+  ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-1-create-success.rules
-    mode: o-rwx
+    mode: g-rwx,o-rwx
   when:
   - audit_create_success | bool
   - low_complexity | bool
@@ -9772,10 +10244,10 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Remove any permissions from other group
-  file:
+- name: Configure auditing of successful file creations (AArch64) - Remove any permissions from group and other
+  ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-1-create-success.rules
-    mode: o-rwx
+    mode: g-rwx,o-rwx
   when:
   - audit_create_success_aarch64 | bool
   - low_complexity | bool
@@ -9847,10 +10319,10 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Remove any permissions from other group
-  file:
+- name: Configure auditing of successful file creations (ppc64le) - Remove any permissions from group and other
+  ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-1-create-success.rules
-    mode: o-rwx
+    mode: g-rwx,o-rwx
   when:
   - audit_create_success_ppc64le | bool
   - low_complexity | bool
@@ -9924,10 +10396,10 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Remove any permissions from other group
-  file:
+- name: Configure auditing of unsuccessful file deletions - Remove any permissions from group and other
+  ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-4-delete-failed.rules
-    mode: o-rwx
+    mode: g-rwx,o-rwx
   when:
   - audit_delete_failed | bool
   - low_complexity | bool
@@ -10001,10 +10473,10 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Remove any permissions from other group
-  file:
+- name: Configure auditing of unsuccessful file deletions (AArch64) - Remove any permissions from group and other
+  ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-4-delete-failed.rules
-    mode: o-rwx
+    mode: g-rwx,o-rwx
   when:
   - audit_delete_failed_aarch64 | bool
   - low_complexity | bool
@@ -10074,10 +10546,10 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Remove any permissions from other group
-  file:
+- name: Configure auditing of unsuccessful file deletions (ppc64le) - Remove any permissions from group and other
+  ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-4-delete-failed.rules
-    mode: o-rwx
+    mode: g-rwx,o-rwx
   when:
   - audit_delete_failed_ppc64le | bool
   - low_complexity | bool
@@ -10147,10 +10619,10 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Remove any permissions from other group
-  file:
+- name: Configure auditing of successful file deletions - Remove any permissions from group and other
+  ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-4-delete-success.rules
-    mode: o-rwx
+    mode: g-rwx,o-rwx
   when:
   - audit_delete_success | bool
   - low_complexity | bool
@@ -10220,10 +10692,10 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Remove any permissions from other group
-  file:
+- name: Configure auditing of successful file deletions (AArch64) - Remove any permissions from group and other
+  ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-4-delete-success.rules
-    mode: o-rwx
+    mode: g-rwx,o-rwx
   when:
   - audit_delete_success_aarch64 | bool
   - low_complexity | bool
@@ -10291,10 +10763,10 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Remove any permissions from other group
-  file:
+- name: Configure auditing of successful file deletions (ppc64le) - Remove any permissions from group and other
+  ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-4-delete-success.rules
-    mode: o-rwx
+    mode: g-rwx,o-rwx
   when:
   - audit_delete_success_ppc64le | bool
   - low_complexity | bool
@@ -10362,10 +10834,10 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Remove any permissions from other group
-  file:
+- name: Configure immutable Audit login UIDs - Remove any permissions from group and other
+  ansible.builtin.file:
     path: /etc/audit/rules.d/11-loginuid.rules
-    mode: o-rwx
+    mode: g-rwx,o-rwx
   when:
   - audit_immutable_login_uids | bool
   - low_complexity | bool
@@ -10454,10 +10926,10 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Remove any permissions from other group
-  file:
+- name: Configure auditing of unsuccessful file modifications - Remove any permissions from group and other
+  ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-2-modify-failed.rules
-    mode: o-rwx
+    mode: g-rwx,o-rwx
   when:
   - audit_modify_failed | bool
   - low_complexity | bool
@@ -10543,10 +11015,10 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Remove any permissions from other group
-  file:
+- name: Configure auditing of unsuccessful file modifications (AARch64) - Remove any permissions from group and other
+  ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-2-modify-failed.rules
-    mode: o-rwx
+    mode: g-rwx,o-rwx
   when:
   - audit_modify_failed_aarch64 | bool
   - low_complexity | bool
@@ -10624,10 +11096,10 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Remove any permissions from other group
-  file:
+- name: Configure auditing of unsuccessful file modifications (ppc64le) - Remove any permissions from group and other
+  ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-2-modify-failed.rules
-    mode: o-rwx
+    mode: g-rwx,o-rwx
   when:
   - audit_modify_failed_ppc64le | bool
   - low_complexity | bool
@@ -10705,10 +11177,10 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Remove any permissions from other group
-  file:
+- name: Configure auditing of successful file modifications - Remove any permissions from group and other
+  ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-2-modify-success.rules
-    mode: o-rwx
+    mode: g-rwx,o-rwx
   when:
   - audit_modify_success | bool
   - low_complexity | bool
@@ -10784,10 +11256,10 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Remove any permissions from other group
-  file:
+- name: Configure auditing of successful file modifications (AArch64) - Remove any permissions from group and other
+  ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-2-modify-success.rules
-    mode: o-rwx
+    mode: g-rwx,o-rwx
   when:
   - audit_modify_success_aarch64 | bool
   - low_complexity | bool
@@ -10859,10 +11331,10 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Remove any permissions from other group
-  file:
+- name: Configure auditing of successful file modifications (ppc64le) - Remove any permissions from group and other
+  ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-2-modify-success.rules
-    mode: o-rwx
+    mode: g-rwx,o-rwx
   when:
   - audit_modify_success_ppc64le | bool
   - low_complexity | bool
@@ -10938,10 +11410,10 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Remove any permissions from other group
-  file:
+- name: Configure auditing of loading and unloading of kernel modules - Remove any permissions from group and other
+  ansible.builtin.file:
     path: /etc/audit/rules.d/43-module-load.rules
-    mode: o-rwx
+    mode: g-rwx,o-rwx
   when:
   - audit_module_load | bool
   - low_complexity | bool
@@ -11013,10 +11485,10 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Remove any permissions from other group
-  file:
+- name: Configure auditing of loading and unloading of kernel modules (ppc64le) - Remove any permissions from group and other
+  ansible.builtin.file:
     path: /etc/audit/rules.d/43-module-load.rules
-    mode: o-rwx
+    mode: g-rwx,o-rwx
   when:
   - audit_module_load_ppc64le | bool
   - low_complexity | bool
@@ -11085,11 +11557,6 @@
 
       ## 30-ospp-v42-6-owner-change-success.rules
 
-      ##
-
-      ## original copies may be found in /usr/share/audit/sample-rules/
-
-
 
       ## User add delete modify. This is covered by pam. However, someone could
 
@@ -11302,10 +11769,10 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Remove any permissions from other group
-  file:
+- name: Perform general configuration of Audit for OSPP - Remove any permissions from group and other
+  ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42.rules
-    mode: o-rwx
+    mode: g-rwx,o-rwx
   when:
   - audit_ospp_general | bool
   - low_complexity | bool
@@ -11373,11 +11840,6 @@
       ## 30-ospp-v42-6-owner-change-failed.rules,
 
       ## 30-ospp-v42-6-owner-change-success.rules
-
-      ##
-
-      ## original copies may be found in /usr/share/audit/sample-rules/
-
 
 
       ## User add delete modify. This is covered by pam. However, someone could
@@ -11587,10 +12049,10 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Remove any permissions from other group
-  file:
+- name: Perform general configuration of Audit for OSPP (AArch64) - Remove any permissions from group and other
+  ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42.rules
-    mode: o-rwx
+    mode: g-rwx,o-rwx
   when:
   - audit_ospp_general_aarch64 | bool
   - low_complexity | bool
@@ -11658,11 +12120,6 @@
       ## 30-ospp-v42-6-owner-change-failed.rules,
 
       ## 30-ospp-v42-6-owner-change-success.rules
-
-      ##
-
-      ## original copies may be found in /usr/share/audit/sample-rules/
-
 
 
       ## User add delete modify. This is covered by pam. However, someone could
@@ -11866,10 +12323,10 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Remove any permissions from other group
-  file:
+- name: Perform general configuration of Audit for OSPP (ppc64le) - Remove any permissions from group and other
+  ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42.rules
-    mode: o-rwx
+    mode: g-rwx,o-rwx
   when:
   - audit_ospp_general_ppc64le | bool
   - low_complexity | bool
@@ -11943,10 +12400,10 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Remove any permissions from other group
-  file:
+- name: Configure auditing of unsuccessful ownership changes - Remove any permissions from group and other
+  ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-6-owner-change-failed.rules
-    mode: o-rwx
+    mode: g-rwx,o-rwx
   when:
   - audit_owner_change_failed | bool
   - low_complexity | bool
@@ -12020,10 +12477,10 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Remove any permissions from other group
-  file:
+- name: Configure auditing of unsuccessful ownership changes (AArch64) - Remove any permissions from group and other
+  ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-6-owner-change-failed.rules
-    mode: o-rwx
+    mode: g-rwx,o-rwx
   when:
   - audit_owner_change_failed_aarch64 | bool
   - low_complexity | bool
@@ -12093,10 +12550,10 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Remove any permissions from other group
-  file:
+- name: Configure auditing of unsuccessful ownership changes (ppc64le) - Remove any permissions from group and other
+  ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-6-owner-change-failed.rules
-    mode: o-rwx
+    mode: g-rwx,o-rwx
   when:
   - audit_owner_change_failed_ppc64le | bool
   - low_complexity | bool
@@ -12166,10 +12623,10 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Remove any permissions from other group
-  file:
+- name: Configure auditing of successful ownership changes - Remove any permissions from group and other
+  ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-6-owner-change-success.rules
-    mode: o-rwx
+    mode: g-rwx,o-rwx
   when:
   - audit_owner_change_success | bool
   - low_complexity | bool
@@ -12239,10 +12696,10 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Remove any permissions from other group
-  file:
+- name: Configure auditing of successful ownership changes (AArch64) - Remove any permissions from group and other
+  ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-6-owner-change-success.rules
-    mode: o-rwx
+    mode: g-rwx,o-rwx
   when:
   - audit_owner_change_success_aarch64 | bool
   - low_complexity | bool
@@ -12310,10 +12767,10 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Remove any permissions from other group
-  file:
+- name: Configure auditing of successful ownership changes (ppc64le) - Remove any permissions from group and other
+  ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-6-owner-change-success.rules
-    mode: o-rwx
+    mode: g-rwx,o-rwx
   when:
   - audit_owner_change_success_ppc64le | bool
   - low_complexity | bool
@@ -12391,10 +12848,10 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Remove any permissions from other group
-  file:
+- name: Configure auditing of unsuccessful permission changes - Remove any permissions from group and other
+  ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-5-perm-change-failed.rules
-    mode: o-rwx
+    mode: g-rwx,o-rwx
   when:
   - audit_perm_change_failed | bool
   - low_complexity | bool
@@ -12472,10 +12929,10 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Remove any permissions from other group
-  file:
+- name: Configure auditing of unsuccessful permission changes (AArch64) - Remove any permissions from group and other
+  ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-5-perm-change-failed.rules
-    mode: o-rwx
+    mode: g-rwx,o-rwx
   when:
   - audit_perm_change_failed_aarch64 | bool
   - low_complexity | bool
@@ -12547,10 +13004,10 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Remove any permissions from other group
-  file:
+- name: Configure auditing of unsuccessful permission changes (ppc64le) - Remove any permissions from group and other
+  ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-5-perm-change-failed.rules
-    mode: o-rwx
+    mode: g-rwx,o-rwx
   when:
   - audit_perm_change_failed_ppc64le | bool
   - low_complexity | bool
@@ -12622,10 +13079,10 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Remove any permissions from other group
-  file:
+- name: Configure auditing of successful permission changes - Remove any permissions from group and other
+  ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-5-perm-change-success.rules
-    mode: o-rwx
+    mode: g-rwx,o-rwx
   when:
   - audit_perm_change_success | bool
   - low_complexity | bool
@@ -12697,10 +13154,10 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Remove any permissions from other group
-  file:
+- name: Configure auditing of successful permission changes (AArch64) - Remove any permissions from group and other
+  ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-5-perm-change-success.rules
-    mode: o-rwx
+    mode: g-rwx,o-rwx
   when:
   - audit_perm_change_success_aarch64 | bool
   - low_complexity | bool
@@ -12769,10 +13226,10 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Remove any permissions from other group
-  file:
+- name: Configure auditing of successful permission changes (ppc64le) - Remove any permissions from group and other
+  ansible.builtin.file:
     path: /etc/audit/rules.d/30-ospp-v42-5-perm-change-success.rules
-    mode: o-rwx
+    mode: g-rwx,o-rwx
   when:
   - audit_perm_change_success_ppc64le | bool
   - low_complexity | bool
