@@ -43,6 +43,8 @@ DISA_STIG_RHEL_09_214020: true
 DISA_STIG_RHEL_09_214025: true
 DISA_STIG_RHEL_09_215010: true
 DISA_STIG_RHEL_09_215080: true
+DISA_STIG_RHEL_09_215100: true
+DISA_STIG_RHEL_09_215105: true
 DISA_STIG_RHEL_09_231160: true
 DISA_STIG_RHEL_09_231165: true
 DISA_STIG_RHEL_09_231170: true
@@ -55,6 +57,7 @@ DISA_STIG_RHEL_09_255020: true
 DISA_STIG_RHEL_09_255025: true
 DISA_STIG_RHEL_09_255040: true
 DISA_STIG_RHEL_09_255045: true
+DISA_STIG_RHEL_09_255075: true
 DISA_STIG_RHEL_09_255080: true
 DISA_STIG_RHEL_09_255090: true
 DISA_STIG_RHEL_09_255135: true
@@ -87,10 +90,8 @@ DISA_STIG_RHEL_09_653095: true
 DISA_STIG_RHEL_09_653100: true
 DISA_STIG_RHEL_09_653120: true
 DISA_STIG_RHEL_09_671010: true
-DISA_STIG_RHEL_09_672010: true
 DISA_STIG_RHEL_09_672030: true
 DISA_STIG_RHEL_09_672035: true
-DISA_STIG_RHEL_09_672045: true
 DISA_STIG_needed_rules: true
 accounts_password_pam_dcredit: true
 accounts_password_pam_lcredit: true
@@ -158,8 +159,6 @@ disable_ctrlaltdel_reboot: true
 disable_host_auth: true
 disable_strategy: true
 enable_authselect: true
-enable_dracut_fips_module: true
-enable_fips_mode: true
 enable_strategy: true
 ensure_gpgcheck_globally_activated: true
 ensure_gpgcheck_local_packages: true
