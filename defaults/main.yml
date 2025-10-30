@@ -1,6 +1,6 @@
 ---
 # defaults file for rhel9_cui
-var_system_crypto_policy: FIPS:OSPP
+var_system_crypto_policy: FIPS
 var_authselect_profile: minimal
 var_accounts_passwords_pam_faillock_deny: '3'
 var_accounts_passwords_pam_faillock_fail_interval: '900'
@@ -10,8 +10,6 @@ var_password_pam_lcredit: '-1'
 var_password_pam_minlen: '12'
 var_password_pam_ocredit: '-1'
 var_password_pam_ucredit: '-1'
-var_auditd_flush: incremental_async
-var_auditd_name_format: hostname
 sysctl_kernel_unprivileged_bpf_disabled_value: '2'
 sysctl_kernel_kptr_restrict_value: '1'
 var_selinux_policy_name: targeted
@@ -20,6 +18,8 @@ var_ssh_client_rekey_limit_size: 1G
 var_ssh_client_rekey_limit_time: 1h
 var_rekey_limit_size: 1G
 var_rekey_limit_time: 1h
+var_auditd_flush: incremental_async
+var_auditd_name_format: hostname
 DISA_STIG_RHEL_09_211045: true
 DISA_STIG_RHEL_09_211050: true
 DISA_STIG_RHEL_09_211055: true
@@ -66,7 +66,6 @@ DISA_STIG_RHEL_09_411075: true
 DISA_STIG_RHEL_09_411085: true
 DISA_STIG_RHEL_09_411090: true
 DISA_STIG_RHEL_09_412010: true
-DISA_STIG_RHEL_09_412015: true
 DISA_STIG_RHEL_09_412020: true
 DISA_STIG_RHEL_09_412025: true
 DISA_STIG_RHEL_09_431010: true
@@ -93,6 +92,7 @@ DISA_STIG_RHEL_09_672010: true
 DISA_STIG_RHEL_09_672030: true
 DISA_STIG_RHEL_09_672035: true
 DISA_STIG_RHEL_09_672045: true
+DISA_STIG_needed_rules: true
 accounts_password_pam_dcredit: true
 accounts_password_pam_lcredit: true
 accounts_password_pam_minlen: true
@@ -239,5 +239,6 @@ usbguard_allow_hid_and_hub: true
 use_pam_wheel_for_su: true
 zipl_audit_argument: true
 zipl_audit_backlog_limit_argument: true
+zipl_bootmap_is_up_to_date: true
 zipl_init_on_alloc_argument: true
 zipl_page_alloc_shuffle_argument: true
