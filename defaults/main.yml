@@ -10,6 +10,7 @@ var_password_pam_lcredit: '-1'
 var_password_pam_minlen: '12'
 var_password_pam_ocredit: '-1'
 var_password_pam_ucredit: '-1'
+var_logind_session_timeout: '1800'
 sysctl_kernel_unprivileged_bpf_disabled_value: '2'
 sysctl_kernel_kptr_restrict_value: '1'
 var_selinux_policy_name: targeted
@@ -61,13 +62,12 @@ DISA_STIG_RHEL_09_255135: true
 DISA_STIG_RHEL_09_255140: true
 DISA_STIG_RHEL_09_291015: true
 DISA_STIG_RHEL_09_291020: true
+DISA_STIG_RHEL_09_291025: true
 DISA_STIG_RHEL_09_291035: true
 DISA_STIG_RHEL_09_411075: true
 DISA_STIG_RHEL_09_411085: true
 DISA_STIG_RHEL_09_411090: true
-DISA_STIG_RHEL_09_412010: true
-DISA_STIG_RHEL_09_412020: true
-DISA_STIG_RHEL_09_412025: true
+DISA_STIG_RHEL_09_412080: true
 DISA_STIG_RHEL_09_431010: true
 DISA_STIG_RHEL_09_431015: true
 DISA_STIG_RHEL_09_432010: true
@@ -149,13 +149,11 @@ auditd_freq: true
 auditd_log_format: true
 auditd_name_format: true
 chronyd_client_only: true
-configure_bashrc_exec_tmux: true
 configure_crypto_policy: true
 configure_openssl_crypto_policy: true
 configure_ssh_crypto_policy: true
 configure_strategy: true
-configure_tmux_lock_after_time: true
-configure_tmux_lock_command: true
+configure_usbguard_auditbackend: true
 disable_ctrlaltdel_burstaction: true
 disable_ctrlaltdel_reboot: true
 disable_host_auth: true
@@ -180,6 +178,7 @@ kernel_module_bluetooth_disabled: true
 kernel_module_can_disabled: true
 kernel_module_sctp_disabled: true
 kernel_module_tipc_disabled: true
+logind_session_timeout: true
 low_complexity: true
 low_disruption: true
 low_severity: true
@@ -204,7 +203,6 @@ package_openssh_server_installed: true
 package_scap_security_guide_installed: true
 package_subscription_manager_installed: true
 package_sudo_installed: true
-package_tmux_installed: true
 package_usbguard_installed: true
 reboot_required: true
 require_singleuser_auth: true
