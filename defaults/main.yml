@@ -149,7 +149,6 @@ auditd_name_format: true
 chronyd_client_only: true
 configure_crypto_policy: true
 configure_openssl_crypto_policy: true
-configure_ssh_crypto_policy: true
 configure_strategy: true
 configure_usbguard_auditbackend: true
 disable_ctrlaltdel_burstaction: true
