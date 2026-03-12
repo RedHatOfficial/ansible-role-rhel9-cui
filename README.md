@@ -1,15 +1,17 @@
+
 DRAFT - Unclassified Information in Non-federal Information Systems and Organizations (NIST 800-171)
 =========
 
 Ansible Role for DRAFT - Unclassified Information in Non-federal Information Systems and Organizations (NIST 800-171)  
   
-Profile Description:  
-From NIST 800-171, Section 2.2:  
+**Profile Description:**  
+*From NIST 800-171, Section 2.2:*  
 Security requirements for protecting the confidentiality of CUI in nonfederal  
 information systems and organizations have a well-defined structure that  
 consists of:  
-(i) a basic security requirements section;  
-(ii) a derived security requirements section.  
+(i) A basic security requirements section.<br>
+(ii) A derived security requirements section.  
+
 The basic security requirements are obtained from FIPS Publication 200, which  
 provides the high-level and fundamental security requirements for federal  
 information and information systems. The derived security requirements, which  
