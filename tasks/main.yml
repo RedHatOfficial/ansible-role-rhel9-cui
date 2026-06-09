@@ -56,6 +56,15 @@
   ansible.builtin.package:
     name: gnutls-utils
     state: present
+  when:
+  - DISA_STIG_RHEL_09_215080 | bool
+  - enable_strategy | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - package_gnutls_utils_installed | bool
+  - '"kernel-core" in ansible_facts.packages'
   tags:
   - CCE-83494-5
   - DISA-STIG-RHEL-09-215080
@@ -65,19 +74,19 @@
   - medium_severity
   - no_reboot_needed
   - package_gnutls-utils_installed
-  when:
-  - DISA_STIG_RHEL_09_215080 | bool
-  - enable_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - package_gnutls_utils_installed | bool
 
 - name: Ensure openscap-scanner is installed
   ansible.builtin.package:
     name: openscap-scanner
     state: present
+  when:
+  - enable_strategy | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - package_openscap_scanner_installed | bool
+  - '"kernel-core" in ansible_facts.packages'
   tags:
   - CCE-83502-5
   - enable_strategy
@@ -86,18 +95,19 @@
   - medium_severity
   - no_reboot_needed
   - package_openscap-scanner_installed
+
+- name: Ensure scap-security-guide is installed
+  ansible.builtin.package:
+    name: scap-security-guide
+    state: present
   when:
   - enable_strategy | bool
   - low_complexity | bool
   - low_disruption | bool
   - medium_severity | bool
   - no_reboot_needed | bool
-  - package_openscap_scanner_installed | bool
-
-- name: Ensure scap-security-guide is installed
-  ansible.builtin.package:
-    name: scap-security-guide
-    state: present
+  - package_scap_security_guide_installed | bool
+  - '"kernel-core" in ansible_facts.packages'
   tags:
   - CCE-83505-8
   - enable_strategy
@@ -106,18 +116,20 @@
   - medium_severity
   - no_reboot_needed
   - package_scap-security-guide_installed
-  when:
-  - enable_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - package_scap_security_guide_installed | bool
 
 - name: Ensure subscription-manager is installed
   ansible.builtin.package:
     name: subscription-manager
     state: present
+  when:
+  - DISA_STIG_RHEL_09_215010 | bool
+  - enable_strategy | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - package_subscription_manager_installed | bool
+  - '"kernel-core" in ansible_facts.packages'
   tags:
   - CCE-83506-6
   - DISA-STIG-RHEL-09-215010
@@ -127,14 +139,6 @@
   - medium_severity
   - no_reboot_needed
   - package_subscription-manager_installed
-  when:
-  - DISA_STIG_RHEL_09_215010 | bool
-  - enable_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - package_subscription_manager_installed | bool
 
 - name: Ensure dnf-automatic is installed
   ansible.builtin.package:
@@ -240,6 +244,15 @@
   ansible.builtin.package:
     name: openssh-clients
     state: present
+  when:
+  - DISA_STIG_RHEL_09_255020 | bool
+  - enable_strategy | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - package_openssh_clients_installed | bool
+  - '"kernel-core" in ansible_facts.packages'
   tags:
   - CCE-90836-8
   - DISA-STIG-RHEL-09-255020
@@ -249,14 +262,6 @@
   - medium_severity
   - no_reboot_needed
   - package_openssh-clients_installed
-  when:
-  - DISA_STIG_RHEL_09_255020 | bool
-  - enable_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - package_openssh_clients_installed | bool
 
 - name: Ensure openssh-server is installed
   ansible.builtin.package:
@@ -791,6 +796,14 @@
     patterns: openssl.cnf
     contains: ^\s*\[\s*crypto_policy\s*]
   register: test_crypto_policy_group
+  when:
+  - configure_openssl_crypto_policy | bool
+  - low_complexity | bool
+  - medium_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - unknown_strategy | bool
+  - '"openssl" in ansible_facts.packages'
   tags:
   - CCE-83452-3
   - NIST-800-53-AC-17(2)
@@ -807,13 +820,6 @@
   - medium_severity
   - no_reboot_needed
   - unknown_strategy
-  when:
-  - configure_openssl_crypto_policy | bool
-  - low_complexity | bool
-  - medium_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - unknown_strategy | bool
 
 - name: Configure OpenSSL library to use System Crypto Policy - Search for crypto_policy Section Together With .include Directive
   ansible.builtin.find:
@@ -821,6 +827,14 @@
     patterns: openssl.cnf
     contains: ^\s*\.include\s*(?:=\s*)?/etc/crypto-policies/back-ends/opensslcnf.config$
   register: test_crypto_policy_include_directive
+  when:
+  - configure_openssl_crypto_policy | bool
+  - low_complexity | bool
+  - medium_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - unknown_strategy | bool
+  - '"openssl" in ansible_facts.packages'
   tags:
   - CCE-83452-3
   - NIST-800-53-AC-17(2)
@@ -837,13 +851,6 @@
   - medium_severity
   - no_reboot_needed
   - unknown_strategy
-  when:
-  - configure_openssl_crypto_policy | bool
-  - low_complexity | bool
-  - medium_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - unknown_strategy | bool
 
 - name: Configure OpenSSL library to use System Crypto Policy - Add .include Line for opensslcnf.config File in crypto_policy
     Section
@@ -859,6 +866,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - unknown_strategy | bool
+  - '"openssl" in ansible_facts.packages'
   - test_crypto_policy_group.matched > 0
   - test_crypto_policy_include_directive.matched == 0
   tags:
@@ -893,6 +901,7 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - unknown_strategy | bool
+  - '"openssl" in ansible_facts.packages'
   - test_crypto_policy_group.matched == 0
   tags:
   - CCE-83452-3
@@ -3973,6 +3982,82 @@
   - low_disruption
   - no_reboot_needed
 
+- name: Remove StopIdleSessionSec from main config
+  ansible.builtin.lineinfile:
+    path: /etc/systemd/logind.conf
+    regexp: ^\s*StopIdleSessionSec\s*=
+    state: absent
+  when:
+  - DISA_STIG_RHEL_09_412080 | bool
+  - logind_session_timeout | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - reboot_required | bool
+  - restrict_strategy | bool
+  - '"kernel-core" in ansible_facts.packages'
+  - ( ansible_distribution == 'RedHat' and ansible_distribution_version is version('8.7', '>=') and ansible_distribution ==
+    'RedHat' and ansible_distribution_version is version('9.0', '!=') ) or ansible_distribution == 'OracleLinux' and ansible_distribution_version
+    is version('8.7', '>=') or ansible_distribution == 'SLES' and ansible_distribution_version is version('15', '>=')
+  tags:
+  - CCE-90785-7
+  - CJIS-5.5.6
+  - DISA-STIG-RHEL-09-412080
+  - NIST-800-171-3.1.11
+  - NIST-800-53-AC-12
+  - NIST-800-53-AC-17(a)
+  - NIST-800-53-AC-17(a)
+  - NIST-800-53-AC-2(5)
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-SC-10
+  - PCI-DSS-Req-8.1.8
+  - logind_session_timeout
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - reboot_required
+  - restrict_strategy
+
+- name: Remove StopIdleSessionSec from drop-in files
+  ansible.builtin.lineinfile:
+    path: '{{ item }}'
+    regexp: ^\s*StopIdleSessionSec\s*=
+    state: absent
+  with_fileglob:
+  - /etc/systemd/logind.conf.d/*.conf
+  when:
+  - DISA_STIG_RHEL_09_412080 | bool
+  - logind_session_timeout | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - reboot_required | bool
+  - restrict_strategy | bool
+  - '"kernel-core" in ansible_facts.packages'
+  - ( ansible_distribution == 'RedHat' and ansible_distribution_version is version('8.7', '>=') and ansible_distribution ==
+    'RedHat' and ansible_distribution_version is version('9.0', '!=') ) or ansible_distribution == 'OracleLinux' and ansible_distribution_version
+    is version('8.7', '>=') or ansible_distribution == 'SLES' and ansible_distribution_version is version('15', '>=')
+  tags:
+  - CCE-90785-7
+  - CJIS-5.5.6
+  - DISA-STIG-RHEL-09-412080
+  - NIST-800-171-3.1.11
+  - NIST-800-53-AC-12
+  - NIST-800-53-AC-17(a)
+  - NIST-800-53-AC-17(a)
+  - NIST-800-53-AC-2(5)
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-SC-10
+  - PCI-DSS-Req-8.1.8
+  - logind_session_timeout
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - reboot_required
+  - restrict_strategy
+
 - name: Set 'StopIdleSessionSec' to '{{ var_logind_session_timeout }}' in the [Login] section of '/etc/systemd/logind.conf.d/oscap-idle-sessions.conf'
   community.general.ini_file:
     path: /etc/systemd/logind.conf.d/oscap-idle-sessions.conf
@@ -4271,30 +4356,6 @@
   - medium_disruption
   - no_empty_passwords
   - no_reboot_needed
-
-- name: Restrict usage of su command only to members of wheel group
-  ansible.builtin.replace:
-    path: /etc/pam.d/su
-    regexp: ^[\s]*#[\s]*auth[\s]+required[\s]+pam_wheel\.so[\s]+use_uid$
-    replace: auth             required        pam_wheel.so use_uid
-  when:
-  - DISA_STIG_RHEL_09_432035 | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - restrict_strategy | bool
-  - use_pam_wheel_for_su | bool
-  - '"pam" in ansible_facts.packages'
-  tags:
-  - CCE-90085-2
-  - DISA-STIG-RHEL-09-432035
-  - low_complexity
-  - low_disruption
-  - medium_severity
-  - no_reboot_needed
-  - restrict_strategy
-  - use_pam_wheel_for_su
 
 - name: Disable Recovery Booting - Verify GRUB_DISABLE_RECOVERY=true
   ansible.builtin.lineinfile:
@@ -7448,6 +7509,14 @@
     create: false
     regexp: ^\s*RekeyLimit.*$
     state: absent
+  when:
+  - configure_strategy | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - ssh_client_rekey_limit | bool
+  - '"openssh-clients" in ansible_facts.packages'
   tags:
   - CCE-87522-9
   - configure_strategy
@@ -7456,20 +7525,21 @@
   - medium_severity
   - no_reboot_needed
   - ssh_client_rekey_limit
-  when:
-  - configure_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - ssh_client_rekey_limit | bool
 
 - name: Collect all include config files for ssh client which configure RekeyLimit
   ansible.builtin.find:
-    paths: /etc/ssh/ssh_config.d/
+    paths: /etc/ssh/ssh_config.d
     contains: ^[\s]*RekeyLimit.*$
     patterns: '*.config'
   register: ssh_config_include_files
+  when:
+  - configure_strategy | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - ssh_client_rekey_limit | bool
+  - '"openssh-clients" in ansible_facts.packages'
   tags:
   - CCE-87522-9
   - configure_strategy
@@ -7478,13 +7548,6 @@
   - medium_severity
   - no_reboot_needed
   - ssh_client_rekey_limit
-  when:
-  - configure_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - ssh_client_rekey_limit | bool
 
 - name: Remove all occurrences of RekeyLimit configuration from include config files of ssh client
   ansible.builtin.lineinfile:
@@ -7492,6 +7555,14 @@
     regexp: ^[\s]*RekeyLimit.*$
     state: absent
   loop: '{{ ssh_config_include_files.files }}'
+  when:
+  - configure_strategy | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - ssh_client_rekey_limit | bool
+  - '"openssh-clients" in ansible_facts.packages'
   tags:
   - CCE-87522-9
   - configure_strategy
@@ -7500,13 +7571,6 @@
   - medium_severity
   - no_reboot_needed
   - ssh_client_rekey_limit
-  when:
-  - configure_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - ssh_client_rekey_limit | bool
 
 - name: Ensure that rekey limit is set to {{ var_ssh_client_rekey_limit_size }} {{ var_ssh_client_rekey_limit_time }} in /etc/ssh/ssh_config.d/02-rekey-limit.conf
   ansible.builtin.lineinfile:
@@ -7515,6 +7579,14 @@
     regexp: ^\s*RekeyLimit.*$
     line: RekeyLimit {{ var_ssh_client_rekey_limit_size }} {{ var_ssh_client_rekey_limit_time }}
     state: present
+  when:
+  - configure_strategy | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - ssh_client_rekey_limit | bool
+  - '"openssh-clients" in ansible_facts.packages'
   tags:
   - CCE-87522-9
   - configure_strategy
@@ -7523,21 +7595,15 @@
   - medium_severity
   - no_reboot_needed
   - ssh_client_rekey_limit
-  when:
-  - configure_strategy | bool
-  - low_complexity | bool
-  - low_disruption | bool
-  - medium_severity | bool
-  - no_reboot_needed | bool
-  - ssh_client_rekey_limit | bool
 
-- name: Disable Host-Based Authentication - Check if the parameter HostbasedAuthentication is configured
-  ansible.builtin.find:
-    paths:
-    - /etc/ssh/sshd_config
-    - /etc/ssh/sshd_config.d
-    contains: (?i)^\s*{{ "HostbasedAuthentication"| regex_escape }}\s+
-  register: _sshd_config_has_parameter
+- name: Disable Host-Based Authentication - Check if the parameter HostbasedAuthentication is configured in /etc/ssh/sshd_config
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: (?i)^\s*{{ "HostbasedAuthentication"| regex_escape }}\s+
+    state: absent
+  check_mode: true
+  changed_when: false
+  register: _config_file_has_parameter
   when:
   - DISA_STIG_RHEL_09_255080 | bool
   - disable_host_auth | bool
@@ -7566,13 +7632,82 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Disable Host-Based Authentication - Check if the parameter HostbasedAuthentication is configured correctly
+- name: Disable Host-Based Authentication - Check if the parameter HostbasedAuthentication is configured in /etc/ssh/sshd_config.d
   ansible.builtin.find:
     paths:
-    - /etc/ssh/sshd_config
+    - /etc/ssh/sshd_config.d
+    contains: (?i)^\s*{{ "HostbasedAuthentication"| regex_escape }}\s+
+  register: _config_dir_has_parameter
+  when:
+  - DISA_STIG_RHEL_09_255080 | bool
+  - disable_host_auth | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+  - '"kernel-core" in ansible_facts.packages'
+  tags:
+  - CCE-90816-0
+  - CJIS-5.5.6
+  - DISA-STIG-RHEL-09-255080
+  - NIST-800-171-3.1.12
+  - NIST-800-53-AC-17(a)
+  - NIST-800-53-AC-3
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-CM-7(a)
+  - NIST-800-53-CM-7(b)
+  - PCI-DSSv4-8.3
+  - PCI-DSSv4-8.3.1
+  - disable_host_auth
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+
+- name: Disable Host-Based Authentication - Check if the parameter HostbasedAuthentication is configured correctly in /etc/ssh/sshd_config
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: (?i)^\s*{{ "HostbasedAuthentication"| regex_escape }}\s+no$
+    state: absent
+  check_mode: true
+  changed_when: false
+  register: _config_file_correctly
+  when:
+  - DISA_STIG_RHEL_09_255080 | bool
+  - disable_host_auth | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+  - '"kernel-core" in ansible_facts.packages'
+  tags:
+  - CCE-90816-0
+  - CJIS-5.5.6
+  - DISA-STIG-RHEL-09-255080
+  - NIST-800-171-3.1.12
+  - NIST-800-53-AC-17(a)
+  - NIST-800-53-AC-3
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-CM-7(a)
+  - NIST-800-53-CM-7(b)
+  - PCI-DSSv4-8.3
+  - PCI-DSSv4-8.3.1
+  - disable_host_auth
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+
+- name: Disable Host-Based Authentication - Check if the parameter HostbasedAuthentication is configured correctly in /etc/ssh/sshd_config.d
+  ansible.builtin.find:
+    paths:
     - /etc/ssh/sshd_config.d
     contains: (?i)^\s*{{ "HostbasedAuthentication"| regex_escape }}\s+no$
-  register: _sshd_config_correctly
+  register: _config_dir_correctly
   when:
   - DISA_STIG_RHEL_09_255080 | bool
   - disable_host_auth | bool
@@ -7627,7 +7762,7 @@
       create: false
       regexp: (?i)(?i)^\s*{{ "HostbasedAuthentication"| regex_escape }}\s+
       state: absent
-    with_items: '{{ _etc_ssh_sshd_config_d_has_parameter.files }}'
+    with_items: '{{ _etc_ssh_sshd_config_d_has_parameter.files | default([]) }}'
     when: _etc_ssh_sshd_config_d_has_parameter.matched > 0
   - name: Insert correct line to /etc/ssh/sshd_config.d/01-complianceascode-reinforce-os-defaults.conf
     ansible.builtin.lineinfile:
@@ -7647,7 +7782,8 @@
   - no_reboot_needed | bool
   - restrict_strategy | bool
   - '"kernel-core" in ansible_facts.packages'
-  - _sshd_config_correctly.matched == 0 or _sshd_config_has_parameter.matched != 1
+  - (_config_file_correctly.found == 0 and _config_dir_correctly.matched == 0) or ((_config_file_has_parameter.found | int)
+    + (_config_dir_has_parameter.matched | int)) != 1
   tags:
   - CCE-90816-0
   - CJIS-5.5.6
@@ -7702,13 +7838,14 @@
   - no_reboot_needed
   - restrict_strategy
 
-- name: Disable SSH Access via Empty Passwords - Check if the parameter PermitEmptyPasswords is configured
-  ansible.builtin.find:
-    paths:
-    - /etc/ssh/sshd_config
-    - /etc/ssh/sshd_config.d
-    contains: (?i)^\s*{{ "PermitEmptyPasswords"| regex_escape }}\s+
-  register: _sshd_config_has_parameter
+- name: Disable SSH Access via Empty Passwords - Check if the parameter PermitEmptyPasswords is configured in /etc/ssh/sshd_config
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: (?i)^\s*{{ "PermitEmptyPasswords"| regex_escape }}\s+
+    state: absent
+  check_mode: true
+  changed_when: false
+  register: _config_file_has_parameter
   when:
   - DISA_STIG_RHEL_09_255040 | bool
   - high_severity | bool
@@ -7738,13 +7875,84 @@
   - restrict_strategy
   - sshd_disable_empty_passwords
 
-- name: Disable SSH Access via Empty Passwords - Check if the parameter PermitEmptyPasswords is configured correctly
+- name: Disable SSH Access via Empty Passwords - Check if the parameter PermitEmptyPasswords is configured in /etc/ssh/sshd_config.d
   ansible.builtin.find:
     paths:
-    - /etc/ssh/sshd_config
+    - /etc/ssh/sshd_config.d
+    contains: (?i)^\s*{{ "PermitEmptyPasswords"| regex_escape }}\s+
+  register: _config_dir_has_parameter
+  when:
+  - DISA_STIG_RHEL_09_255040 | bool
+  - high_severity | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+  - sshd_disable_empty_passwords | bool
+  - '"kernel-core" in ansible_facts.packages'
+  tags:
+  - CCE-90799-8
+  - CJIS-5.5.6
+  - DISA-STIG-RHEL-09-255040
+  - NIST-800-171-3.1.1
+  - NIST-800-171-3.1.5
+  - NIST-800-53-AC-17(a)
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-CM-7(a)
+  - NIST-800-53-CM-7(b)
+  - PCI-DSS-Req-2.2.4
+  - PCI-DSSv4-2.2
+  - PCI-DSSv4-2.2.6
+  - high_severity
+  - low_complexity
+  - low_disruption
+  - no_reboot_needed
+  - restrict_strategy
+  - sshd_disable_empty_passwords
+
+- name: Disable SSH Access via Empty Passwords - Check if the parameter PermitEmptyPasswords is configured correctly in /etc/ssh/sshd_config
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: (?i)^\s*{{ "PermitEmptyPasswords"| regex_escape }}\s+no$
+    state: absent
+  check_mode: true
+  changed_when: false
+  register: _config_file_correctly
+  when:
+  - DISA_STIG_RHEL_09_255040 | bool
+  - high_severity | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+  - sshd_disable_empty_passwords | bool
+  - '"kernel-core" in ansible_facts.packages'
+  tags:
+  - CCE-90799-8
+  - CJIS-5.5.6
+  - DISA-STIG-RHEL-09-255040
+  - NIST-800-171-3.1.1
+  - NIST-800-171-3.1.5
+  - NIST-800-53-AC-17(a)
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-CM-7(a)
+  - NIST-800-53-CM-7(b)
+  - PCI-DSS-Req-2.2.4
+  - PCI-DSSv4-2.2
+  - PCI-DSSv4-2.2.6
+  - high_severity
+  - low_complexity
+  - low_disruption
+  - no_reboot_needed
+  - restrict_strategy
+  - sshd_disable_empty_passwords
+
+- name: Disable SSH Access via Empty Passwords - Check if the parameter PermitEmptyPasswords is configured correctly in /etc/ssh/sshd_config.d
+  ansible.builtin.find:
+    paths:
     - /etc/ssh/sshd_config.d
     contains: (?i)^\s*{{ "PermitEmptyPasswords"| regex_escape }}\s+no$
-  register: _sshd_config_correctly
+  register: _config_dir_correctly
   when:
   - DISA_STIG_RHEL_09_255040 | bool
   - high_severity | bool
@@ -7800,7 +8008,7 @@
       create: false
       regexp: (?i)(?i)^\s*{{ "PermitEmptyPasswords"| regex_escape }}\s+
       state: absent
-    with_items: '{{ _etc_ssh_sshd_config_d_has_parameter.files }}'
+    with_items: '{{ _etc_ssh_sshd_config_d_has_parameter.files | default([]) }}'
     when: _etc_ssh_sshd_config_d_has_parameter.matched > 0
   - name: Insert correct line to /etc/ssh/sshd_config.d/01-complianceascode-reinforce-os-defaults.conf
     ansible.builtin.lineinfile:
@@ -7820,7 +8028,8 @@
   - restrict_strategy | bool
   - sshd_disable_empty_passwords | bool
   - '"kernel-core" in ansible_facts.packages'
-  - _sshd_config_correctly.matched == 0 or _sshd_config_has_parameter.matched != 1
+  - (_config_file_correctly.found == 0 and _config_dir_correctly.matched == 0) or ((_config_file_has_parameter.found | int)
+    + (_config_dir_has_parameter.matched | int)) != 1
   tags:
   - CCE-90799-8
   - CJIS-5.5.6
@@ -7877,13 +8086,14 @@
   - restrict_strategy
   - sshd_disable_empty_passwords
 
-- name: Disable GSSAPI Authentication - Check if the parameter GSSAPIAuthentication is configured
-  ansible.builtin.find:
-    paths:
-    - /etc/ssh/sshd_config
-    - /etc/ssh/sshd_config.d
-    contains: (?i)^\s*{{ "GSSAPIAuthentication"| regex_escape }}\s+
-  register: _sshd_config_has_parameter
+- name: Disable GSSAPI Authentication - Check if the parameter GSSAPIAuthentication is configured in /etc/ssh/sshd_config
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: (?i)^\s*{{ "GSSAPIAuthentication"| regex_escape }}\s+
+    state: absent
+  check_mode: true
+  changed_when: false
+  register: _config_file_has_parameter
   when:
   - DISA_STIG_RHEL_09_255135 | bool
   - low_complexity | bool
@@ -7908,13 +8118,74 @@
   - restrict_strategy
   - sshd_disable_gssapi_auth
 
-- name: Disable GSSAPI Authentication - Check if the parameter GSSAPIAuthentication is configured correctly
+- name: Disable GSSAPI Authentication - Check if the parameter GSSAPIAuthentication is configured in /etc/ssh/sshd_config.d
   ansible.builtin.find:
     paths:
-    - /etc/ssh/sshd_config
+    - /etc/ssh/sshd_config.d
+    contains: (?i)^\s*{{ "GSSAPIAuthentication"| regex_escape }}\s+
+  register: _config_dir_has_parameter
+  when:
+  - DISA_STIG_RHEL_09_255135 | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+  - sshd_disable_gssapi_auth | bool
+  - '"kernel-core" in ansible_facts.packages'
+  tags:
+  - CCE-90808-7
+  - DISA-STIG-RHEL-09-255135
+  - NIST-800-171-3.1.12
+  - NIST-800-53-AC-17(a)
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-CM-7(a)
+  - NIST-800-53-CM-7(b)
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  - sshd_disable_gssapi_auth
+
+- name: Disable GSSAPI Authentication - Check if the parameter GSSAPIAuthentication is configured correctly in /etc/ssh/sshd_config
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: (?i)^\s*{{ "GSSAPIAuthentication"| regex_escape }}\s+no$
+    state: absent
+  check_mode: true
+  changed_when: false
+  register: _config_file_correctly
+  when:
+  - DISA_STIG_RHEL_09_255135 | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+  - sshd_disable_gssapi_auth | bool
+  - '"kernel-core" in ansible_facts.packages'
+  tags:
+  - CCE-90808-7
+  - DISA-STIG-RHEL-09-255135
+  - NIST-800-171-3.1.12
+  - NIST-800-53-AC-17(a)
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-CM-7(a)
+  - NIST-800-53-CM-7(b)
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  - sshd_disable_gssapi_auth
+
+- name: Disable GSSAPI Authentication - Check if the parameter GSSAPIAuthentication is configured correctly in /etc/ssh/sshd_config.d
+  ansible.builtin.find:
+    paths:
     - /etc/ssh/sshd_config.d
     contains: (?i)^\s*{{ "GSSAPIAuthentication"| regex_escape }}\s+no$
-  register: _sshd_config_correctly
+  register: _config_dir_correctly
   when:
   - DISA_STIG_RHEL_09_255135 | bool
   - low_complexity | bool
@@ -7965,7 +8236,7 @@
       create: false
       regexp: (?i)(?i)^\s*{{ "GSSAPIAuthentication"| regex_escape }}\s+
       state: absent
-    with_items: '{{ _etc_ssh_sshd_config_d_has_parameter.files }}'
+    with_items: '{{ _etc_ssh_sshd_config_d_has_parameter.files | default([]) }}'
     when: _etc_ssh_sshd_config_d_has_parameter.matched > 0
   - name: Insert correct line to /etc/ssh/sshd_config.d/01-complianceascode-reinforce-os-defaults.conf
     ansible.builtin.lineinfile:
@@ -7985,7 +8256,8 @@
   - restrict_strategy | bool
   - sshd_disable_gssapi_auth | bool
   - '"kernel-core" in ansible_facts.packages'
-  - _sshd_config_correctly.matched == 0 or _sshd_config_has_parameter.matched != 1
+  - (_config_file_correctly.found == 0 and _config_dir_correctly.matched == 0) or ((_config_file_has_parameter.found | int)
+    + (_config_dir_has_parameter.matched | int)) != 1
   tags:
   - CCE-90808-7
   - DISA-STIG-RHEL-09-255135
@@ -8032,13 +8304,14 @@
   - restrict_strategy
   - sshd_disable_gssapi_auth
 
-- name: Disable Kerberos Authentication - Check if the parameter KerberosAuthentication is configured
-  ansible.builtin.find:
-    paths:
-    - /etc/ssh/sshd_config
-    - /etc/ssh/sshd_config.d
-    contains: (?i)^\s*{{ "KerberosAuthentication"| regex_escape }}\s+
-  register: _sshd_config_has_parameter
+- name: Disable Kerberos Authentication - Check if the parameter KerberosAuthentication is configured in /etc/ssh/sshd_config
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: (?i)^\s*{{ "KerberosAuthentication"| regex_escape }}\s+
+    state: absent
+  check_mode: true
+  changed_when: false
+  register: _config_file_has_parameter
   when:
   - DISA_STIG_RHEL_09_255140 | bool
   - low_complexity | bool
@@ -8063,13 +8336,74 @@
   - restrict_strategy
   - sshd_disable_kerb_auth
 
-- name: Disable Kerberos Authentication - Check if the parameter KerberosAuthentication is configured correctly
+- name: Disable Kerberos Authentication - Check if the parameter KerberosAuthentication is configured in /etc/ssh/sshd_config.d
   ansible.builtin.find:
     paths:
-    - /etc/ssh/sshd_config
+    - /etc/ssh/sshd_config.d
+    contains: (?i)^\s*{{ "KerberosAuthentication"| regex_escape }}\s+
+  register: _config_dir_has_parameter
+  when:
+  - DISA_STIG_RHEL_09_255140 | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+  - sshd_disable_kerb_auth | bool
+  - '"kernel-core" in ansible_facts.packages'
+  tags:
+  - CCE-90802-0
+  - DISA-STIG-RHEL-09-255140
+  - NIST-800-171-3.1.12
+  - NIST-800-53-AC-17(a)
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-CM-7(a)
+  - NIST-800-53-CM-7(b)
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  - sshd_disable_kerb_auth
+
+- name: Disable Kerberos Authentication - Check if the parameter KerberosAuthentication is configured correctly in /etc/ssh/sshd_config
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: (?i)^\s*{{ "KerberosAuthentication"| regex_escape }}\s+no$
+    state: absent
+  check_mode: true
+  changed_when: false
+  register: _config_file_correctly
+  when:
+  - DISA_STIG_RHEL_09_255140 | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+  - sshd_disable_kerb_auth | bool
+  - '"kernel-core" in ansible_facts.packages'
+  tags:
+  - CCE-90802-0
+  - DISA-STIG-RHEL-09-255140
+  - NIST-800-171-3.1.12
+  - NIST-800-53-AC-17(a)
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-CM-7(a)
+  - NIST-800-53-CM-7(b)
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  - sshd_disable_kerb_auth
+
+- name: Disable Kerberos Authentication - Check if the parameter KerberosAuthentication is configured correctly in /etc/ssh/sshd_config.d
+  ansible.builtin.find:
+    paths:
     - /etc/ssh/sshd_config.d
     contains: (?i)^\s*{{ "KerberosAuthentication"| regex_escape }}\s+no$
-  register: _sshd_config_correctly
+  register: _config_dir_correctly
   when:
   - DISA_STIG_RHEL_09_255140 | bool
   - low_complexity | bool
@@ -8120,7 +8454,7 @@
       create: false
       regexp: (?i)(?i)^\s*{{ "KerberosAuthentication"| regex_escape }}\s+
       state: absent
-    with_items: '{{ _etc_ssh_sshd_config_d_has_parameter.files }}'
+    with_items: '{{ _etc_ssh_sshd_config_d_has_parameter.files | default([]) }}'
     when: _etc_ssh_sshd_config_d_has_parameter.matched > 0
   - name: Insert correct line to /etc/ssh/sshd_config.d/01-complianceascode-reinforce-os-defaults.conf
     ansible.builtin.lineinfile:
@@ -8140,7 +8474,8 @@
   - restrict_strategy | bool
   - sshd_disable_kerb_auth | bool
   - '"kernel-core" in ansible_facts.packages'
-  - _sshd_config_correctly.matched == 0 or _sshd_config_has_parameter.matched != 1
+  - (_config_file_correctly.found == 0 and _config_dir_correctly.matched == 0) or ((_config_file_has_parameter.found | int)
+    + (_config_dir_has_parameter.matched | int)) != 1
   tags:
   - CCE-90802-0
   - DISA-STIG-RHEL-09-255140
@@ -8187,13 +8522,14 @@
   - restrict_strategy
   - sshd_disable_kerb_auth
 
-- name: Disable SSH Root Login - Check if the parameter PermitRootLogin is configured
-  ansible.builtin.find:
-    paths:
-    - /etc/ssh/sshd_config
-    - /etc/ssh/sshd_config.d
-    contains: (?i)^\s*{{ "PermitRootLogin"| regex_escape }}\s+
-  register: _sshd_config_has_parameter
+- name: Disable SSH Root Login - Check if the parameter PermitRootLogin is configured in /etc/ssh/sshd_config
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: (?i)^\s*{{ "PermitRootLogin"| regex_escape }}\s+
+    state: absent
+  check_mode: true
+  changed_when: false
+  register: _config_file_has_parameter
   when:
   - DISA_STIG_RHEL_09_255045 | bool
   - low_complexity | bool
@@ -8226,13 +8562,90 @@
   - restrict_strategy
   - sshd_disable_root_login
 
-- name: Disable SSH Root Login - Check if the parameter PermitRootLogin is configured correctly
+- name: Disable SSH Root Login - Check if the parameter PermitRootLogin is configured in /etc/ssh/sshd_config.d
   ansible.builtin.find:
     paths:
-    - /etc/ssh/sshd_config
+    - /etc/ssh/sshd_config.d
+    contains: (?i)^\s*{{ "PermitRootLogin"| regex_escape }}\s+
+  register: _config_dir_has_parameter
+  when:
+  - DISA_STIG_RHEL_09_255045 | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+  - sshd_disable_root_login | bool
+  - '"kernel-core" in ansible_facts.packages'
+  tags:
+  - CCE-90800-4
+  - CJIS-5.5.6
+  - DISA-STIG-RHEL-09-255045
+  - NIST-800-171-3.1.1
+  - NIST-800-171-3.1.5
+  - NIST-800-53-AC-17(a)
+  - NIST-800-53-AC-6(2)
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-CM-7(a)
+  - NIST-800-53-CM-7(b)
+  - NIST-800-53-IA-2
+  - NIST-800-53-IA-2(5)
+  - PCI-DSS-Req-2.2.4
+  - PCI-DSSv4-2.2
+  - PCI-DSSv4-2.2.6
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  - sshd_disable_root_login
+
+- name: Disable SSH Root Login - Check if the parameter PermitRootLogin is configured correctly in /etc/ssh/sshd_config
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: (?i)^\s*{{ "PermitRootLogin"| regex_escape }}\s+no$
+    state: absent
+  check_mode: true
+  changed_when: false
+  register: _config_file_correctly
+  when:
+  - DISA_STIG_RHEL_09_255045 | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+  - sshd_disable_root_login | bool
+  - '"kernel-core" in ansible_facts.packages'
+  tags:
+  - CCE-90800-4
+  - CJIS-5.5.6
+  - DISA-STIG-RHEL-09-255045
+  - NIST-800-171-3.1.1
+  - NIST-800-171-3.1.5
+  - NIST-800-53-AC-17(a)
+  - NIST-800-53-AC-6(2)
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-CM-7(a)
+  - NIST-800-53-CM-7(b)
+  - NIST-800-53-IA-2
+  - NIST-800-53-IA-2(5)
+  - PCI-DSS-Req-2.2.4
+  - PCI-DSSv4-2.2
+  - PCI-DSSv4-2.2.6
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  - sshd_disable_root_login
+
+- name: Disable SSH Root Login - Check if the parameter PermitRootLogin is configured correctly in /etc/ssh/sshd_config.d
+  ansible.builtin.find:
+    paths:
     - /etc/ssh/sshd_config.d
     contains: (?i)^\s*{{ "PermitRootLogin"| regex_escape }}\s+no$
-  register: _sshd_config_correctly
+  register: _config_dir_correctly
   when:
   - DISA_STIG_RHEL_09_255045 | bool
   - low_complexity | bool
@@ -8291,7 +8704,7 @@
       create: false
       regexp: (?i)(?i)^\s*{{ "PermitRootLogin"| regex_escape }}\s+
       state: absent
-    with_items: '{{ _etc_ssh_sshd_config_d_has_parameter.files }}'
+    with_items: '{{ _etc_ssh_sshd_config_d_has_parameter.files | default([]) }}'
     when: _etc_ssh_sshd_config_d_has_parameter.matched > 0
   - name: Insert correct line to /etc/ssh/sshd_config.d/00-complianceascode-hardening.conf
     ansible.builtin.lineinfile:
@@ -8311,7 +8724,8 @@
   - restrict_strategy | bool
   - sshd_disable_root_login | bool
   - '"kernel-core" in ansible_facts.packages'
-  - _sshd_config_correctly.matched == 0 or _sshd_config_has_parameter.matched != 1
+  - (_config_file_correctly.found == 0 and _config_dir_correctly.matched == 0) or ((_config_file_has_parameter.found | int)
+    + (_config_dir_has_parameter.matched | int)) != 1
   tags:
   - CCE-90800-4
   - CJIS-5.5.6
@@ -8374,13 +8788,14 @@
   - restrict_strategy
   - sshd_disable_root_login
 
-- name: Enable SSH Warning Banner - Check if the parameter Banner is configured
-  ansible.builtin.find:
-    paths:
-    - /etc/ssh/sshd_config
-    - /etc/ssh/sshd_config.d
-    contains: (?i)^\s*{{ "Banner"| regex_escape }}\s+
-  register: _sshd_config_has_parameter
+- name: Enable SSH Warning Banner - Check if the parameter Banner is configured in /etc/ssh/sshd_config
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: (?i)^\s*{{ "Banner"| regex_escape }}\s+
+    state: absent
+  check_mode: true
+  changed_when: false
+  register: _config_file_has_parameter
   when:
   - DISA_STIG_RHEL_09_255025 | bool
   - low_complexity | bool
@@ -8407,13 +8822,78 @@
   - restrict_strategy
   - sshd_enable_warning_banner
 
-- name: Enable SSH Warning Banner - Check if the parameter Banner is configured correctly
+- name: Enable SSH Warning Banner - Check if the parameter Banner is configured in /etc/ssh/sshd_config.d
   ansible.builtin.find:
     paths:
-    - /etc/ssh/sshd_config
+    - /etc/ssh/sshd_config.d
+    contains: (?i)^\s*{{ "Banner"| regex_escape }}\s+
+  register: _config_dir_has_parameter
+  when:
+  - DISA_STIG_RHEL_09_255025 | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+  - sshd_enable_warning_banner | bool
+  - '"kernel-core" in ansible_facts.packages'
+  tags:
+  - CCE-90807-9
+  - CJIS-5.5.6
+  - DISA-STIG-RHEL-09-255025
+  - NIST-800-171-3.1.9
+  - NIST-800-53-AC-17(a)
+  - NIST-800-53-AC-8(a)
+  - NIST-800-53-AC-8(c)
+  - NIST-800-53-CM-6(a)
+  - PCI-DSS-Req-2.2.4
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  - sshd_enable_warning_banner
+
+- name: Enable SSH Warning Banner - Check if the parameter Banner is configured correctly in /etc/ssh/sshd_config
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: (?i)^\s*{{ "Banner"| regex_escape }}\s+/etc/issue$
+    state: absent
+  check_mode: true
+  changed_when: false
+  register: _config_file_correctly
+  when:
+  - DISA_STIG_RHEL_09_255025 | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+  - sshd_enable_warning_banner | bool
+  - '"kernel-core" in ansible_facts.packages'
+  tags:
+  - CCE-90807-9
+  - CJIS-5.5.6
+  - DISA-STIG-RHEL-09-255025
+  - NIST-800-171-3.1.9
+  - NIST-800-53-AC-17(a)
+  - NIST-800-53-AC-8(a)
+  - NIST-800-53-AC-8(c)
+  - NIST-800-53-CM-6(a)
+  - PCI-DSS-Req-2.2.4
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  - sshd_enable_warning_banner
+
+- name: Enable SSH Warning Banner - Check if the parameter Banner is configured correctly in /etc/ssh/sshd_config.d
+  ansible.builtin.find:
+    paths:
     - /etc/ssh/sshd_config.d
     contains: (?i)^\s*{{ "Banner"| regex_escape }}\s+/etc/issue$
-  register: _sshd_config_correctly
+  register: _config_dir_correctly
   when:
   - DISA_STIG_RHEL_09_255025 | bool
   - low_complexity | bool
@@ -8466,7 +8946,7 @@
       create: false
       regexp: (?i)(?i)^\s*{{ "Banner"| regex_escape }}\s+
       state: absent
-    with_items: '{{ _etc_ssh_sshd_config_d_has_parameter.files }}'
+    with_items: '{{ _etc_ssh_sshd_config_d_has_parameter.files | default([]) }}'
     when: _etc_ssh_sshd_config_d_has_parameter.matched > 0
   - name: Insert correct line to /etc/ssh/sshd_config.d/00-complianceascode-hardening.conf
     ansible.builtin.lineinfile:
@@ -8486,7 +8966,8 @@
   - restrict_strategy | bool
   - sshd_enable_warning_banner | bool
   - '"kernel-core" in ansible_facts.packages'
-  - _sshd_config_correctly.matched == 0 or _sshd_config_has_parameter.matched != 1
+  - (_config_file_correctly.found == 0 and _config_dir_correctly.matched == 0) or ((_config_file_has_parameter.found | int)
+    + (_config_dir_has_parameter.matched | int)) != 1
   tags:
   - CCE-90807-9
   - CJIS-5.5.6
@@ -8537,13 +9018,14 @@
   - restrict_strategy
   - sshd_enable_warning_banner
 
-- name: Force frequent session key renegotiation - Check if the parameter RekeyLimit is configured
-  ansible.builtin.find:
-    paths:
-    - /etc/ssh/sshd_config
-    - /etc/ssh/sshd_config.d
-    contains: (?i)^\s*{{ "RekeyLimit"| regex_escape }}\s+
-  register: _sshd_config_has_parameter
+- name: Force frequent session key renegotiation - Check if the parameter RekeyLimit is configured in /etc/ssh/sshd_config
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: (?i)^\s*{{ "RekeyLimit"| regex_escape }}\s+
+    state: absent
+  check_mode: true
+  changed_when: false
+  register: _config_file_has_parameter
   when:
   - DISA_STIG_RHEL_09_255090 | bool
   - configure_strategy | bool
@@ -8563,13 +9045,64 @@
   - no_reboot_needed
   - sshd_rekey_limit
 
-- name: Force frequent session key renegotiation - Check if the parameter RekeyLimit is configured correctly
+- name: Force frequent session key renegotiation - Check if the parameter RekeyLimit is configured in /etc/ssh/sshd_config.d
   ansible.builtin.find:
     paths:
-    - /etc/ssh/sshd_config
+    - /etc/ssh/sshd_config.d
+    contains: (?i)^\s*{{ "RekeyLimit"| regex_escape }}\s+
+  register: _config_dir_has_parameter
+  when:
+  - DISA_STIG_RHEL_09_255090 | bool
+  - configure_strategy | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - sshd_rekey_limit | bool
+  - '"kernel-core" in ansible_facts.packages'
+  tags:
+  - CCE-90815-2
+  - DISA-STIG-RHEL-09-255090
+  - configure_strategy
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - sshd_rekey_limit
+
+- name: Force frequent session key renegotiation - Check if the parameter RekeyLimit is configured correctly in /etc/ssh/sshd_config
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: (?i)^\s*{{ "RekeyLimit"| regex_escape }}\s+{{ var_rekey_limit_size }} {{ var_rekey_limit_time }}$
+    state: absent
+  check_mode: true
+  changed_when: false
+  register: _config_file_correctly
+  when:
+  - DISA_STIG_RHEL_09_255090 | bool
+  - configure_strategy | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - sshd_rekey_limit | bool
+  - '"kernel-core" in ansible_facts.packages'
+  tags:
+  - CCE-90815-2
+  - DISA-STIG-RHEL-09-255090
+  - configure_strategy
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - sshd_rekey_limit
+
+- name: Force frequent session key renegotiation - Check if the parameter RekeyLimit is configured correctly in /etc/ssh/sshd_config.d
+  ansible.builtin.find:
+    paths:
     - /etc/ssh/sshd_config.d
     contains: (?i)^\s*{{ "RekeyLimit"| regex_escape }}\s+{{ var_rekey_limit_size }} {{ var_rekey_limit_time }}$
-  register: _sshd_config_correctly
+  register: _config_dir_correctly
   when:
   - DISA_STIG_RHEL_09_255090 | bool
   - configure_strategy | bool
@@ -8615,7 +9148,7 @@
       create: false
       regexp: (?i)(?i)^\s*{{ "RekeyLimit"| regex_escape }}\s+
       state: absent
-    with_items: '{{ _etc_ssh_sshd_config_d_has_parameter.files }}'
+    with_items: '{{ _etc_ssh_sshd_config_d_has_parameter.files | default([]) }}'
     when: _etc_ssh_sshd_config_d_has_parameter.matched > 0
   - name: Insert correct line to /etc/ssh/sshd_config.d/00-complianceascode-hardening.conf
     ansible.builtin.lineinfile:
@@ -8635,7 +9168,8 @@
   - no_reboot_needed | bool
   - sshd_rekey_limit | bool
   - '"kernel-core" in ansible_facts.packages'
-  - _sshd_config_correctly.matched == 0 or _sshd_config_has_parameter.matched != 1
+  - (_config_file_correctly.found == 0 and _config_dir_correctly.matched == 0) or ((_config_file_has_parameter.found | int)
+    + (_config_dir_has_parameter.matched | int)) != 1
   tags:
   - CCE-90815-2
   - DISA-STIG-RHEL-09-255090
