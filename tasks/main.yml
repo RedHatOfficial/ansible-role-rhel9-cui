@@ -151,9 +151,9 @@
   - medium_severity | bool
   - no_reboot_needed | bool
   - package_dnf_automatic_installed | bool
-  - ( not ( "kernel-core" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
-    and not "openshift-kubelet" in ansible_facts.packages and "ostree" in ansible_proc_cmdline ) and not ( ansible_virtualization_type
-    in ["docker", "lxc", "openvz", "podman", "container"] ) )
+  - ( not ( "kernel-core" in ansible_facts.packages and "bootc" in ansible_facts.packages and not "openshift-kubelet" in ansible_facts.packages
+    and "ostree" in ansible_proc_cmdline ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz", "podman",
+    "container"] ) )
   tags:
   - CCE-83454-9
   - enable_strategy
@@ -859,6 +859,7 @@
     insertafter: ^\s*\[\s*crypto_policy\s*]\s*
     line: .include = /etc/crypto-policies/back-ends/opensslcnf.config
     path: /etc/pki/tls/openssl.cnf
+    mode: 420
   when:
   - configure_openssl_crypto_policy | bool
   - low_complexity | bool
@@ -894,6 +895,7 @@
 
       .include = /etc/crypto-policies/back-ends/opensslcnf.config'
     path: /etc/pki/tls/openssl.cnf
+    mode: 420
   when:
   - configure_openssl_crypto_policy | bool
   - low_complexity | bool
@@ -927,15 +929,16 @@
     option: apply_updates
     value: 'yes'
     create: true
+    mode: 420
   when:
   - low_complexity | bool
   - medium_disruption | bool
   - medium_severity | bool
   - no_reboot_needed | bool
   - unknown_strategy | bool
-  - ( not ( "kernel-core" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
-    and not "openshift-kubelet" in ansible_facts.packages and "ostree" in ansible_proc_cmdline ) and not ( ansible_virtualization_type
-    in ["docker", "lxc", "openvz", "podman", "container"] ) )
+  - ( not ( "kernel-core" in ansible_facts.packages and "bootc" in ansible_facts.packages and not "openshift-kubelet" in ansible_facts.packages
+    and "ostree" in ansible_proc_cmdline ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz", "podman",
+    "container"] ) )
   tags:
   - CCE-83456-4
   - NIST-800-53-CM-6(a)
@@ -1008,6 +1011,7 @@
       value: 1
       no_extra_spaces: true
       create: true
+      mode: 420
   when:
   - DISA_STIG_RHEL_09_214020 | bool
   - ensure_gpgcheck_local_packages | bool
@@ -1298,9 +1302,9 @@
   - low_disruption | bool
   - medium_severity | bool
   - no_reboot_needed | bool
-  - ( not ( "kernel-core" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
-    and not "openshift-kubelet" in ansible_facts.packages and "ostree" in ansible_proc_cmdline ) and not ( ansible_virtualization_type
-    in ["docker", "lxc", "openvz", "podman", "container"] ) )
+  - ( not ( "kernel-core" in ansible_facts.packages and "bootc" in ansible_facts.packages and not "openshift-kubelet" in ansible_facts.packages
+    and "ostree" in ansible_proc_cmdline ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz", "podman",
+    "container"] ) )
   tags:
   - CCE-83459-8
   - NIST-800-53-CM-6(a)
@@ -3516,6 +3520,7 @@
     dest: /etc/security/pwquality.conf
     regexp: ^#?\s*dcredit
     line: dcredit = {{ var_password_pam_dcredit }}
+    mode: 420
   when:
   - DISA_STIG_RHEL_09_611070 | bool
   - accounts_password_pam_dcredit | bool
@@ -3614,6 +3619,7 @@
     dest: /etc/security/pwquality.conf
     regexp: ^#?\s*lcredit
     line: lcredit = {{ var_password_pam_lcredit }}
+    mode: 420
   when:
   - DISA_STIG_RHEL_09_611065 | bool
   - accounts_password_pam_lcredit | bool
@@ -3714,6 +3720,7 @@
     dest: /etc/security/pwquality.conf
     regexp: ^#?\s*minlen
     line: minlen = {{ var_password_pam_minlen }}
+    mode: 420
   when:
   - DISA_STIG_RHEL_09_611090 | bool
   - accounts_password_pam_minlen | bool
@@ -3807,6 +3814,7 @@
     dest: /etc/security/pwquality.conf
     regexp: ^#?\s*ocredit
     line: ocredit = {{ var_password_pam_ocredit }}
+    mode: 420
   when:
   - DISA_STIG_RHEL_09_611100 | bool
   - accounts_password_pam_ocredit | bool
@@ -3898,6 +3906,7 @@
     dest: /etc/security/pwquality.conf
     regexp: ^#?\s*ucredit
     line: ucredit = {{ var_password_pam_ucredit }}
+    mode: 420
   when:
   - DISA_STIG_RHEL_09_611110 | bool
   - accounts_password_pam_ucredit | bool
@@ -3930,6 +3939,7 @@
     regexp: ^CtrlAltDelBurstAction
     line: CtrlAltDelBurstAction=none
     create: true
+    mode: 420
   when:
   - DISA_STIG_RHEL_09_211045 | bool
   - disable_ctrlaltdel_burstaction | bool
@@ -4697,6 +4707,7 @@
       create: true
       path: /etc/kernel/cmdline
       line: audit=1
+      mode: 420
     when: cmdline_stat is defined and not cmdline_stat.stat.exists
   - name: Append /etc/kernel/cmdline contains audit=1
     ansible.builtin.lineinfile:
@@ -4754,6 +4765,7 @@
       create: true
       path: /etc/kernel/cmdline
       line: audit_backlog_limit=8192
+      mode: 420
     when: cmdline_stat is defined and not cmdline_stat.stat.exists
   - name: Append /etc/kernel/cmdline contains audit_backlog_limit=8192
     ansible.builtin.lineinfile:
@@ -4811,6 +4823,7 @@
       create: true
       path: /etc/kernel/cmdline
       line: init_on_alloc=1
+      mode: 420
     when: cmdline_stat is defined and not cmdline_stat.stat.exists
   - name: Append /etc/kernel/cmdline contains init_on_alloc=1
     ansible.builtin.lineinfile:
@@ -4868,6 +4881,7 @@
       create: true
       path: /etc/kernel/cmdline
       line: page_alloc.shuffle=1
+      mode: 420
     when: cmdline_stat is defined and not cmdline_stat.stat.exists
   - name: Append /etc/kernel/cmdline contains page_alloc.shuffle=1
     ansible.builtin.lineinfile:
@@ -4985,6 +4999,7 @@
     dest: /etc/modprobe.d/can.conf
     regexp: install\s+can
     line: install can /bin/false
+    mode: 420
   when:
   - DISA_STIG_RHEL_09_213050 | bool
   - disable_strategy | bool
@@ -5011,6 +5026,7 @@
     dest: /etc/modprobe.d/can.conf
     regexp: ^blacklist can$
     line: blacklist can
+    mode: 420
   when:
   - DISA_STIG_RHEL_09_213050 | bool
   - disable_strategy | bool
@@ -5037,6 +5053,7 @@
     dest: /etc/modprobe.d/sctp.conf
     regexp: install\s+sctp
     line: install sctp /bin/false
+    mode: 420
   when:
   - DISA_STIG_RHEL_09_213060 | bool
   - disable_strategy | bool
@@ -5070,6 +5087,7 @@
     dest: /etc/modprobe.d/sctp.conf
     regexp: ^blacklist sctp$
     line: blacklist sctp
+    mode: 420
   when:
   - DISA_STIG_RHEL_09_213060 | bool
   - disable_strategy | bool
@@ -5103,6 +5121,7 @@
     dest: /etc/modprobe.d/tipc.conf
     regexp: install\s+tipc
     line: install tipc /bin/false
+    mode: 420
   when:
   - DISA_STIG_RHEL_09_213065 | bool
   - disable_strategy | bool
@@ -5131,6 +5150,7 @@
     dest: /etc/modprobe.d/tipc.conf
     regexp: ^blacklist tipc$
     line: blacklist tipc
+    mode: 420
   when:
   - DISA_STIG_RHEL_09_213065 | bool
   - disable_strategy | bool
@@ -5159,6 +5179,7 @@
     dest: /etc/modprobe.d/bluetooth.conf
     regexp: install\s+bluetooth
     line: install bluetooth /bin/false
+    mode: 420
   when:
   - DISA_STIG_RHEL_09_291035 | bool
   - disable_strategy | bool
@@ -5192,6 +5213,7 @@
     dest: /etc/modprobe.d/bluetooth.conf
     regexp: ^blacklist bluetooth$
     line: blacklist bluetooth
+    mode: 420
   when:
   - DISA_STIG_RHEL_09_291035 | bool
   - disable_strategy | bool
@@ -5233,9 +5255,9 @@
   - medium_severity | bool
   - mount_option_var_log_audit_nodev | bool
   - no_reboot_needed | bool
-  - ( not ( "kernel-core" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
-    and not "openshift-kubelet" in ansible_facts.packages and "ostree" in ansible_proc_cmdline ) and not ( ansible_virtualization_type
-    in ["docker", "lxc", "openvz", "podman", "container"] ) )
+  - ( not ( "kernel-core" in ansible_facts.packages and "bootc" in ansible_facts.packages and not "openshift-kubelet" in ansible_facts.packages
+    and "ostree" in ansible_proc_cmdline ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz", "podman",
+    "container"] ) )
   - '"/var/log/audit" in ansible_mounts | map(attribute="mount") | list'
   tags:
   - CCE-83882-1
@@ -5267,9 +5289,9 @@
   - medium_severity | bool
   - mount_option_var_log_audit_nodev | bool
   - no_reboot_needed | bool
-  - ( not ( "kernel-core" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
-    and not "openshift-kubelet" in ansible_facts.packages and "ostree" in ansible_proc_cmdline ) and not ( ansible_virtualization_type
-    in ["docker", "lxc", "openvz", "podman", "container"] ) )
+  - ( not ( "kernel-core" in ansible_facts.packages and "bootc" in ansible_facts.packages and not "openshift-kubelet" in ansible_facts.packages
+    and "ostree" in ansible_proc_cmdline ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz", "podman",
+    "container"] ) )
   - '"/var/log/audit" in ansible_mounts | map(attribute="mount") | list'
   - device_name.stdout is defined and device_name.stdout_lines is defined
   - (device_name.stdout | length > 0)
@@ -5309,9 +5331,9 @@
   - medium_severity | bool
   - mount_option_var_log_audit_nodev | bool
   - no_reboot_needed | bool
-  - ( not ( "kernel-core" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
-    and not "openshift-kubelet" in ansible_facts.packages and "ostree" in ansible_proc_cmdline ) and not ( ansible_virtualization_type
-    in ["docker", "lxc", "openvz", "podman", "container"] ) )
+  - ( not ( "kernel-core" in ansible_facts.packages and "bootc" in ansible_facts.packages and not "openshift-kubelet" in ansible_facts.packages
+    and "ostree" in ansible_proc_cmdline ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz", "podman",
+    "container"] ) )
   - '"/var/log/audit" in ansible_mounts | map(attribute="mount") | list'
   - ("--fstab" | length == 0)
   - device_name.stdout is defined and device_name.stdout_lines is defined
@@ -5344,9 +5366,9 @@
   - medium_severity | bool
   - mount_option_var_log_audit_nodev | bool
   - no_reboot_needed | bool
-  - ( not ( "kernel-core" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
-    and not "openshift-kubelet" in ansible_facts.packages and "ostree" in ansible_proc_cmdline ) and not ( ansible_virtualization_type
-    in ["docker", "lxc", "openvz", "podman", "container"] ) )
+  - ( not ( "kernel-core" in ansible_facts.packages and "bootc" in ansible_facts.packages and not "openshift-kubelet" in ansible_facts.packages
+    and "ostree" in ansible_proc_cmdline ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz", "podman",
+    "container"] ) )
   - '"/var/log/audit" in ansible_mounts | map(attribute="mount") | list'
   - mount_info is defined and "nodev" not in (mount_info.options | default(''))
   tags:
@@ -5385,9 +5407,9 @@
   - medium_severity | bool
   - mount_option_var_log_audit_nodev | bool
   - no_reboot_needed | bool
-  - ( not ( "kernel-core" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
-    and not "openshift-kubelet" in ansible_facts.packages and "ostree" in ansible_proc_cmdline ) and not ( ansible_virtualization_type
-    in ["docker", "lxc", "openvz", "podman", "container"] ) )
+  - ( not ( "kernel-core" in ansible_facts.packages and "bootc" in ansible_facts.packages and not "openshift-kubelet" in ansible_facts.packages
+    and "ostree" in ansible_proc_cmdline ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz", "podman",
+    "container"] ) )
   - '"/var/log/audit" in ansible_mounts | map(attribute="mount") | list'
   - mount_info is defined
   - (device_name.stdout is defined and (device_name.stdout | length > 0)) or ("--fstab" | length == 0)
@@ -5421,9 +5443,9 @@
   - medium_severity | bool
   - mount_option_var_log_audit_noexec | bool
   - no_reboot_needed | bool
-  - ( not ( "kernel-core" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
-    and not "openshift-kubelet" in ansible_facts.packages and "ostree" in ansible_proc_cmdline ) and not ( ansible_virtualization_type
-    in ["docker", "lxc", "openvz", "podman", "container"] ) )
+  - ( not ( "kernel-core" in ansible_facts.packages and "bootc" in ansible_facts.packages and not "openshift-kubelet" in ansible_facts.packages
+    and "ostree" in ansible_proc_cmdline ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz", "podman",
+    "container"] ) )
   - '"/var/log/audit" in ansible_mounts | map(attribute="mount") | list'
   tags:
   - CCE-83878-9
@@ -5455,9 +5477,9 @@
   - medium_severity | bool
   - mount_option_var_log_audit_noexec | bool
   - no_reboot_needed | bool
-  - ( not ( "kernel-core" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
-    and not "openshift-kubelet" in ansible_facts.packages and "ostree" in ansible_proc_cmdline ) and not ( ansible_virtualization_type
-    in ["docker", "lxc", "openvz", "podman", "container"] ) )
+  - ( not ( "kernel-core" in ansible_facts.packages and "bootc" in ansible_facts.packages and not "openshift-kubelet" in ansible_facts.packages
+    and "ostree" in ansible_proc_cmdline ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz", "podman",
+    "container"] ) )
   - '"/var/log/audit" in ansible_mounts | map(attribute="mount") | list'
   - device_name.stdout is defined and device_name.stdout_lines is defined
   - (device_name.stdout | length > 0)
@@ -5497,9 +5519,9 @@
   - medium_severity | bool
   - mount_option_var_log_audit_noexec | bool
   - no_reboot_needed | bool
-  - ( not ( "kernel-core" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
-    and not "openshift-kubelet" in ansible_facts.packages and "ostree" in ansible_proc_cmdline ) and not ( ansible_virtualization_type
-    in ["docker", "lxc", "openvz", "podman", "container"] ) )
+  - ( not ( "kernel-core" in ansible_facts.packages and "bootc" in ansible_facts.packages and not "openshift-kubelet" in ansible_facts.packages
+    and "ostree" in ansible_proc_cmdline ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz", "podman",
+    "container"] ) )
   - '"/var/log/audit" in ansible_mounts | map(attribute="mount") | list'
   - ("--fstab" | length == 0)
   - device_name.stdout is defined and device_name.stdout_lines is defined
@@ -5532,9 +5554,9 @@
   - medium_severity | bool
   - mount_option_var_log_audit_noexec | bool
   - no_reboot_needed | bool
-  - ( not ( "kernel-core" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
-    and not "openshift-kubelet" in ansible_facts.packages and "ostree" in ansible_proc_cmdline ) and not ( ansible_virtualization_type
-    in ["docker", "lxc", "openvz", "podman", "container"] ) )
+  - ( not ( "kernel-core" in ansible_facts.packages and "bootc" in ansible_facts.packages and not "openshift-kubelet" in ansible_facts.packages
+    and "ostree" in ansible_proc_cmdline ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz", "podman",
+    "container"] ) )
   - '"/var/log/audit" in ansible_mounts | map(attribute="mount") | list'
   - mount_info is defined and "noexec" not in (mount_info.options | default(''))
   tags:
@@ -5573,9 +5595,9 @@
   - medium_severity | bool
   - mount_option_var_log_audit_noexec | bool
   - no_reboot_needed | bool
-  - ( not ( "kernel-core" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
-    and not "openshift-kubelet" in ansible_facts.packages and "ostree" in ansible_proc_cmdline ) and not ( ansible_virtualization_type
-    in ["docker", "lxc", "openvz", "podman", "container"] ) )
+  - ( not ( "kernel-core" in ansible_facts.packages and "bootc" in ansible_facts.packages and not "openshift-kubelet" in ansible_facts.packages
+    and "ostree" in ansible_proc_cmdline ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz", "podman",
+    "container"] ) )
   - '"/var/log/audit" in ansible_mounts | map(attribute="mount") | list'
   - mount_info is defined
   - (device_name.stdout is defined and (device_name.stdout | length > 0)) or ("--fstab" | length == 0)
@@ -5609,9 +5631,9 @@
   - medium_severity | bool
   - mount_option_var_log_audit_nosuid | bool
   - no_reboot_needed | bool
-  - ( not ( "kernel-core" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
-    and not "openshift-kubelet" in ansible_facts.packages and "ostree" in ansible_proc_cmdline ) and not ( ansible_virtualization_type
-    in ["docker", "lxc", "openvz", "podman", "container"] ) )
+  - ( not ( "kernel-core" in ansible_facts.packages and "bootc" in ansible_facts.packages and not "openshift-kubelet" in ansible_facts.packages
+    and "ostree" in ansible_proc_cmdline ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz", "podman",
+    "container"] ) )
   - '"/var/log/audit" in ansible_mounts | map(attribute="mount") | list'
   tags:
   - CCE-83893-8
@@ -5643,9 +5665,9 @@
   - medium_severity | bool
   - mount_option_var_log_audit_nosuid | bool
   - no_reboot_needed | bool
-  - ( not ( "kernel-core" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
-    and not "openshift-kubelet" in ansible_facts.packages and "ostree" in ansible_proc_cmdline ) and not ( ansible_virtualization_type
-    in ["docker", "lxc", "openvz", "podman", "container"] ) )
+  - ( not ( "kernel-core" in ansible_facts.packages and "bootc" in ansible_facts.packages and not "openshift-kubelet" in ansible_facts.packages
+    and "ostree" in ansible_proc_cmdline ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz", "podman",
+    "container"] ) )
   - '"/var/log/audit" in ansible_mounts | map(attribute="mount") | list'
   - device_name.stdout is defined and device_name.stdout_lines is defined
   - (device_name.stdout | length > 0)
@@ -5685,9 +5707,9 @@
   - medium_severity | bool
   - mount_option_var_log_audit_nosuid | bool
   - no_reboot_needed | bool
-  - ( not ( "kernel-core" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
-    and not "openshift-kubelet" in ansible_facts.packages and "ostree" in ansible_proc_cmdline ) and not ( ansible_virtualization_type
-    in ["docker", "lxc", "openvz", "podman", "container"] ) )
+  - ( not ( "kernel-core" in ansible_facts.packages and "bootc" in ansible_facts.packages and not "openshift-kubelet" in ansible_facts.packages
+    and "ostree" in ansible_proc_cmdline ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz", "podman",
+    "container"] ) )
   - '"/var/log/audit" in ansible_mounts | map(attribute="mount") | list'
   - ("--fstab" | length == 0)
   - device_name.stdout is defined and device_name.stdout_lines is defined
@@ -5720,9 +5742,9 @@
   - medium_severity | bool
   - mount_option_var_log_audit_nosuid | bool
   - no_reboot_needed | bool
-  - ( not ( "kernel-core" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
-    and not "openshift-kubelet" in ansible_facts.packages and "ostree" in ansible_proc_cmdline ) and not ( ansible_virtualization_type
-    in ["docker", "lxc", "openvz", "podman", "container"] ) )
+  - ( not ( "kernel-core" in ansible_facts.packages and "bootc" in ansible_facts.packages and not "openshift-kubelet" in ansible_facts.packages
+    and "ostree" in ansible_proc_cmdline ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz", "podman",
+    "container"] ) )
   - '"/var/log/audit" in ansible_mounts | map(attribute="mount") | list'
   - mount_info is defined and "nosuid" not in (mount_info.options | default(''))
   tags:
@@ -5761,9 +5783,9 @@
   - medium_severity | bool
   - mount_option_var_log_audit_nosuid | bool
   - no_reboot_needed | bool
-  - ( not ( "kernel-core" in ansible_facts.packages and "rpm-ostree" in ansible_facts.packages and "bootc" in ansible_facts.packages
-    and not "openshift-kubelet" in ansible_facts.packages and "ostree" in ansible_proc_cmdline ) and not ( ansible_virtualization_type
-    in ["docker", "lxc", "openvz", "podman", "container"] ) )
+  - ( not ( "kernel-core" in ansible_facts.packages and "bootc" in ansible_facts.packages and not "openshift-kubelet" in ansible_facts.packages
+    and "ostree" in ansible_proc_cmdline ) and not ( ansible_virtualization_type in ["docker", "lxc", "openvz", "podman",
+    "container"] ) )
   - '"/var/log/audit" in ansible_mounts | map(attribute="mount") | list'
   - mount_info is defined
   - (device_name.stdout is defined and (device_name.stdout | length > 0)) or ("--fstab" | length == 0)
@@ -7428,6 +7450,7 @@
     state: touch
     access_time: preserve
     modification_time: preserve
+    mode: 420
   when:
   - DISA_STIG_RHEL_09_431010 | bool
   - high_severity | bool
@@ -7666,6 +7689,38 @@
   - no_reboot_needed
   - restrict_strategy
 
+- name: Disable Host-Based Authentication - Check if /etc/ssh/sshd_config exists
+  ansible.builtin.stat:
+    path: /etc/ssh/sshd_config
+  register: _config_file_exists
+  when:
+  - DISA_STIG_RHEL_09_255080 | bool
+  - disable_host_auth | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+  - '"kernel-core" in ansible_facts.packages'
+  tags:
+  - CCE-90816-0
+  - CJIS-5.5.6
+  - DISA-STIG-RHEL-09-255080
+  - NIST-800-171-3.1.12
+  - NIST-800-53-AC-17(a)
+  - NIST-800-53-AC-3
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-CM-7(a)
+  - NIST-800-53-CM-7(b)
+  - PCI-DSSv4-8.3
+  - PCI-DSSv4-8.3.1
+  - disable_host_auth
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+
 - name: Disable Host-Based Authentication - Check if the parameter HostbasedAuthentication is configured correctly in /etc/ssh/sshd_config
   ansible.builtin.lineinfile:
     path: /etc/ssh/sshd_config
@@ -7683,6 +7738,7 @@
   - no_reboot_needed | bool
   - restrict_strategy | bool
   - '"kernel-core" in ansible_facts.packages'
+  - _config_file_exists.stat.exists
   tags:
   - CCE-90816-0
   - CJIS-5.5.6
@@ -7782,6 +7838,7 @@
   - no_reboot_needed | bool
   - restrict_strategy | bool
   - '"kernel-core" in ansible_facts.packages'
+  - _config_file_correctly is not skipped
   - (_config_file_correctly.found == 0 and _config_dir_correctly.matched == 0) or ((_config_file_has_parameter.found | int)
     + (_config_dir_has_parameter.matched | int)) != 1
   tags:
@@ -7910,6 +7967,39 @@
   - restrict_strategy
   - sshd_disable_empty_passwords
 
+- name: Disable SSH Access via Empty Passwords - Check if /etc/ssh/sshd_config exists
+  ansible.builtin.stat:
+    path: /etc/ssh/sshd_config
+  register: _config_file_exists
+  when:
+  - DISA_STIG_RHEL_09_255040 | bool
+  - high_severity | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+  - sshd_disable_empty_passwords | bool
+  - '"kernel-core" in ansible_facts.packages'
+  tags:
+  - CCE-90799-8
+  - CJIS-5.5.6
+  - DISA-STIG-RHEL-09-255040
+  - NIST-800-171-3.1.1
+  - NIST-800-171-3.1.5
+  - NIST-800-53-AC-17(a)
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-CM-7(a)
+  - NIST-800-53-CM-7(b)
+  - PCI-DSS-Req-2.2.4
+  - PCI-DSSv4-2.2
+  - PCI-DSSv4-2.2.6
+  - high_severity
+  - low_complexity
+  - low_disruption
+  - no_reboot_needed
+  - restrict_strategy
+  - sshd_disable_empty_passwords
+
 - name: Disable SSH Access via Empty Passwords - Check if the parameter PermitEmptyPasswords is configured correctly in /etc/ssh/sshd_config
   ansible.builtin.lineinfile:
     path: /etc/ssh/sshd_config
@@ -7927,6 +8017,7 @@
   - restrict_strategy | bool
   - sshd_disable_empty_passwords | bool
   - '"kernel-core" in ansible_facts.packages'
+  - _config_file_exists.stat.exists
   tags:
   - CCE-90799-8
   - CJIS-5.5.6
@@ -8028,6 +8119,7 @@
   - restrict_strategy | bool
   - sshd_disable_empty_passwords | bool
   - '"kernel-core" in ansible_facts.packages'
+  - _config_file_correctly is not skipped
   - (_config_file_correctly.found == 0 and _config_dir_correctly.matched == 0) or ((_config_file_has_parameter.found | int)
     + (_config_dir_has_parameter.matched | int)) != 1
   tags:
@@ -8148,6 +8240,34 @@
   - restrict_strategy
   - sshd_disable_gssapi_auth
 
+- name: Disable GSSAPI Authentication - Check if /etc/ssh/sshd_config exists
+  ansible.builtin.stat:
+    path: /etc/ssh/sshd_config
+  register: _config_file_exists
+  when:
+  - DISA_STIG_RHEL_09_255135 | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+  - sshd_disable_gssapi_auth | bool
+  - '"kernel-core" in ansible_facts.packages'
+  tags:
+  - CCE-90808-7
+  - DISA-STIG-RHEL-09-255135
+  - NIST-800-171-3.1.12
+  - NIST-800-53-AC-17(a)
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-CM-7(a)
+  - NIST-800-53-CM-7(b)
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  - sshd_disable_gssapi_auth
+
 - name: Disable GSSAPI Authentication - Check if the parameter GSSAPIAuthentication is configured correctly in /etc/ssh/sshd_config
   ansible.builtin.lineinfile:
     path: /etc/ssh/sshd_config
@@ -8165,6 +8285,7 @@
   - restrict_strategy | bool
   - sshd_disable_gssapi_auth | bool
   - '"kernel-core" in ansible_facts.packages'
+  - _config_file_exists.stat.exists
   tags:
   - CCE-90808-7
   - DISA-STIG-RHEL-09-255135
@@ -8256,6 +8377,7 @@
   - restrict_strategy | bool
   - sshd_disable_gssapi_auth | bool
   - '"kernel-core" in ansible_facts.packages'
+  - _config_file_correctly is not skipped
   - (_config_file_correctly.found == 0 and _config_dir_correctly.matched == 0) or ((_config_file_has_parameter.found | int)
     + (_config_dir_has_parameter.matched | int)) != 1
   tags:
@@ -8366,6 +8488,34 @@
   - restrict_strategy
   - sshd_disable_kerb_auth
 
+- name: Disable Kerberos Authentication - Check if /etc/ssh/sshd_config exists
+  ansible.builtin.stat:
+    path: /etc/ssh/sshd_config
+  register: _config_file_exists
+  when:
+  - DISA_STIG_RHEL_09_255140 | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+  - sshd_disable_kerb_auth | bool
+  - '"kernel-core" in ansible_facts.packages'
+  tags:
+  - CCE-90802-0
+  - DISA-STIG-RHEL-09-255140
+  - NIST-800-171-3.1.12
+  - NIST-800-53-AC-17(a)
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-CM-7(a)
+  - NIST-800-53-CM-7(b)
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  - sshd_disable_kerb_auth
+
 - name: Disable Kerberos Authentication - Check if the parameter KerberosAuthentication is configured correctly in /etc/ssh/sshd_config
   ansible.builtin.lineinfile:
     path: /etc/ssh/sshd_config
@@ -8383,6 +8533,7 @@
   - restrict_strategy | bool
   - sshd_disable_kerb_auth | bool
   - '"kernel-core" in ansible_facts.packages'
+  - _config_file_exists.stat.exists
   tags:
   - CCE-90802-0
   - DISA-STIG-RHEL-09-255140
@@ -8474,6 +8625,7 @@
   - restrict_strategy | bool
   - sshd_disable_kerb_auth | bool
   - '"kernel-core" in ansible_facts.packages'
+  - _config_file_correctly is not skipped
   - (_config_file_correctly.found == 0 and _config_dir_correctly.matched == 0) or ((_config_file_has_parameter.found | int)
     + (_config_dir_has_parameter.matched | int)) != 1
   tags:
@@ -8600,6 +8752,42 @@
   - restrict_strategy
   - sshd_disable_root_login
 
+- name: Disable SSH Root Login - Check if /etc/ssh/sshd_config exists
+  ansible.builtin.stat:
+    path: /etc/ssh/sshd_config
+  register: _config_file_exists
+  when:
+  - DISA_STIG_RHEL_09_255045 | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+  - sshd_disable_root_login | bool
+  - '"kernel-core" in ansible_facts.packages'
+  tags:
+  - CCE-90800-4
+  - CJIS-5.5.6
+  - DISA-STIG-RHEL-09-255045
+  - NIST-800-171-3.1.1
+  - NIST-800-171-3.1.5
+  - NIST-800-53-AC-17(a)
+  - NIST-800-53-AC-6(2)
+  - NIST-800-53-CM-6(a)
+  - NIST-800-53-CM-7(a)
+  - NIST-800-53-CM-7(b)
+  - NIST-800-53-IA-2
+  - NIST-800-53-IA-2(5)
+  - PCI-DSS-Req-2.2.4
+  - PCI-DSSv4-2.2
+  - PCI-DSSv4-2.2.6
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  - sshd_disable_root_login
+
 - name: Disable SSH Root Login - Check if the parameter PermitRootLogin is configured correctly in /etc/ssh/sshd_config
   ansible.builtin.lineinfile:
     path: /etc/ssh/sshd_config
@@ -8617,6 +8805,7 @@
   - restrict_strategy | bool
   - sshd_disable_root_login | bool
   - '"kernel-core" in ansible_facts.packages'
+  - _config_file_exists.stat.exists
   tags:
   - CCE-90800-4
   - CJIS-5.5.6
@@ -8724,6 +8913,7 @@
   - restrict_strategy | bool
   - sshd_disable_root_login | bool
   - '"kernel-core" in ansible_facts.packages'
+  - _config_file_correctly is not skipped
   - (_config_file_correctly.found == 0 and _config_dir_correctly.matched == 0) or ((_config_file_has_parameter.found | int)
     + (_config_dir_has_parameter.matched | int)) != 1
   tags:
@@ -8854,6 +9044,36 @@
   - restrict_strategy
   - sshd_enable_warning_banner
 
+- name: Enable SSH Warning Banner - Check if /etc/ssh/sshd_config exists
+  ansible.builtin.stat:
+    path: /etc/ssh/sshd_config
+  register: _config_file_exists
+  when:
+  - DISA_STIG_RHEL_09_255025 | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - restrict_strategy | bool
+  - sshd_enable_warning_banner | bool
+  - '"kernel-core" in ansible_facts.packages'
+  tags:
+  - CCE-90807-9
+  - CJIS-5.5.6
+  - DISA-STIG-RHEL-09-255025
+  - NIST-800-171-3.1.9
+  - NIST-800-53-AC-17(a)
+  - NIST-800-53-AC-8(a)
+  - NIST-800-53-AC-8(c)
+  - NIST-800-53-CM-6(a)
+  - PCI-DSS-Req-2.2.4
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - restrict_strategy
+  - sshd_enable_warning_banner
+
 - name: Enable SSH Warning Banner - Check if the parameter Banner is configured correctly in /etc/ssh/sshd_config
   ansible.builtin.lineinfile:
     path: /etc/ssh/sshd_config
@@ -8871,6 +9091,7 @@
   - restrict_strategy | bool
   - sshd_enable_warning_banner | bool
   - '"kernel-core" in ansible_facts.packages'
+  - _config_file_exists.stat.exists
   tags:
   - CCE-90807-9
   - CJIS-5.5.6
@@ -8966,6 +9187,7 @@
   - restrict_strategy | bool
   - sshd_enable_warning_banner | bool
   - '"kernel-core" in ansible_facts.packages'
+  - _config_file_correctly is not skipped
   - (_config_file_correctly.found == 0 and _config_dir_correctly.matched == 0) or ((_config_file_has_parameter.found | int)
     + (_config_dir_has_parameter.matched | int)) != 1
   tags:
@@ -9070,6 +9292,29 @@
   - no_reboot_needed
   - sshd_rekey_limit
 
+- name: Force frequent session key renegotiation - Check if /etc/ssh/sshd_config exists
+  ansible.builtin.stat:
+    path: /etc/ssh/sshd_config
+  register: _config_file_exists
+  when:
+  - DISA_STIG_RHEL_09_255090 | bool
+  - configure_strategy | bool
+  - low_complexity | bool
+  - low_disruption | bool
+  - medium_severity | bool
+  - no_reboot_needed | bool
+  - sshd_rekey_limit | bool
+  - '"kernel-core" in ansible_facts.packages'
+  tags:
+  - CCE-90815-2
+  - DISA-STIG-RHEL-09-255090
+  - configure_strategy
+  - low_complexity
+  - low_disruption
+  - medium_severity
+  - no_reboot_needed
+  - sshd_rekey_limit
+
 - name: Force frequent session key renegotiation - Check if the parameter RekeyLimit is configured correctly in /etc/ssh/sshd_config
   ansible.builtin.lineinfile:
     path: /etc/ssh/sshd_config
@@ -9087,6 +9332,7 @@
   - no_reboot_needed | bool
   - sshd_rekey_limit | bool
   - '"kernel-core" in ansible_facts.packages'
+  - _config_file_exists.stat.exists
   tags:
   - CCE-90815-2
   - DISA-STIG-RHEL-09-255090
@@ -9168,6 +9414,7 @@
   - no_reboot_needed | bool
   - sshd_rekey_limit | bool
   - '"kernel-core" in ansible_facts.packages'
+  - _config_file_correctly is not skipped
   - (_config_file_correctly.found == 0 and _config_dir_correctly.matched == 0) or ((_config_file_has_parameter.found | int)
     + (_config_dir_has_parameter.matched | int)) != 1
   tags:
@@ -9473,6 +9720,7 @@
     line: flush = {{ var_auditd_flush }}
     state: present
     create: true
+    mode: u-x,g-wx,o-rwx
   when:
   - auditd_data_retention_flush | bool
   - low_complexity | bool
@@ -9501,6 +9749,7 @@
       path: /etc/audit/auditd.conf
       create: true
       regexp: (?i)(?i)^\s*freq\s*=\s*
+      mode: u-x,g-wx,o-rwx
       state: absent
     check_mode: true
     changed_when: false
@@ -9510,6 +9759,7 @@
       path: /etc/audit/auditd.conf
       create: true
       regexp: (?i)(?i)^\s*freq\s*=\s*
+      mode: u-x,g-wx,o-rwx
       state: absent
     when: dupes.found is defined and dupes.found > 1
   - name: Insert correct line to /etc/audit/auditd.conf
@@ -9517,6 +9767,7 @@
       path: /etc/audit/auditd.conf
       create: true
       regexp: (?i)(?i)^\s*freq\s*=\s*
+      mode: u-x,g-wx,o-rwx
       line: freq = {{ var_auditd_freq }}
       state: present
   when:
@@ -9547,6 +9798,7 @@
       path: /etc/audit/auditd.conf
       create: true
       regexp: (?i)(?i)^\s*log_format\s*=\s*
+      mode: u-x,g-wx,o-rwx
       state: absent
     check_mode: true
     changed_when: false
@@ -9556,6 +9808,7 @@
       path: /etc/audit/auditd.conf
       create: true
       regexp: (?i)(?i)^\s*log_format\s*=\s*
+      mode: u-x,g-wx,o-rwx
       state: absent
     when: dupes.found is defined and dupes.found > 1
   - name: Insert correct line to /etc/audit/auditd.conf
@@ -9563,6 +9816,7 @@
       path: /etc/audit/auditd.conf
       create: true
       regexp: (?i)(?i)^\s*log_format\s*=\s*
+      mode: u-x,g-wx,o-rwx
       line: log_format = ENRICHED
       state: present
   when:
@@ -9620,6 +9874,7 @@
       path: /etc/audit/auditd.conf
       create: true
       regexp: (?i)(?i)^\s*name_format\s*=\s*
+      mode: u-x,g-wx,o-rwx
       state: absent
     check_mode: true
     changed_when: false
@@ -9629,6 +9884,7 @@
       path: /etc/audit/auditd.conf
       create: true
       regexp: (?i)(?i)^\s*name_format\s*=\s*
+      mode: u-x,g-wx,o-rwx
       state: absent
     when: dupes.found is defined and dupes.found > 1
   - name: Insert correct line to /etc/audit/auditd.conf
@@ -9636,6 +9892,7 @@
       path: /etc/audit/auditd.conf
       create: true
       regexp: (?i)(?i)^\s*name_format\s*=\s*
+      mode: u-x,g-wx,o-rwx
       line: name_format = {{ auditd_name_format_split }}
       state: present
   when:
@@ -9679,6 +9936,7 @@
 
       '
     force: true
+    mode: 420
   when:
   - audit_access_failed | bool
   - low_complexity | bool
@@ -9738,6 +9996,7 @@
 
       '
     force: true
+    mode: 420
   when:
   - audit_access_failed_aarch64 | bool
   - low_complexity | bool
@@ -9793,6 +10052,7 @@
 
       '
     force: true
+    mode: 420
   when:
   - audit_access_failed_ppc64le | bool
   - low_complexity | bool
@@ -9849,6 +10109,7 @@
 
       '
     force: true
+    mode: 420
   when:
   - audit_access_success | bool
   - low_complexity | bool
@@ -9905,6 +10166,7 @@
 
       '
     force: true
+    mode: 420
   when:
   - audit_access_success_aarch64 | bool
   - low_complexity | bool
@@ -9959,6 +10221,7 @@
 
       '
     force: true
+    mode: 420
   when:
   - audit_access_success_ppc64le | bool
   - low_complexity | bool
@@ -10029,6 +10292,7 @@
 
       '
     force: true
+    mode: 420
   when:
   - audit_basic_configuration | bool
   - low_complexity | bool
@@ -10101,6 +10365,7 @@
 
       '
     force: true
+    mode: 420
   when:
   - audit_create_failed | bool
   - low_complexity | bool
@@ -10167,6 +10432,7 @@
 
       '
     force: true
+    mode: 420
   when:
   - audit_create_failed_aarch64 | bool
   - low_complexity | bool
@@ -10229,6 +10495,7 @@
 
       '
     force: true
+    mode: 420
   when:
   - audit_create_failed_ppc64le | bool
   - low_complexity | bool
@@ -10291,6 +10558,7 @@
 
       '
     force: true
+    mode: 420
   when:
   - audit_create_success | bool
   - low_complexity | bool
@@ -10349,6 +10617,7 @@
 
       '
     force: true
+    mode: 420
   when:
   - audit_create_success_aarch64 | bool
   - low_complexity | bool
@@ -10405,6 +10674,7 @@
 
       '
     force: true
+    mode: 420
   when:
   - audit_create_success_ppc64le | bool
   - low_complexity | bool
@@ -10463,6 +10733,7 @@
 
       '
     force: true
+    mode: 420
   when:
   - audit_delete_failed | bool
   - low_complexity | bool
@@ -10521,6 +10792,7 @@
 
       '
     force: true
+    mode: 420
   when:
   - audit_delete_failed_aarch64 | bool
   - low_complexity | bool
@@ -10575,6 +10847,7 @@
 
       '
     force: true
+    mode: 420
   when:
   - audit_delete_failed_ppc64le | bool
   - low_complexity | bool
@@ -10629,6 +10902,7 @@
 
       '
     force: true
+    mode: 420
   when:
   - audit_delete_success | bool
   - low_complexity | bool
@@ -10683,6 +10957,7 @@
 
       '
     force: true
+    mode: 420
   when:
   - audit_delete_success_aarch64 | bool
   - low_complexity | bool
@@ -10735,6 +11010,7 @@
 
       '
     force: true
+    mode: 420
   when:
   - audit_delete_success_ppc64le | bool
   - low_complexity | bool
@@ -10788,6 +11064,7 @@
 
       '
     force: true
+    mode: 420
   when:
   - audit_immutable_login_uids | bool
   - low_complexity | bool
@@ -10860,6 +11137,7 @@
 
       '
     force: true
+    mode: 420
   when:
   - audit_modify_failed | bool
   - low_complexity | bool
@@ -10930,6 +11208,7 @@
 
       '
     force: true
+    mode: 420
   when:
   - audit_modify_failed_aarch64 | bool
   - low_complexity | bool
@@ -10992,6 +11271,7 @@
 
       '
     force: true
+    mode: 420
   when:
   - audit_modify_failed_ppc64le | bool
   - low_complexity | bool
@@ -11054,6 +11334,7 @@
 
       '
     force: true
+    mode: 420
   when:
   - audit_modify_success | bool
   - low_complexity | bool
@@ -11114,6 +11395,7 @@
 
       '
     force: true
+    mode: 420
   when:
   - audit_modify_success_aarch64 | bool
   - low_complexity | bool
@@ -11170,6 +11452,7 @@
 
       '
     force: true
+    mode: 420
   when:
   - audit_modify_success_ppc64le | bool
   - low_complexity | bool
@@ -11230,6 +11513,7 @@
 
       '
     force: true
+    mode: 420
   when:
   - audit_module_load | bool
   - low_complexity | bool
@@ -11286,6 +11570,7 @@
 
       '
     force: true
+    mode: 420
   when:
   - audit_module_load_ppc64le | bool
   - low_complexity | bool
@@ -11556,6 +11841,7 @@
 
       '
     force: true
+    mode: 420
   when:
   - audit_ospp_general | bool
   - low_complexity | bool
@@ -11822,6 +12108,7 @@
 
       '
     force: true
+    mode: 420
   when:
   - audit_ospp_general_aarch64 | bool
   - low_complexity | bool
@@ -12028,6 +12315,7 @@
 
       '
     force: true
+    mode: 420
   when:
   - audit_ospp_general_ppc64le | bool
   - low_complexity | bool
@@ -12086,6 +12374,7 @@
 
       '
     force: true
+    mode: 420
   when:
   - audit_owner_change_failed | bool
   - low_complexity | bool
@@ -12144,6 +12433,7 @@
 
       '
     force: true
+    mode: 420
   when:
   - audit_owner_change_failed_aarch64 | bool
   - low_complexity | bool
@@ -12198,6 +12488,7 @@
 
       '
     force: true
+    mode: 420
   when:
   - audit_owner_change_failed_ppc64le | bool
   - low_complexity | bool
@@ -12252,6 +12543,7 @@
 
       '
     force: true
+    mode: 420
   when:
   - audit_owner_change_success | bool
   - low_complexity | bool
@@ -12306,6 +12598,7 @@
 
       '
     force: true
+    mode: 420
   when:
   - audit_owner_change_success_aarch64 | bool
   - low_complexity | bool
@@ -12358,6 +12651,7 @@
 
       '
     force: true
+    mode: 420
   when:
   - audit_owner_change_success_ppc64le | bool
   - low_complexity | bool
@@ -12420,6 +12714,7 @@
 
       '
     force: true
+    mode: 420
   when:
   - audit_perm_change_failed | bool
   - low_complexity | bool
@@ -12482,6 +12777,7 @@
 
       '
     force: true
+    mode: 420
   when:
   - audit_perm_change_failed_aarch64 | bool
   - low_complexity | bool
@@ -12538,6 +12834,7 @@
 
       '
     force: true
+    mode: 420
   when:
   - audit_perm_change_failed_ppc64le | bool
   - low_complexity | bool
@@ -12594,6 +12891,7 @@
 
       '
     force: true
+    mode: 420
   when:
   - audit_perm_change_success | bool
   - low_complexity | bool
@@ -12650,6 +12948,7 @@
 
       '
     force: true
+    mode: 420
   when:
   - audit_perm_change_success_aarch64 | bool
   - low_complexity | bool
@@ -12703,6 +13002,7 @@
 
       '
     force: true
+    mode: 420
   when:
   - audit_perm_change_success_ppc64le | bool
   - low_complexity | bool
